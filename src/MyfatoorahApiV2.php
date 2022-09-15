@@ -135,14 +135,14 @@ class MyfatoorahApiV2
         curl_close($curl);
 
         //example set a local ip to host apitest.myfatoorah.com
-        if ($err && !is_string($res)) {
+        if ($err) {
             $this->log("$msgLog - cURL Error: $err");
             throw new Exception($err);
         }
 
         $this->log("$msgLog - Response: $res");
 
-        $json = json_decode($res);
+        $json = json_decode((string)$res);
 
         //***************************************
         //check for errors
