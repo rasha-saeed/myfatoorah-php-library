@@ -147,6 +147,66 @@ class PaymentMyfatoorahApiV2 extends MyfatoorahApiV2
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
+     * List available Payment Methods
+     *
+     * @param double|integer $invoiceValue
+     * @param string         $displayCurrencyIso
+     * @param bool           $isAppleRegistered
+     *
+     * @return array
+     */
+    public function getPaymentMethodsForDisplay($invoiceValue, $displayCurrencyIso, $isAppleRegistered = false)
+    {
+
+        if (!empty(self::$paymentMethods)) {
+            return self::$paymentMethods;
+        }
+
+        $gateways = $this->getVendorGateways($invoiceValue, $displayCurrencyIso);
+        $allRates = $this->getCurrencyRates();
+
+        self::$paymentMethods = ['all' => [], 'cards' => [], 'form' => [], 'ap' => []];
+
+        foreach ($gateways as $g) {
+            $g->GatewayData = $this->calcGatewayData($g->TotalAmount, $g->CurrencyIso, $g->PaymentCurrencyIso, $allRates);
+
+            self::$paymentMethods = $this->fillPaymentMethodsArray($g, self::$paymentMethods, $isAppleRegistered);
+        }
+
+        //add only one ap gateway
+        self::$paymentMethods['ap'] = $this->getOneApplePayGateway(self::$paymentMethods['ap'], $displayCurrencyIso, $allRates);
+
+        return self::$paymentMethods;
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+    protected function getOneApplePayGateway($apGateways, $displayCurrency, $allRates)
+    {
+
+        $displayCurrencyIndex = array_search($displayCurrency, array_column($apGateways, 'PaymentCurrencyIso'));
+        if ($displayCurrencyIndex) {
+            return $apGateways[$displayCurrencyIndex];
+        }
+
+        //get defult mf account currency
+        $defCurKey       = array_search('1', array_column($allRates, 'Value'));
+        $defaultCurrency = $allRates[$defCurKey]->Text;
+
+        $defaultCurrencyIndex = array_search($defaultCurrency, array_column($apGateways, 'PaymentCurrencyIso'));
+        if ($defaultCurrencyIndex) {
+            return $apGateways[$defaultCurrencyIndex];
+        }
+
+        if (isset($apGateways[0])) {
+            return $apGateways[0];
+        }
+
+        return [];
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
      *
      * @param object  $g
      * @param array   $paymentMethods
@@ -175,6 +235,44 @@ class PaymentMyfatoorahApiV2 extends MyfatoorahApiV2
             $paymentMethods['all'][] = $g;
         }
         return $paymentMethods;
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Get Payment Method Object
+     *
+     * @param string         $gateway
+     * @param string         $gatewayType        ['PaymentMethodId', 'PaymentMethodCode']
+     * @param double|integer $invoiceValue
+     * @param string         $displayCurrencyIso
+     *
+     * @return object
+     *
+     * @throws Exception
+     */
+    public function getPaymentMethod($gateway, $gatewayType = 'PaymentMethodId', $invoiceValue = 0, $displayCurrencyIso = '')
+    {
+
+        $paymentMethods = $this->getVendorGateways($invoiceValue, $displayCurrencyIso);
+
+        $pm = null;
+        foreach ($paymentMethods as $method) {
+            if ($method->$gatewayType == $gateway) {
+                $pm = $method;
+                break;
+            }
+        }
+
+        if (!isset($pm)) {
+            throw new Exception('Please contact Account Manager to enable the used payment method in your account');
+        }
+
+        if ($this->isDirectPayment && !$pm->IsDirectPayment) {
+            throw new Exception($pm->PaymentMethodEn . ' Direct Payment Method is not activated. Kindly contact your MyFatoorah account manager or sales representative to activate it.');
+        }
+
+        return $pm;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -244,6 +342,31 @@ class PaymentMyfatoorahApiV2 extends MyfatoorahApiV2
         $json = $this->callAPI("$this->apiURL/v2/SendPayment", $curlData, $orderId, 'Send Payment');
 
         return ['invoiceURL' => $json->Data->InvoiceURL, 'invoiceId' => $json->Data->InvoiceId];
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Get the direct payment URL and the invoice id (POST API)
+     *
+     * @param array          $curlData
+     * @param integer|string $gateway
+     * @param array          $cardInfo
+     * @param integer|string $orderId  (default value: null) used in log file
+     *
+     * @return array
+     */
+    public function directPayment($curlData, $gateway, $cardInfo, $orderId = null)
+    {
+
+        $this->log('------------------------------------------------------------');
+
+        $this->isDirectPayment = true;
+
+        $data = $this->excutePayment($curlData, $gateway, $orderId);
+
+        $json = $this->callAPI($data['invoiceURL'], $cardInfo, $orderId, 'Direct Payment'); //__FUNCTION__
+        return ['invoiceURL' => $json->Data->PaymentURL, 'invoiceId' => $data['invoiceId']];
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -331,7 +454,7 @@ class PaymentMyfatoorahApiV2 extends MyfatoorahApiV2
      *
      * @return object
      */
-        protected function getSuccessData($json)
+    protected function getSuccessData($json)
     {
 
         foreach ($json->Data->InvoiceTransactions as $transaction) {
@@ -480,6 +603,38 @@ class PaymentMyfatoorahApiV2 extends MyfatoorahApiV2
         return ['invoiceURL' => $json->Data->PaymentURL, 'invoiceId' => $json->Data->InvoiceId];
     }
 
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Get session Data (POST API)
+     *
+     * @param string         $userDefinedField Customer Identifier to dispaly its saved data
+     * @param integer|string $orderId          used in log file (default value: null)
+     *
+     * @return object
+     */
+    public function getEmbeddedSession($userDefinedField = '', $orderId = null)
+    {
+
+        $customerIdentifier = ['CustomerIdentifier' => $userDefinedField];
+        return $this->callAPI("$this->apiURL/v2/InitiateSession", $customerIdentifier, $orderId, 'Initiate Session');
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Register Apple Pay Domain (POST API)
+     *
+     * @param string $url Site URL
+     *
+     * @return object
+     */
+    public function registerApplePayDomain($url)
+    {
+
+        $domainName = ['DomainName' => parse_url($url, PHP_URL_HOST)];
+        return $this->callAPI("$this->apiURL/v2/RegisterApplePayDomain", $domainName, '', 'Register Apple Pay Domain');
+    }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
 }
