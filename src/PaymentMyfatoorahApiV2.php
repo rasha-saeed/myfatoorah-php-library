@@ -433,13 +433,13 @@ class PaymentMyfatoorahApiV2 extends MyfatoorahApiV2
         }
 
         //check for the order price and currency
-        list($mfPriceString, $mfCurrncy) = explode(' ', $json->Data->InvoiceDisplayValue);
-        $mfPrice = floatval(preg_replace('/[^\d.]/', '', $mfPriceString));
+        list($valStr, $mfCurrncy) = explode(' ', $json->Data->InvoiceDisplayValue);
+        $mfPrice = floatval(preg_replace('/[^\d.]/', '', $valStr));
 
-        if ($price != $mfPrice) {
+        if ($price && $price != $mfPrice) {
             return false;
         }
-        if ($currncy != $mfCurrncy) {
+        if ($currncy && $currncy != $mfCurrncy) {
             return false;
         }
 

@@ -25,7 +25,7 @@ class PaymentMyfatoorahApiV2Test extends \PHPUnit\Framework\TestCase
                 $mfObj = new PaymentMyfatoorahApiV2($token['apiKey'], $token['countryMode'], $token['isTest']);
                 $json  = $mfObj->getVendorGateways();
 
-                $this->assertEquals('AMEX', $json[0]->PaymentMethodEn);
+                $this->assertEquals('Sadad', $json[0]->PaymentMethodEn);
             } catch (\Exception $ex) {
                 $this->assertEquals($token['exception'], $ex->getMessage(), $token['message']);
             }
