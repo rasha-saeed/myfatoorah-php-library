@@ -53,6 +53,27 @@ class PaymentMyfatoorahApiV2 extends MyfatoorahApiV2
         }
         return $paymentMethods;
     }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * List available Cached Payment Gateways.
+     *
+     * @return array of Cached payment methods
+     */
+    public function getCachedVendorGateways()
+    {
+
+        if (file_exists(self::$pmCachedFile)) {
+            $cache = file_get_contents(self::$pmCachedFile);
+            return ($cache) ? json_decode($cache) : [];
+        } else {
+            return $this->getVendorGateways(0, '', true);
+        }
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
     /**
      *
      * @param object $json
