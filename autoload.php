@@ -14,9 +14,9 @@
  * API Documentation on https://myfatoorah.readme.io/docs
  * Library Documentation and Download link on https://myfatoorah.readme.io/docs/php-library
  *
- * @author    MyFatoorah <tech@myfatoorah.com>
+ * @author MyFatoorah <tech@myfatoorah.com>
  * @copyright 2021 MyFatoorah, All rights reserved
- * @license   GNU General Public License v3.0
+ * @license GNU General Public License v3.0
  */
 
 $mfLibFolder = __DIR__ . '/src';
@@ -24,18 +24,15 @@ $mfLibFile   = $mfLibFolder . '/MyfatoorahApiV2.php';
 
 if (!file_exists($mfLibFile) || (time() - filemtime($mfLibFile) > 86400)) {
     $mfCurl = curl_init('https://portal.myfatoorah.com/Files/API/php/library/2.0.0/MyfatoorahLibrary.txt');
-    curl_setopt_array(
-        $mfCurl,
-        array(
+    curl_setopt_array($mfCurl, array(
         CURLOPT_RETURNTRANSFER => true,
-        )
-    );
+    ));
 
     $mfResponse = curl_exec($mfCurl);
     $mfHttpCode = curl_getinfo($mfCurl, CURLINFO_HTTP_CODE);
 
     curl_close($mfCurl);
-    if ($mfHttpCode == 200) {
+    if ($mfHttpCode == 200 && is_string($mfResponse)) {
         $mfNamespace = '<?php namespace MyFatoorah\Library; ';
         $mfUse1      = 'use MyFatoorah\Library\MyfatoorahApiV2; ';
         $mfUse2      = 'use Exception; ';

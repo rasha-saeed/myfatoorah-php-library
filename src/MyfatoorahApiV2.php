@@ -135,7 +135,7 @@ class MyfatoorahApiV2
         curl_close($curl);
 
         //example set a local ip to host apitest.myfatoorah.com
-        if ($err) {
+        if ($err && !is_string($res)) {
             $this->log("$msgLog - cURL Error: $err");
             throw new Exception($err);
         }
@@ -377,7 +377,7 @@ class MyfatoorahApiV2
         $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
 
-        if ($http_code == 200) {
+        if ($http_code == 200 && is_string($response)) {
             file_put_contents($cachedFile, $response);
             return json_decode($response, true);
         } elseif ($http_code == 403) {
