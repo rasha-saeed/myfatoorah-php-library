@@ -446,4 +446,94 @@ class PaymentMyfatoorahApiV2 extends MyfatoorahApiV2
         return true;
     }
 
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     *
+     * @param object $json
+     *
+     * @return object
+     */
+    protected function getSuccessData($json)
+    {
+
+        foreach ($json->Data->InvoiceTransactions as $transaction) {
+            if ($transaction->TransactionStatus == 'Succss') {
+                $json->Data->InvoiceStatus = 'Paid';
+                $json->Data->InvoiceError  = '';
+
+                $json->Data->focusTransaction = $transaction;
+                return $json->Data;
+            }
+        }
+        return $json->Data;
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     *
+     * @param object $json
+     * @param string $keyId
+     * @param string $KeyType
+     *
+     * @return object
+     */
+    protected function getErrorData($json, $keyId, $KeyType)
+    {
+
+        //------------------
+        //case 1: payment is Failed
+        $focusTransaction = $this->{"getLastTransactionOf$KeyType"}($json, $keyId);
+        if ($focusTransaction && $focusTransaction->TransactionStatus == 'Failed') {
+            $json->Data->InvoiceStatus = 'Failed';
+            $json->Data->InvoiceError  = $focusTransaction->Error . '.';
+
+            $json->Data->focusTransaction = $focusTransaction;
+
+            return $json->Data;
+        }
+
+        //------------------
+        //case 2: payment is Expired
+        //all myfatoorah gateway is set to Asia/Kuwait
+        $ExpiryDateTime = $json->Data->ExpiryDate . ' ' . $json->Data->ExpiryTime;
+        $ExpiryDate     = new \DateTime($ExpiryDateTime, new \DateTimeZone('Asia/Kuwait'));
+        $currentDate    = new \DateTime('now', new \DateTimeZone('Asia/Kuwait'));
+
+        if ($ExpiryDate < $currentDate) {
+            $json->Data->InvoiceStatus = 'Expired';
+            $json->Data->InvoiceError  = 'Invoice is expired since ' . $json->Data->ExpiryDate . '.';
+
+            return $json->Data;
+        }
+
+        //------------------
+        //case 3: payment is Pending
+        //payment is pending .. user has not paid yet and the invoice is not expired
+        $json->Data->InvoiceStatus = 'Pending';
+        $json->Data->InvoiceError  = 'Pending Payment.';
+
+        return $json->Data;
+    }
+
+        //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Create an invoice using Embedded session (POST API)
+     *
+     * @param array          $curlData  invoice information
+     * @param integer|string $sessionId session id used in payment process
+     * @param integer|string $orderId   used in log file (default value: null)
+     *
+     * @return array
+     */
+    public function embeddedPayment($curlData, $sessionId, $orderId = null)
+    {
+
+        $curlData['SessionId'] = $sessionId;
+
+        $json = $this->callAPI("$this->apiURL/v2/ExecutePayment", $curlData, $orderId, 'Embedded Payment');
+        return ['invoiceURL' => $json->Data->PaymentURL, 'invoiceId' => $json->Data->InvoiceId];
+    }
 }
