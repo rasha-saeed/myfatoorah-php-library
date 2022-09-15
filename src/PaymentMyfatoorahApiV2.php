@@ -229,6 +229,53 @@ class PaymentMyfatoorahApiV2 extends MyfatoorahApiV2 {
         return $paymentMethods;
     }
 
+//-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Check if the system supports ApplePay or not
+     *
+     * @return boolean
+     */
+    protected static function isAppleSystem() {
+
+        $userAgent = filter_input(INPUT_SERVER, 'HTTP_USER_AGENT', FILTER_SANITIZE_STRING);
+
+        if ((stripos($userAgent, 'iPod') || stripos($userAgent, 'iPhone') || stripos($userAgent, 'iPad') || stripos($userAgent, 'Mac')) && (self::getBrowserName($userAgent) == 'Safari')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     *
+     * @param string $userAgent
+     *
+     * @return string
+     */
+    public static function getBrowserName($userAgent) {
+        
+        $browsers = [
+            'Opera'             => ['Opera', 'OPR/'],
+            'Edge'              => ['Edge'],
+            'Chrome'            => ['Chrome', 'CriOS'],
+            'Firefox'           => ['Firefox', 'FxiOS'],
+            'Safari'            => ['Safari'],
+            'Internet Explorer' => ['MSIE', 'Trident/7'],
+        ];
+
+        foreach ($browsers as $browser => $bArr) {
+            foreach ($bArr as $needle) {
+                if (strpos($userAgent, $needle)) {
+                    return $browser;
+                }
+            }
+        }
+
+        return 'Other';
+    }
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
