@@ -11,8 +11,7 @@ use Exception;
  * @copyright 2021 MyFatoorah, All rights reserved
  * @license   GNU General Public License v3.0
  */
-trait TraitHelper
-{
+trait TraitHelper {
     // -----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -28,8 +27,7 @@ trait TraitHelper
      *
      * @throws Exception    Throw exception if the input length is less than 3 chars or long than 14 chars.
      */
-    public static function getPhone($inputString)
-    {
+    public static function getPhone($inputString) {
 
         //remove any arabic digit
         $newNumbers = range(0, 9);
@@ -88,8 +86,7 @@ trait TraitHelper
      *
      * @throws Exception Throw exception if the input unit is not support.
      */
-    public static function getWeightRate($unit)
-    {
+    public static function getWeightRate($unit) {
 
         $lUnit = strtolower($unit);
 
@@ -121,8 +118,7 @@ trait TraitHelper
      *
      * @throws Exception        Throw exception if the input unit is not support.
      */
-    public static function getDimensionRate($unit)
-    {
+    public static function getDimensionRate($unit) {
 
         $lUnit = strtolower($unit);
 
@@ -155,8 +151,7 @@ trait TraitHelper
      *
      * @return boolean
      */
-    public static function isSignatureValid($dataArray, $secret, $signature, $eventType = 0)
-    {
+    public static function isSignatureValid($dataArray, $secret, $signature, $eventType = 0) {
 
         if ($eventType == 2) {
             unset($dataArray['GatewayReference']);
@@ -171,14 +166,14 @@ trait TraitHelper
         // });
 
         $output = implode(
-            ',',
-            array_map(
-                function ($v, $k) {
-                    return sprintf("%s=%s", $k, $v);
-                },
-                $dataArray,
-                array_keys($dataArray)
-            )
+                ',',
+                array_map(
+                        function ($v, $k) {
+                            return sprintf("%s=%s", $k, $v);
+                        },
+                        $dataArray,
+                        array_keys($dataArray)
+                )
         );
 
         //        $data      = utf8_encode($output);
@@ -200,8 +195,7 @@ trait TraitHelper
      *
      * @return array of MyFatoorah data
      */
-    public static function getMyFatoorahCountries()
-    {
+    public static function getMyFatoorahCountries() {
 
         $cachedFile = dirname(__FILE__) . '/mf-config.json';
 
@@ -228,8 +222,7 @@ trait TraitHelper
      *
      * @return boolean
      */
-    protected static function isAppleSystem()
-    {
+    protected static function isAppleSystem() {
 
         $userAgent = filter_input(INPUT_SERVER, 'HTTP_USER_AGENT', FILTER_SANITIZE_STRING);
 
@@ -248,8 +241,7 @@ trait TraitHelper
      *
      * @return string
      */
-    public static function getBrowserName($userAgent)
-    {
+    public static function getBrowserName($userAgent) {
         $browsers = [
             'Opera'             => ['Opera', 'OPR/'],
             'Edge'              => ['Edge'],

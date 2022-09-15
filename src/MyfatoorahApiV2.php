@@ -23,8 +23,8 @@ use Exception;
  * @copyright 2021 MyFatoorah, All rights reserved
  * @license   GNU General Public License v3.0
  */
-class MyfatoorahApiV2
-{
+class MyfatoorahApiV2 {
+
     use TraitHelper;
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -71,8 +71,7 @@ class MyfatoorahApiV2
      * @param string|object $loggerObj   This is the file name or the logger object. It is used in logging the payment/shipping events to help in debugging and monitor the process and connections. Leave it null, if you don't want to log the events.
      * @param string        $loggerFunc  If $loggerObj is set as a logger object, you should set this var with the function name that will be used in the debugging.
      */
-    public function __construct($apiKey, $countryMode = 'KWT', $isTest = false, $loggerObj = null, $loggerFunc = null)
-    {
+    public function __construct($apiKey, $countryMode = 'KWT', $isTest = false, $loggerObj = null, $loggerFunc = null) {
 
         $mfCountries = $this->getMyFatoorahCountries();
 
@@ -101,8 +100,7 @@ class MyfatoorahApiV2
      *
      * @throws Exception    Throw exception if there is any curl/validation error in the MyFatoorah API endpoint URL
      */
-    public function callAPI($url, $postFields = null, $orderId = null, $function = null)
-    {
+    public function callAPI($url, $postFields = null, $orderId = null, $function = null) {
 
         //to prevent json_encode adding lots of decimal digits
         ini_set('precision', 14);
@@ -123,10 +121,10 @@ class MyfatoorahApiV2
         $curl = curl_init($url);
 
         curl_setopt_array($curl, array(
-                    CURLOPT_CUSTOMREQUEST  => $request,
-                    CURLOPT_POSTFIELDS     => $fields,
-                    CURLOPT_HTTPHEADER     => ["Authorization: Bearer $this->apiKey", 'Content-Type: application/json'],
-                    CURLOPT_RETURNTRANSFER => true
+            CURLOPT_CUSTOMREQUEST  => $request,
+            CURLOPT_POSTFIELDS     => $fields,
+            CURLOPT_HTTPHEADER     => ["Authorization: Bearer $this->apiKey", 'Content-Type: application/json'],
+            CURLOPT_RETURNTRANSFER => true
         ));
 
         $res = curl_exec($curl);
@@ -170,8 +168,7 @@ class MyfatoorahApiV2
      *
      * @return string
      */
-    protected function getAPIError($json, $res)
-    {
+    protected function getAPIError($json, $res) {
 
         if (isset($json->IsSuccess) && $json->IsSuccess == true) {
             return '';
@@ -216,8 +213,7 @@ class MyfatoorahApiV2
      *
      * @return string
      */
-    protected function getJsonErrors($json)
-    {
+    protected function getJsonErrors($json) {
 
         if (isset($json->ValidationErrors) || isset($json->FieldsErrors)) {
             //$err = implode(', ', array_column($json->ValidationErrors, 'Error'));
@@ -226,8 +222,8 @@ class MyfatoorahApiV2
             $blogDatas = array_column($errorsObj, 'Error', 'Name');
 
             return implode(', ', array_map(function ($k, $v) {
-                                return "$k: $v";
-            }, array_keys($blogDatas), array_values($blogDatas)));
+                        return "$k: $v";
+                    }, array_keys($blogDatas), array_values($blogDatas)));
         }
 
         if (isset($json->Data->ErrorMessage)) {
@@ -264,8 +260,7 @@ class MyfatoorahApiV2
      *
      * @return null
      */
-    public function log($msg)
-    {
+    public function log($msg) {
 
         if (!$this->loggerObj) {
             return;
@@ -288,8 +283,7 @@ class MyfatoorahApiV2
      *
      * @throws Exception    Throw exception if the input currency is not support by MyFatoorah portal account.
      */
-    public function getCurrencyRate($currency)
-    {
+    public function getCurrencyRate($currency) {
 
         $json = $this->getCurrencyRates();
         foreach ($json as $value) {
@@ -307,8 +301,7 @@ class MyfatoorahApiV2
      *
      * @return object
      */
-    public function getCurrencyRates()
-    {
+    public function getCurrencyRates() {
 
         $url = "$this->apiURL/v2/GetCurrenciesExchangeList";
         return $this->callAPI($url, null, null, 'Get Currencies Exchange List');
@@ -326,8 +319,7 @@ class MyfatoorahApiV2
      *
      * @return array
      */
-    protected function calcGatewayData($totalAmount, $currency, $paymentCurrencyIso, $allRatesData)
-    {
+    protected function calcGatewayData($totalAmount, $currency, $paymentCurrencyIso, $allRatesData) {
 
         //if ($currency != $paymentCurrencyIso) {
         foreach ($allRatesData as $data) {
@@ -364,13 +356,12 @@ class MyfatoorahApiV2
      *
      * @return array
      */
-    protected static function createNewMFConfigFile($cachedFile)
-    {
+    protected static function createNewMFConfigFile($cachedFile) {
 
         $curl = curl_init('https://portal.myfatoorah.com/Files/API/mf-config.json');
         curl_setopt_array($curl, array(
-                    CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
-                    CURLOPT_RETURNTRANSFER => true
+            CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
+            CURLOPT_RETURNTRANSFER => true
         ));
 
         $response  = curl_exec($curl);
