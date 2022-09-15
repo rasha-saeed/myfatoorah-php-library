@@ -226,7 +226,7 @@ class PaymentMyfatoorahApiV2 extends MyfatoorahApiV2
                 $paymentMethods['all'][]   = $g;
             }
         } elseif ($this->isAppleSystem()) {
-            if ($isAppleRegistered == true) {
+            if ($isAppleRegistered) {
                 //add apple payment for IOS systems
                 $paymentMethods['ap'][] = $g;
             } else {
@@ -659,7 +659,7 @@ class PaymentMyfatoorahApiV2 extends MyfatoorahApiV2
      * @param string         $userDefinedField Customer Identifier to dispaly its saved data
      * @param integer|string $orderId          used in log file (default value: null)
      *
-     * @return array
+     * @return object
      */
     public function getEmbeddedSession($userDefinedField = '', $orderId = null)
     {
@@ -675,7 +675,7 @@ class PaymentMyfatoorahApiV2 extends MyfatoorahApiV2
      *
      * @param string $url Site URL
      *
-     * @return array
+     * @return object
      */
     public function registerApplePayDomain($url)
     {
