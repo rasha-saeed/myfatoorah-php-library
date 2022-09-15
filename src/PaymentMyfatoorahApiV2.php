@@ -498,20 +498,4 @@ class PaymentMyfatoorahApiV2 extends MyfatoorahApiV2
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Register Apple Pay Domain (POST API)
-     *
-     * @param string $url Site URL
-     *
-     * @return object
-     */
-    public function registerApplePayDomain($url)
-    {
-
-        $domainName = ['DomainName' => parse_url($url, PHP_URL_HOST)];
-        return $this->callAPI("$this->apiURL/v2/RegisterApplePayDomain", $domainName, '', 'Register Apple Pay Domain');
-    }
-
-    //-----------------------------------------------------------------------------------------------------------------------------------------
 }
