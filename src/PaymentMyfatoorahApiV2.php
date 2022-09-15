@@ -480,22 +480,6 @@ class PaymentMyfatoorahApiV2 extends MyfatoorahApiV2
         return ['invoiceURL' => $json->Data->PaymentURL, 'invoiceId' => $json->Data->InvoiceId];
     }
 
-    //-----------------------------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Get session Data (POST API)
-     *
-     * @param string         $userDefinedField Customer Identifier to dispaly its saved data
-     * @param integer|string $orderId          used in log file (default value: null)
-     *
-     * @return object
-     */
-    public function getEmbeddedSession($userDefinedField = '', $orderId = null)
-    {
-
-        $customerIdentifier = ['CustomerIdentifier' => $userDefinedField];
-        return $this->callAPI("$this->apiURL/v2/InitiateSession", $customerIdentifier, $orderId, 'Initiate Session');
-    }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
 }
