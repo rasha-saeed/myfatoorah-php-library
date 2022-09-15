@@ -15,7 +15,13 @@ use Exception;
 class PaymentMyfatoorahApiV2 extends MyfatoorahApiV2
 {
 
-
+    /**
+     * To specify either the payment will be onsite or offsite
+     * (default value: false)
+     *
+     * @var boolean
+     */
+    protected $isDirectPayment = false;
 
     /**
      *
@@ -23,7 +29,11 @@ class PaymentMyfatoorahApiV2 extends MyfatoorahApiV2
      */
     public static $pmCachedFile = __DIR__ . '/mf-methods.json';
 
-
+    /**
+     *
+     * @var array
+     */
+    protected static $paymentMethods;
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -70,6 +80,102 @@ class PaymentMyfatoorahApiV2 extends MyfatoorahApiV2
         } else {
             return $this->getVendorGateways(0, '', true);
         }
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * List available Payment Gateways by type (direct, cards)
+     *
+     * @param boolean $isDirect
+     *
+     * @return array
+     */
+    public function getVendorGatewaysByType($isDirect = false)
+    {
+
+        $gateways = $this->getCachedVendorGateways();
+
+        //        try {
+        //            $gateways = $this->getVendorGateways();
+        //        } catch (Exception $ex) {
+        //            return [];
+        //        }
+
+        $paymentMethods = [
+            'cards'  => [],
+            'direct' => [],
+        ];
+
+        foreach ($gateways as $g) {
+            if ($g->IsDirectPayment) {
+                $paymentMethods['direct'][] = $g;
+            } elseif ($g->PaymentMethodCode != 'ap') {
+                $paymentMethods['cards'][] = $g;
+            } elseif ($this->isAppleSystem()) {
+                //add apple payment for IOS systems
+                $paymentMethods['cards'][] = $g;
+            }
+        }
+
+        return ($isDirect) ? $paymentMethods['direct'] : $paymentMethods['cards'];
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * List available cached  Payment Methods
+     *
+     * @param  bool $isAppleRegistered
+     * @return array
+     */
+    public function getCachedPaymentMethods($isAppleRegistered = false)
+    {
+
+        $gateways       = $this->getCachedVendorGateways();
+        $paymentMethods = ['all' => [], 'cards' => [], 'form' => [], 'ap' => []];
+        foreach ($gateways as $g) {
+            $paymentMethods = $this->fillPaymentMethodsArray($g, $paymentMethods, $isAppleRegistered);
+        }
+
+        //add only one ap gateway
+        $paymentMethods['ap'] = (isset($paymentMethods['ap'][0])) ? $paymentMethods['ap'][0] : [];
+
+        return $paymentMethods;
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * List available Payment Methods
+     *
+     * @param object $json
+     * @param string $orderId
+     * @param string $price
+     * @param string $currncy
+     *
+     * @return boolean
+     */
+    protected function checkOrderInformation($json, $orderId = null, $price = null, $currncy = null)
+    {
+
+        //check for the order ID
+        if ($orderId && $json->Data->CustomerReference != $orderId) {
+            return false;
+        }
+
+        //check for the order price and currency
+        list($valStr, $mfCurrncy) = explode(' ', $json->Data->InvoiceDisplayValue);
+        $mfPrice = floatval(preg_replace('/[^\d.]/', '', $valStr));
+
+        if ($price && $price != $mfPrice) {
+            return false;
+        }
+        if ($currncy && $currncy != $mfCurrncy) {
+            return false;
+        }
+
+        return true;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
