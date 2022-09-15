@@ -142,13 +142,13 @@ class MyfatoorahApiV2
 
         $this->log("$msgLog - Response: $res");
 
-        $json = json_decode((string)$res);
+        $json = json_decode((string) $res);
 
         //***************************************
         //check for errors
         //***************************************
 
-        $error = $this->getAPIError($json, (string)$res);
+        $error = $this->getAPIError($json, (string) $res);
         if ($error) {
             $this->log("$msgLog - Error: $error");
             throw new Exception($error);

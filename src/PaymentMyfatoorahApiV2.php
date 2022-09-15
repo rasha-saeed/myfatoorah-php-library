@@ -259,33 +259,6 @@ class PaymentMyfatoorahApiV2 extends MyfatoorahApiV2
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     *
-     * @param string $userAgent
-     *
-     * @return string
-     */
-    public static function getBrowserName($userAgent)
-    {
-
-        if (strpos($userAgent, 'Opera') || strpos($userAgent, 'OPR/')) {
-            return 'Opera';
-        } elseif (strpos($userAgent, 'Edge')) {
-            return 'Edge';
-        } elseif (strpos($userAgent, 'Chrome') || strpos($userAgent, 'CriOS')) {
-            return 'Chrome';
-        } elseif (strpos($userAgent, 'Firefox') || strpos($userAgent, 'FxiOS')) {
-            return 'Firefox';
-        } elseif (strpos($userAgent, 'Safari')) {
-            return 'Safari';
-        } elseif (strpos($userAgent, 'MSIE') || strpos($userAgent, 'Trident/7')) {
-            return 'Internet Explorer';
-        }
-        return 'Other';
-    }
-
-    //-----------------------------------------------------------------------------------------------------------------------------------------
-
-    /**
      * Get Payment Method Object
      *
      * @param string         $gateway
@@ -479,15 +452,13 @@ class PaymentMyfatoorahApiV2 extends MyfatoorahApiV2
         }
 
         //check for the order price and currency
-        $invoiceDisplayValue = explode(' ', $json->Data->InvoiceDisplayValue);
+        list($mfPriceString, $mfCurrncy) = explode(' ', $json->Data->InvoiceDisplayValue);
+        $mfPrice = floatval(preg_replace('/[^\d.]/', '', $mfPriceString));
 
-        $mfPrice   = floatval(preg_replace('/[^\d.]/', '', $invoiceDisplayValue[0]));
-        $mfCurrncy = $invoiceDisplayValue[1];
-
-        if ($price && $mfPrice != $price) {
+        if ($price && $price != $mfPrice) {
             return false;
         }
-        if ($currncy && $mfCurrncy != $currncy) {
+        if ($currncy && $currncy != $mfCurrncy) {
             return false;
         }
 

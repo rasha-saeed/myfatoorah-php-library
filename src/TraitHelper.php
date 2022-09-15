@@ -222,4 +222,34 @@ trait TraitHelper
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     *
+     * @param string $userAgent
+     *
+     * @return string
+     */
+    public static function getBrowserName($userAgent)
+    {
+        $browsers = [
+            'Opera'             => ['Opera', 'OPR/'],
+            'Edge'              => ['Edge'],
+            'Chrome'            => ['Chrome', 'CriOS'],
+            'Firefox'           => ['Firefox', 'FxiOS'],
+            'Safari'            => ['Safari'],
+            'Internet Explorer' => ['MSIE', 'Trident/7'],
+        ];
+
+        foreach ($browsers as $browser => $bArr) {
+            foreach ($bArr as $needle) {
+                if (strpos($userAgent, $needle)) {
+                    return $browser;
+                }
+            }
+        }
+
+        return 'Other';
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
 }
