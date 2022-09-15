@@ -240,25 +240,6 @@ class PaymentMyfatoorahApiV2 extends MyfatoorahApiV2
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Check if the system supports ApplePay or not
-     *
-     * @return boolean
-     */
-    protected function isAppleSystem()
-    {
-
-        $userAgent = filter_input(INPUT_SERVER, 'HTTP_USER_AGENT', FILTER_SANITIZE_STRING);
-
-        if ((stripos($userAgent, 'iPod') || stripos($userAgent, 'iPhone') || stripos($userAgent, 'iPad') || stripos($userAgent, 'Mac')) && (self::getBrowserName($userAgent) == 'Safari')) {
-            return true;
-        }
-
-        return false;
-    }
-
-    //-----------------------------------------------------------------------------------------------------------------------------------------
-
-    /**
      * Get Payment Method Object
      *
      * @param string         $gateway
@@ -455,10 +436,10 @@ class PaymentMyfatoorahApiV2 extends MyfatoorahApiV2
         list($mfPriceString, $mfCurrncy) = explode(' ', $json->Data->InvoiceDisplayValue);
         $mfPrice = floatval(preg_replace('/[^\d.]/', '', $mfPriceString));
 
-        if ($price && $price != $mfPrice) {
+        if ($price != $mfPrice) {
             return false;
         }
-        if ($currncy && $currncy != $mfCurrncy) {
+        if ($currncy != $mfCurrncy) {
             return false;
         }
 

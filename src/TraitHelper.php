@@ -221,6 +221,25 @@ trait TraitHelper
         }
     }
 
+//-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Check if the system supports ApplePay or not
+     *
+     * @return boolean
+     */
+    protected static function isAppleSystem()
+    {
+
+        $userAgent = filter_input(INPUT_SERVER, 'HTTP_USER_AGENT', FILTER_SANITIZE_STRING);
+
+        if ((stripos($userAgent, 'iPod') || stripos($userAgent, 'iPhone') || stripos($userAgent, 'iPad') || stripos($userAgent, 'Mac')) && (self::getBrowserName($userAgent) == 'Safari')) {
+            return true;
+        }
+
+        return false;
+    }
+
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
