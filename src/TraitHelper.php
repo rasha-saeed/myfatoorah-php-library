@@ -2,24 +2,34 @@
 
 namespace MyFatoorah\Library;
 
-trait TraitHelper {
+use Exception;
 
-    //-----------------------------------------------------------------------------------------------------------------------------------------
+/**
+ *  TraitHelper handles the standard values used in MyFatoorah API endpoints.
+ *
+ * @author    MyFatoorah <tech@myfatoorah.com>
+ * @copyright 2021 MyFatoorah, All rights reserved
+ * @license   GNU General Public License v3.0
+ */
+trait TraitHelper
+{
+    // -----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * Returns the country code and the phone after applying MyFatoorah restriction
-     * 
+     *
      * Matching regular expression pattern: ^(?:(\+)|(00)|(\\*)|())[0-9]{3,14}((\\#)|())$
      * if (!preg_match('/^(?:(\+)|(00)|(\\*)|())[0-9]{3,14}((\\#)|())$/iD', $inputString))
      * String length: inclusive between 0 and 11
-     * 
+     *
      * @param string $inputString It is the input phone number provide by the end user.
-     * 
+     *
      * @return array        That contains the phone code in the 1st element the the phone number the the 2nd element.
-     * 
+     *
      * @throws Exception    Throw exception if the input length is less than 3 chars or long than 14 chars.
      */
-    public static function getPhone($inputString) {
+    public static function getPhone($inputString)
+    {
 
         //remove any arabic digit
         $newNumbers = range(0, 9);
@@ -70,75 +80,83 @@ trait TraitHelper {
 
     /**
      * Get the rate that will convert the given weight unit to MyFatoorah default weight unit.
-     * 
-     * @param string $unit It is the weight unit used. Weight must be in kg, g, lbs, or oz. Default is kg.
-     * 
-     * @return double|integer The conversion rate that will convert the given unit into the kg. 
-     * 
-     * @throws Exception Throw exception if the input unit is not support. Weight must be in kg, g, lbs, or oz. Default is kg.
+     * Weight must be in kg, g, lbs, or oz. Default is kg.
+     *
+     * @param string $unit It is the weight unit used.
+     *
+     * @return double|integer The conversion rate that will convert the given unit into the kg.
+     *
+     * @throws Exception Throw exception if the input unit is not support.
      */
-    public static function getWeightRate($unit) {
+    public static function getWeightRate($unit)
+    {
 
-        $unit1 = strtolower($unit);
-        if ($unit1 == 'kg' || $unit1 == 'kgs' || $unit1 == 'كج' || $unit1 == 'كلغ' || $unit1 == 'كيلو جرام' || $unit1 == 'كيلو غرام') {
-            $rate = 1; //kg is the default
-        } else if ($unit1 == 'g' || $unit1 == 'جرام' || $unit1 == 'غرام' || $unit1 == 'جم') {
-            $rate = 0.001;
-        } else if ($unit1 == 'lbs' || $unit1 == 'lb' || $unit1 == 'رطل' || $unit1 == 'باوند') {
-            $rate = 0.453592;
-        } else if ($unit1 == 'oz' || $unit1 == 'اوقية' || $unit1 == 'أوقية') {
-            $rate = 0.0283495;
-        } else {
-            throw new Exception('Weight units must be in kg, g, lbs, or oz. Default is kg');
+        $lUnit = strtolower($unit);
+
+        //kg is the default
+        $rateUnits = [
+            '1'         => ['kg', 'kgs', 'كج', 'كلغ', 'كيلو جرام', 'كيلو غرام'],
+            '0.001'     => ['g', 'جرام', 'غرام', 'جم'],
+            '0.453592'  => ['lbs', 'lb', 'رطل', 'باوند'],
+            '0.0283495' => ['oz', 'اوقية', 'أوقية'],
+        ];
+
+        foreach ($rateUnits as $rate => $unitArr) {
+            if (array_search($lUnit, $unitArr) !== false) {
+                return (float) $rate;
+            }
         }
-
-        return $rate;
+        throw new Exception('Weight units must be in kg, g, lbs, or oz. Default is kg');
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * Get the rate that will convert the given dimension unit to MyFatoorah default dimension unit.
-     * 
-     * @param string $unit It is the dimension unit used in width, hight, or depth. Dimension must be in cm, m, mm, in, or yd. Default is cm.
-     * 
-     * @return double|integer         The conversion rate that will convert the given unit into the cm.
-     * 
-     * @throws Exception    Throw exception if the input unit is not support. Dimension must be in cm, m, mm, in, or yd. Default is cm.
+     * Dimension must be in cm, m, mm, in, or yd. Default is cm.
+     *
+     * @param string $unit It is the dimension unit used in width, hight, or depth.
+     *
+     * @return double|integer   The conversion rate that will convert the given unit into the cm.
+     *
+     * @throws Exception        Throw exception if the input unit is not support.
      */
-    public static function getDimensionRate($unit) {
+    public static function getDimensionRate($unit)
+    {
 
-        $unit1 = strtolower($unit);
-        if ($unit1 == 'cm' || $unit1 == 'سم') {
-            $rate = 1; //cm is the default
-        } elseif ($unit1 == 'm' || $unit1 == 'متر' || $unit1 == 'م') {
-            $rate = 100;
-        } else if ($unit1 == 'mm' || $unit1 == 'مم') {
-            $rate = 0.1;
-        } else if ($unit1 == 'in' || $unit1 == 'انش' || $unit1 == 'إنش' || $unit1 == 'بوصه' || $unit1 == 'بوصة') {
-            $rate = 2.54;
-        } else if ($unit1 == 'yd' || $unit1 == 'يارده' || $unit1 == 'ياردة') {
-            $rate = 91.44;
-        } else {
-            throw new Exception('Dimension units must be in cm, m, mm, in, or yd. Default is cm');
+        $lUnit = strtolower($unit);
+
+        //cm is the default
+        $rateUnits = [
+            '1'     => ['cm', 'سم'],
+            '100'   => ['m', 'متر', 'م'],
+            '0.1'   => ['mm', 'مم'],
+            '2.54'  => ['in', 'انش', 'إنش', 'بوصه', 'بوصة'],
+            '91.44' => ['yd', 'يارده', 'ياردة'],
+        ];
+
+        foreach ($rateUnits as $rate => $unitArr) {
+            if (array_search($lUnit, $unitArr) !== false) {
+                return (float) $rate;
+            }
         }
-
-        return $rate;
+        throw new Exception('Dimension units must be in cm, m, mm, in, or yd. Default is cm');
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * Validate webhook signature function
-     * 
+     *
      * @param array  $dataArray webhook request array
      * @param string $secret    webhook secret key
      * @param string $signature MyFatoorah signature
-     * @param int    $eventType
-     * 
+     * @param int    $eventType MyFatoorah Event type Number (1, 2, 3 , 4)
+     *
      * @return boolean
      */
-    public static function isSignatureValid($dataArray, $secret, $signature, $eventType = 0) {
+    public static function isSignatureValid($dataArray, $secret, $signature, $eventType = 0)
+    {
 
         if ($eventType == 2) {
             unset($dataArray['GatewayReference']);
@@ -152,17 +170,20 @@ trait TraitHelper {
         //   return strcmp($a, $b);
         // });
 
-        $output = implode(',', array_map(
-                        function ($v, $k) {
+        $output = implode(
+            ',',
+            array_map(
+                function ($v, $k) {
                     return sprintf("%s=%s", $k, $v);
                 },
-                        $dataArray,
-                        array_keys($dataArray)
-        ));
+                $dataArray,
+                array_keys($dataArray)
+            )
+        );
 
         //        $data      = utf8_encode($output);
         //        $keySecret = utf8_encode($secret);
-        // generate hash of $field string 
+        // generate hash of $field string
         $hash = base64_encode(hash_hmac('sha256', $output, $secret, true));
 
         if ($signature === $hash) {
@@ -176,10 +197,11 @@ trait TraitHelper {
 
     /**
      * Get a list of MyFatoorah countries and their API URLs and names
-     * 
+     *
      * @return array of MyFatoorah data
      */
-    public static function getMyFatoorahCountries() {
+    public static function getMyFatoorahCountries()
+    {
 
         $cachedFile = dirname(__FILE__) . '/mf-config.json';
 

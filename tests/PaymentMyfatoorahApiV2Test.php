@@ -4,18 +4,21 @@ namespace MyFatoorah\Test;
 
 use MyFatoorah\Library\PaymentMyfatoorahApiV2;
 
-class PaymentMyfatoorahApiV2Test extends \PHPUnit\Framework\TestCase {
+class PaymentMyfatoorahApiV2Test extends \PHPUnit\Framework\TestCase
+{
 
     private $keys;
 
-//-----------------------------------------------------------------------------------------------------------------------------------------
-    public function __construct() {
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+    public function __construct()
+    {
         parent::__construct();
-        $this->keys = include ('apiKeys.php');
+        $this->keys = include 'apiKeys.php';
     }
 
-//-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testGetVendorGateways() {
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+    public function testGetVendorGateways()
+    {
 
         foreach ($this->keys as $token) {
             try {
@@ -29,28 +32,30 @@ class PaymentMyfatoorahApiV2Test extends \PHPUnit\Framework\TestCase {
         }
     }
 
-//-----------------------------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * change the accessibility of a function
      * usage $method->invokeArgs($mfObj, [$ua]);
-     * 
-     * @param type $name
+     *
+     * @param  type $name
      * @return type
      */
-    protected static function getMethod($name) {
+    protected static function getMethod($name)
+    {
         $class  = new \ReflectionClass('\MyFatoorah\Library\PaymentMyfatoorahApiV2');
         $method = $class->getMethod($name);
         $method->setAccessible(true);
         return $method;
     }
 
-//-----------------------------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * https://www.whatismybrowser.com/guides/the-latest-user-agent/firefox
      */
-    public function testGetBrowserNameFirefox() {
+    public function testGetBrowserNameFirefox()
+    {
 
         $userAgents = [
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0',
@@ -78,7 +83,8 @@ class PaymentMyfatoorahApiV2Test extends \PHPUnit\Framework\TestCase {
         }
     }
 
-    public function testGetBrowserNameSafari() {
+    public function testGetBrowserNameSafari()
+    {
 
         $userAgents = [
             'Mozilla/5.0 (Macintosh; Intel Mac OS X 12_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.3 Safari/605.1.15',
@@ -93,7 +99,8 @@ class PaymentMyfatoorahApiV2Test extends \PHPUnit\Framework\TestCase {
         }
     }
 
-    public function testGetBrowserNameChrome() {
+    public function testGetBrowserNameChrome()
+    {
 
         $userAgents = [
             'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36',
@@ -120,5 +127,5 @@ class PaymentMyfatoorahApiV2Test extends \PHPUnit\Framework\TestCase {
         }
     }
 
-//-----------------------------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------
 }

@@ -4,18 +4,21 @@ namespace MyFatoorah\Test;
 
 use MyFatoorah\Library\ShippingMyfatoorahApiV2;
 
-class ShippingMyfatoorahApiV2Test extends \PHPUnit\Framework\TestCase {
+class ShippingMyfatoorahApiV2Test extends \PHPUnit\Framework\TestCase
+{
 
     private $keys;
 
-//-----------------------------------------------------------------------------------------------------------------------------------------
-    public function __construct() {
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+    public function __construct()
+    {
         parent::__construct();
-        $this->keys = include ('apiKeys.php');
+        $this->keys = include 'apiKeys.php';
     }
 
-//-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testGetShippingCountries() {
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+    public function testGetShippingCountries()
+    {
         foreach ($this->keys as $token) {
             try {
                 $mfObj = new ShippingMyfatoorahApiV2($token['apiKey'], $token['countryMode'], $token['isTest']);
@@ -29,8 +32,9 @@ class ShippingMyfatoorahApiV2Test extends \PHPUnit\Framework\TestCase {
         }
     }
 
-//-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testGetShippingCities() {
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+    public function testGetShippingCities()
+    {
         foreach ($this->keys as $token) {
             try {
                 $mfObj = new ShippingMyfatoorahApiV2($token['apiKey'], $token['countryMode'], $token['isTest']);
@@ -45,8 +49,9 @@ class ShippingMyfatoorahApiV2Test extends \PHPUnit\Framework\TestCase {
         }
     }
 
-//-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testCalculateShippingCharge() {
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+    public function testCalculateShippingCharge()
+    {
         $mfObj = new ShippingMyfatoorahApiV2($this->keys['valid']['apiKey'], $this->keys['valid']['countryMode'], $this->keys['valid']['isTest']);
 
         $shippingData = [
@@ -71,7 +76,8 @@ class ShippingMyfatoorahApiV2Test extends \PHPUnit\Framework\TestCase {
         $this->assertEquals(45.926, $json->Data->Fees);
     }
 
-    public function testCalculateShippingChargeExceptionProductName() {
+    public function testCalculateShippingChargeExceptionProductName()
+    {
         $mfObj = new ShippingMyfatoorahApiV2($this->keys['valid']['apiKey'], $this->keys['valid']['countryMode'], $this->keys['valid']['isTest']);
 
         //test empty ProductName
@@ -97,5 +103,5 @@ class ShippingMyfatoorahApiV2Test extends \PHPUnit\Framework\TestCase {
         $mfObj->calculateShippingCharge($shippingData1);
     }
 
-//-----------------------------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------
 }
