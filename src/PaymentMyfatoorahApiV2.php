@@ -147,7 +147,152 @@ class PaymentMyfatoorahApiV2 extends MyfatoorahApiV2
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * List available Payment Methods
+     *
+     * @param object  $g
+     * @param array   $paymentMethods
+     * @param boolean $isAppleRegistered
+     *
+     * @return array
+     */
+    protected function fillPaymentMethodsArray($g, $paymentMethods, $isAppleRegistered = false)
+    {
+
+        if ($g->PaymentMethodCode != 'ap') {
+            if ($g->IsEmbeddedSupported) {
+                $paymentMethods['form'][] = $g;
+                $paymentMethods['all'][]  = $g;
+            } elseif (!$g->IsDirectPayment) {
+                $paymentMethods['cards'][] = $g;
+                $paymentMethods['all'][]   = $g;
+            }
+        } elseif ($this->isAppleSystem()) {
+            if ($isAppleRegistered) {
+                //add apple payment for IOS systems
+                $paymentMethods['ap'][] = $g;
+            } else {
+                $paymentMethods['cards'][] = $g;
+            }
+            $paymentMethods['all'][] = $g;
+        }
+        return $paymentMethods;
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Get the invoice/payment URL and the invoice id
+     *
+     * @param array          $curlData
+     * @param string         $gatewayId (default value: 'myfatoorah')
+     * @param integer|string $orderId   (default value: null) used in log file
+     * @param string         $sessionId
+     *
+     * @return array
+     */
+    public function getInvoiceURL($curlData, $gatewayId = 0, $orderId = null, $sessionId = null)
+    {
+
+        $this->log('------------------------------------------------------------');
+
+        $this->isDirectPayment = false;
+
+        if (!empty($sessionId)) {
+            return $this->embeddedPayment($curlData, $sessionId, $orderId);
+        } elseif ($gatewayId == 'myfatoorah' || empty($gatewayId)) {
+            return $this->sendPayment($curlData, $orderId);
+        } else {
+            return $this->excutePayment($curlData, $gatewayId, $orderId);
+        }
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * (POST API)
+     *
+     * @param array          $curlData
+     * @param integer|string $gatewayId
+     * @param integer|string $orderId   (default value: null) used in log file
+     *
+     * @return array
+     */
+    protected function excutePayment($curlData, $gatewayId, $orderId = null)
+    {
+
+        $curlData['PaymentMethodId'] = $gatewayId;
+
+        $json = $this->callAPI("$this->apiURL/v2/ExecutePayment", $curlData, $orderId, 'Excute Payment'); //__FUNCTION__
+
+        return ['invoiceURL' => $json->Data->PaymentURL, 'invoiceId' => $json->Data->InvoiceId];
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * (POST API)
+     *
+     * @param array          $curlData
+     * @param integer|string $orderId  (default value: null) used in log file
+     *
+     * @return array
+     */
+    protected function sendPayment($curlData, $orderId = null)
+    {
+
+        $curlData['NotificationOption'] = 'Lnk';
+
+        $json = $this->callAPI("$this->apiURL/v2/SendPayment", $curlData, $orderId, 'Send Payment');
+
+        return ['invoiceURL' => $json->Data->InvoiceURL, 'invoiceId' => $json->Data->InvoiceId];
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Get the Payment Transaction Status (POST API)
+     *
+     * @param string         $keyId
+     * @param string         $KeyType
+     * @param integer|string $orderId (default value: null)
+     * @param string         $price
+     * @param string         $currncy
+     *
+     * @return object
+     *
+     * @throws Exception
+     */
+    public function getPaymentStatus($keyId, $KeyType, $orderId = null, $price = null, $currncy = null)
+    {
+
+        //payment inquiry
+        $curlData = ['Key' => $keyId, 'KeyType' => $KeyType];
+        $json     = $this->callAPI("$this->apiURL/v2/GetPaymentStatus", $curlData, $orderId, 'Get Payment Status');
+
+        $msgLog = 'Order #' . $json->Data->CustomerReference . ' ----- Get Payment Status';
+
+        //check for the order information
+        if (!$this->checkOrderInformation($json, $orderId, $price, $currncy)) {
+            $err = 'Trying to call data of another order';
+            $this->log("$msgLog - Exception is $err");
+            throw new Exception($err);
+        }
+
+
+        //check invoice status (Paid and Not Paid Cases)
+        if ($json->Data->InvoiceStatus == 'Paid' || $json->Data->InvoiceStatus == 'DuplicatePayment') {
+            $json->Data = $this->getSuccessData($json);
+            $this->log("$msgLog - Status is Paid");
+        } elseif ($json->Data->InvoiceStatus != 'Paid') {
+            $json->Data = $this->getErrorData($json, $keyId, $KeyType);
+            $this->log("$msgLog - Status is " . $json->Data->InvoiceStatus . '. Error is ' . $json->Data->InvoiceError);
+        }
+
+        return $json->Data;
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
      *
      * @param object $json
      * @param string $orderId
