@@ -41,7 +41,8 @@ class MyFatoorahRefund extends MyFatoorah {
             'Comment'                 => $reason,
         ];
 
-        return $this->callAPI($url, $postFields, $orderId, 'Make Refund');
+        $json = $this->callAPI($url, $postFields, $orderId, 'Make Refund');
+        return $json->Data;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------

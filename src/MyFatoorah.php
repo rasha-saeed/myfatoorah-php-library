@@ -111,7 +111,7 @@ Class MyFatoorah {
      * @param integer|string $orderId    The order id or the payment id of the process, used for the events logging.
      * @param string         $function   The requester function name, used for the events logging.
      *
-     * @return object|array       The response object as the result of a successful calling to the API.
+     * @return object       The response object as the result of a successful calling to the API.
      *
      * @throws Exception    Throw exception if there is any curl/validation error in the MyFatoorah API endpoint URL
      */
@@ -233,7 +233,7 @@ Class MyFatoorah {
             $errorsObj = isset($json->ValidationErrors) ? $json->ValidationErrors : $json->FieldsErrors;
             $blogDatas = array_column($errorsObj, 'Error', 'Name');
 
-            return implode(', ', array_map(function ($k, $v) {
+            return implode(', ', array_map(function($k, $v) {
                         return "$k: $v";
                     }, array_keys($blogDatas), array_values($blogDatas)));
         }

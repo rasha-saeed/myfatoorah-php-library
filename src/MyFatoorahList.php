@@ -45,7 +45,7 @@ Class MyFatoorahList extends MyFatoorah {
     public function getCurrencyRates() {
 
         $url = "$this->apiURL/v2/GetCurrenciesExchangeList";
-        return $this->callAPI($url, null, null, 'Get Currencies Exchange List');
+        return (array) $this->callAPI($url, null, null, 'Get Currencies Exchange List');
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
