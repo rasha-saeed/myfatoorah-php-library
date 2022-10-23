@@ -60,7 +60,7 @@ Trait MyFatoorahPaymentForm {
      * @param double|integer $totalAmount
      * @param string         $currency
      * @param string         $paymentCurrencyIso
-     * @param object         $allRatesData
+     * @param array          $allRatesData
      *
      * @return array
      */

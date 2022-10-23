@@ -35,6 +35,13 @@ Class MyFatoorah {
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
+     * The configuration used to connect to MyFatoorah test/live API server
+     *
+     * @var array
+     */
+    protected $config = '';
+    
+    /**
      * The URL used to connect to MyFatoorah test/live API server
      *
      * @var string

@@ -27,8 +27,10 @@ class MyFatoorahRefund extends MyFatoorah {
      */
     public function refund($paymentId, $amount, $currencyCode, $reason, $orderId = null) {
 
-        $rate = $this->getCurrencyRate($currencyCode);
-        $url  = "$this->apiURL/v2/MakeRefund";
+        $mfListObj = new MyFatoorahList($this->config);
+        $rate      = $mfListObj->getCurrencyRate($currencyCode);
+
+        $url = "$this->apiURL/v2/MakeRefund";
 
         $postFields = [
             'KeyType'                 => 'PaymentId',

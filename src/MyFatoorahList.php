@@ -3,6 +3,7 @@
 namespace MyFatoorah\Library;
 
 use MyFatoorah\Library\MyFatoorah;
+use Exception;
 
 /**
  * MyFatoorahList handles the list process of MyFatoorah API endpoints
@@ -39,7 +40,7 @@ Class MyFatoorahList extends MyFatoorah {
     /**
      * Get list of MyFatoorah currency rates
      *
-     * @return object
+     * @return array
      */
     public function getCurrencyRates() {
 
