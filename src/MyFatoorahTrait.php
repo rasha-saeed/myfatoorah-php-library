@@ -5,14 +5,11 @@ namespace MyFatoorah\Library;
 use Exception;
 
 /**
- *  TraitHelper handles the standard values used in MyFatoorah API endpoints.
- *
- * @author    MyFatoorah <tech@myfatoorah.com>
- * @copyright 2021 MyFatoorah, All rights reserved
- * @license   GNU General Public License v3.0
+ * Trait MyFatoorah is responsible for helping calling MyFatoorah API endpoints.
+ * 
  */
-trait TraitHelper {
-    // -----------------------------------------------------------------------------------------------------------------------------------------
+Trait MyFatoorahTrait {
+    //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * Returns the country code and the phone after applying MyFatoorah restriction
@@ -159,25 +156,14 @@ trait TraitHelper {
 
         uksort($dataArray, 'strcasecmp');
 
-        // uksort($data, function ($a, $b) {
-        //   $a = mb_strtolower($a);
-        //   $b = mb_strtolower($b);
-        //   return strcmp($a, $b);
-        // });
-
-        $output = implode(
-                ',',
-                array_map(
+        $output = implode(',', array_map(
                         function ($v, $k) {
                             return sprintf("%s=%s", $k, $v);
                         },
                         $dataArray,
                         array_keys($dataArray)
-                )
-        );
+        ));
 
-        //        $data      = utf8_encode($output);
-        //        $keySecret = utf8_encode($secret);
         // generate hash of $field string
         $hash = base64_encode(hash_hmac('sha256', $output, $secret, true));
 
@@ -186,80 +172,6 @@ trait TraitHelper {
         } else {
             return false;
         }
-    }
-
-    //-----------------------------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Get a list of MyFatoorah countries and their API URLs and names
-     *
-     * @return array of MyFatoorah data
-     */
-    public static function getMyFatoorahCountries() {
-
-        $cachedFile = dirname(__FILE__) . '/mf-config.json';
-
-        if (file_exists($cachedFile)) {
-            if ((time() - filemtime($cachedFile) > 3600)) {
-                $countries = self::createNewMFConfigFile($cachedFile);
-            }
-
-            if (!empty($countries)) {
-                return $countries;
-            }
-
-            $cache = file_get_contents($cachedFile);
-            return ($cache) ? json_decode($cache, true) : [];
-        } else {
-            return self::createNewMFConfigFile($cachedFile);
-        }
-    }
-
-//-----------------------------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Check if the system supports ApplePay or not
-     *
-     * @return boolean
-     */
-    protected static function isAppleSystem() {
-
-        $userAgent = filter_input(INPUT_SERVER, 'HTTP_USER_AGENT', FILTER_SANITIZE_STRING);
-
-        if ((stripos($userAgent, 'iPod') || stripos($userAgent, 'iPhone') || stripos($userAgent, 'iPad') || stripos($userAgent, 'Mac')) && (self::getBrowserName($userAgent) == 'Safari')) {
-            return true;
-        }
-
-        return false;
-    }
-
-    //-----------------------------------------------------------------------------------------------------------------------------------------
-
-    /**
-     *
-     * @param string $userAgent
-     *
-     * @return string
-     */
-    public static function getBrowserName($userAgent) {
-        $browsers = [
-            'Opera'             => ['Opera', 'OPR/'],
-            'Edge'              => ['Edge'],
-            'Chrome'            => ['Chrome', 'CriOS'],
-            'Firefox'           => ['Firefox', 'FxiOS'],
-            'Safari'            => ['Safari'],
-            'Internet Explorer' => ['MSIE', 'Trident/7'],
-        ];
-
-        foreach ($browsers as $browser => $bArr) {
-            foreach ($bArr as $needle) {
-                if (strpos($userAgent, $needle)) {
-                    return $browser;
-                }
-            }
-        }
-
-        return 'Other';
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------

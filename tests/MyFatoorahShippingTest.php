@@ -2,9 +2,9 @@
 
 namespace MyFatoorah\Test;
 
-use MyFatoorah\Library\ShippingMyfatoorahApiV2;
+use MyFatoorah\Library\MyFatoorahShipping;
 
-class ShippingMyfatoorahApiV2Test extends \PHPUnit\Framework\TestCase {
+class MyFatoorahShippingTest extends \PHPUnit\Framework\TestCase {
 
     private $keys;
 
@@ -16,38 +16,37 @@ class ShippingMyfatoorahApiV2Test extends \PHPUnit\Framework\TestCase {
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
     public function testGetShippingCountries() {
-        foreach ($this->keys as $token) {
+        foreach ($this->keys as $config) {
             try {
-                $mfObj = new ShippingMyfatoorahApiV2($token['apiKey'], $token['countryMode'], $token['isTest']);
-                $json  = $mfObj->getShippingCountries();
+                $mfObj = new MyFatoorahShipping($config);
+                $data  = $mfObj->getShippingCountries();
 
-                $this->assertEquals('AD', $json->Data[0]->CountryCode);
-                $this->assertEquals('ANDORRA', $json->Data[0]->CountryName);
+                $this->assertEquals('AD', $data[0]->CountryCode);
+                $this->assertEquals('ANDORRA', $data[0]->CountryName);
             } catch (\Exception $ex) {
-                $this->assertEquals($token['exception'], $ex->getMessage(), $token['message']);
+                $this->assertEquals($config['exception'], $ex->getMessage(), $config['message']);
             }
         }
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
     public function testGetShippingCities() {
-        foreach ($this->keys as $token) {
+        foreach ($this->keys as $config) {
             try {
-                $mfObj = new ShippingMyfatoorahApiV2($token['apiKey'], $token['countryMode'], $token['isTest']);
-                $json  = $mfObj->getShippingCities(1, 'KW', 'ada');
+                $mfObj = new MyfatoorahShipping($config);
+                $cities  = $mfObj->getShippingCities(1, 'KW', 'ada');
 
-                $this->assertEquals('KW', $json->Data->CountryCode);
-                $this->assertEquals('ADAN', $json->Data->CityNames[0]);
-                $this->assertEquals('SHUHADA', $json->Data->CityNames[1]);
+                $this->assertEquals('ADAN', $cities[0]);
+                $this->assertEquals('SHUHADA', $cities[1]);
             } catch (\Exception $ex) {
-                $this->assertEquals($token['exception'], $ex->getMessage(), $token['message']);
+                $this->assertEquals($config['exception'], $ex->getMessage(), $config['message']);
             }
         }
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
     public function testCalculateShippingCharge() {
-        $mfObj = new ShippingMyfatoorahApiV2($this->keys['valid']['apiKey'], $this->keys['valid']['countryMode'], $this->keys['valid']['isTest']);
+        $mfObj = new MyfatoorahShipping($this->keys['valid']);
 
         $shippingData = [
             'ShippingMethod' => 1,
@@ -66,13 +65,13 @@ class ShippingMyfatoorahApiV2Test extends \PHPUnit\Framework\TestCase {
             'PostalCode'     => '12345',
         ];
 
-        $json = $mfObj->calculateShippingCharge($shippingData);
-        $this->assertEquals('KD', $json->Data->Currency);
-        $this->assertEquals(52.189, $json->Data->Fees);
+        $data = $mfObj->calculateShippingCharge($shippingData);
+        $this->assertEquals('KD', $data->Currency);
+        $this->assertEquals(52.189, $data->Fees);
     }
 
     public function testCalculateShippingChargeExceptionProductName() {
-        $mfObj = new ShippingMyfatoorahApiV2($this->keys['valid']['apiKey'], $this->keys['valid']['countryMode'], $this->keys['valid']['isTest']);
+        $mfObj = new MyfatoorahShipping($this->keys['valid']);
 
         //test empty ProductName
         $shippingData1 = [

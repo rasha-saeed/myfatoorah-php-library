@@ -2,28 +2,28 @@
 
 namespace MyFatoorah\Library;
 
-use MyFatoorah\Library\MyfatoorahApiV2;
+use MyFatoorah\Library\MyFatoorah;
 
 /**
- * This class handles the shipping process of MyFatoorah API endpoints
+ * MyFatoorahShipping handles the shipping process of MyFatoorah API endpoints
  *
  * @author    MyFatoorah <tech@myfatoorah.com>
  * @copyright 2021 MyFatoorah, All rights reserved
  * @license   GNU General Public License v3.0
  */
-class ShippingMyfatoorahApiV2 extends MyfatoorahApiV2 {
-    //-----------------------------------------------------------------------------------------------------------------------------------------
+class MyFatoorahShipping  extends MyFatoorah{
 
+    //-----------------------------------------------------------------------------------------------------------------------------------------
     /**
      * Get MyFatoorah Shipping Countries (GET API)
      *
-     * @return object
+     * @return array
      */
     public function getShippingCountries() {
 
         $url  = "$this->apiURL/v2/GetCountries";
         $json = $this->callAPI($url, null, null, 'Get Countries');
-        return $json;
+        return $json->Data;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -35,7 +35,7 @@ class ShippingMyfatoorahApiV2 extends MyfatoorahApiV2 {
      * @param string  $countryCode It can be obtained from getShippingCountries
      * @param string  $searchValue The key word that will be used in searching
      *
-     * @return object
+     * @return array
      */
     public function getShippingCities($method, $countryCode, $searchValue = '') {
 
@@ -45,8 +45,7 @@ class ShippingMyfatoorahApiV2 extends MyfatoorahApiV2 {
                 . '&searchValue=' . urlencode(substr($searchValue, 0, 30));
 
         $json = $this->callAPI($url, null, null, "Get Cities: $countryCode");
-        //        return array_map('strtolower', $json->Data->CityNames);
-        return $json;
+        return array_map('ucwords', $json->Data->CityNames);
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -62,7 +61,7 @@ class ShippingMyfatoorahApiV2 extends MyfatoorahApiV2 {
 
         $url  = "$this->apiURL/v2/CalculateShippingCharge";
         $json = $this->callAPI($url, $curlData, null, 'Calculate Shipping Charge');
-        return $json;
+        return $json->Data;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
