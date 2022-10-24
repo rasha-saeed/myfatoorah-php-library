@@ -31,7 +31,13 @@ Class MyFatoorah extends MyFatoorahHelper {
      *
      * @var array
      */
-    protected $config = '';
+    protected $config = [
+        'apiKey'      => null,
+        'isTest'      => false,
+        'countryCode' => null,
+        'loggerObj'   => null, //optional
+        'loggerFunc'  => null, //optional
+    ];
 
     /**
      * The URL used to connect to MyFatoorah test/live API server
@@ -54,14 +60,14 @@ Class MyFatoorah extends MyFatoorahHelper {
      *
      * @var string|object
      */
-    protected $loggerObj;
+    protected static $loggerObj;
 
     /**
      * If $loggerObj is set as a logger object, you should set $loggerFunc with the function name that will be used in the debugging.
      *
      * @var string
      */
-    protected $loggerFunc;
+    protected static $loggerFunc;
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -79,19 +85,51 @@ Class MyFatoorah extends MyFatoorahHelper {
 
         $mfConfig = self::getMFConfig();
 
-        $code = strtoupper($config['countryCode']);
+        $this->config = self::validateConfigArray($config, array_keys($mfConfig));
+
+        $code = $this->config['countryCode'];
         if (isset($mfConfig[$code])) {
             $this->apiURL = ($config['isTest']) ? $mfConfig[$code]['testv2'] : $mfConfig[$code]['v2'];
         } else {
             $this->apiURL = ($config['isTest']) ? 'https://apitest.myfatoorah.com' : 'https://api.myfatoorah.com';
         }
 
-        $config['apiKey'] = trim($config['apiKey']);
-        $this->config     = $config;
+        self::$loggerObj  = empty($config['loggerObj']) ? null : $config['loggerObj'];
+        self::$loggerFunc = empty($config['loggerFunc']) ? null : $config['loggerFunc'];
+    }
 
-        $this->apiKey     = $config['apiKey'];
-        $this->loggerObj  = isset($config['loggerObj']) ? $config['loggerObj'] : null;
-        $this->loggerFunc = isset($config['loggerFunc']) ? $config['loggerFunc'] : null;
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+    private static function validateConfigArray($config, $countriesCodes) {
+//        $configModel = [
+//            'apiKey'                    => (string) null,
+//            'isTest'                    => (bool) false,
+//            'countryCode'               => (string) null,
+//            'loggerObj'                 => (string) null, //optional
+//            'loggerFunc'                => (string) null, //optional
+//            'message'                   => (string) null, //optional
+//            'exception'                 => (string) null, //optional
+//            'getCurrencyRatesException' => (string) null, //optional
+//        ];
+//        if (array_diff(array_merge($config, $configModel), $configModel)) {
+//            throw new Exception('Kindly follow MyFatoorah config array schema.');
+//        }
+
+
+        if (!array_key_exists('apiKey', $config) || !array_key_exists('isTest', $config) || !array_key_exists('countryCode', $config)) {
+            throw new Exception('Config array should has the apiKey, isTest, and countryCode keys.');
+        }
+
+        $config['countryCode'] = strtoupper($config['countryCode']);
+        if (!in_array($config['countryCode'], $countriesCodes)) {
+            throw new Exception('The countryCode key must be one of (' . implode(', ', $countriesCodes) . ').');
+        }
+
+        if (!is_bool($config['isTest'])) {
+            throw new Exception('The isTest key must be boolean.');
+        }
+
+        $config['apiKey'] = trim($config['apiKey']);
+        return $config;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -127,7 +165,7 @@ Class MyFatoorah extends MyFatoorahHelper {
         curl_setopt_array($curl, array(
             CURLOPT_CUSTOMREQUEST  => $request,
             CURLOPT_POSTFIELDS     => $fields,
-            CURLOPT_HTTPHEADER     => ["Authorization: Bearer $this->apiKey", 'Content-Type: application/json'],
+            CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . $this->config['apiKey'], 'Content-Type: application/json'],
             CURLOPT_RETURNTRANSFER => true
         ));
 
@@ -327,13 +365,17 @@ Class MyFatoorah extends MyFatoorahHelper {
      */
     public function log($msg) {
 
-        if (!$this->loggerObj) {
+        $loggerObj  = self::$loggerObj;
+        $loggerFunc = self::$loggerFunc;
+
+        if (empty($loggerObj)) {
             return;
         }
-        if (is_string($this->loggerObj)) {
-            error_log(PHP_EOL . date('d.m.Y h:i:s') . ' - ' . $msg, 3, $this->loggerObj);
-        } elseif (method_exists($this->loggerObj, $this->loggerFunc)) {
-            $this->loggerObj->{$this->loggerFunc}($msg);
+
+        if (is_string($loggerObj)) {
+            error_log(PHP_EOL . date('d.m.Y h:i:s') . ' - ' . $msg, 3, $loggerObj);
+        } elseif (method_exists($loggerObj, $loggerFunc)) {
+            $loggerObj->{$loggerFunc}($msg);
         }
     }
 
