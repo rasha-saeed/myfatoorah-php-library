@@ -40,7 +40,6 @@ Class MyFatoorah extends MyFatoorahHelper {
      */
     protected $apiURL = '';
 
-
     /**
      * The file name or the logger object
      * It is used in logging the payment/shipping events to help in debugging and monitor the process and connections.
@@ -72,20 +71,39 @@ Class MyFatoorah extends MyFatoorahHelper {
 
         $mfConfig = self::getMFConfig();
 
-        $this->config = self::validateConfigArray($config, array_keys($mfConfig));
+        $this->setConfigArray($config, array_keys($mfConfig));
 
-        $code = $this->config['countryCode'];
+        $code         = $this->config['countryCode'];
         $this->apiURL = ($config['isTest']) ? $mfConfig[$code]['testv2'] : $mfConfig[$code]['v2'];
-        
+
         self::$loggerObj  = empty($config['loggerObj']) ? null : $config['loggerObj'];
         self::$loggerFunc = empty($config['loggerFunc']) ? null : $config['loggerFunc'];
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
-    private static function validateConfigArray($config, $countriesCodes) {
 
-        if (empty($config['apiKey']) || empty($config['isTest']) || empty($config['countryCode'])) {
-            throw new Exception('Config array must have the "apiKey", "isTest", and "countryCode" keys.');
+    /**
+     * 
+     * @param array $config
+     * @param array $countriesCodes
+     */
+    private function setConfigArray($config, $countriesCodes) {
+
+        $this->setApiKey($config);
+        $this->setIsTest($config);
+        $this->setCountryCode($config, $countriesCodes);
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * 
+     * @param array $config
+     * @throws Exception
+     */
+    private function setApiKey($config) {
+        if (empty($config['apiKey'])) {
+            throw new Exception('Config array must have the "apiKey" key.');
         }
 
         $config['apiKey'] = trim($config['apiKey']);
@@ -93,8 +111,39 @@ Class MyFatoorah extends MyFatoorahHelper {
             throw new Exception('The "apiKey" key is required and must be a string.');
         }
 
+        $this->config['apiKey'] = $config['apiKey'];
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * 
+     * @param array $config
+     * @throws Exception
+     */
+    private function setIsTest($config) {
+        if (empty($config['isTest'])) {
+            throw new Exception('Config array must have the "isTest" key.');
+        }
+
         if (!is_bool($config['isTest'])) {
             throw new Exception('The "isTest" key must be boolean.');
+        }
+
+        $this->config['isTest'] = $config['isTest'];
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * 
+     * @param array $config
+     * @param array $countriesCodes
+     * @throws Exception
+     */
+    private function setCountryCode($config, $countriesCodes) {
+        if (empty($config['countryCode'])) {
+            throw new Exception('Config array must have the "countryCode" key.');
         }
 
         $config['countryCode'] = strtoupper($config['countryCode']);
@@ -102,7 +151,7 @@ Class MyFatoorah extends MyFatoorahHelper {
             throw new Exception('The "countryCode" key must be one of (' . implode(', ', $countriesCodes) . ').');
         }
 
-        return $config;
+        $this->config['countryCode'] = $config['countryCode'];
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------

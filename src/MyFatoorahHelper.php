@@ -26,7 +26,7 @@ class MyFatoorahHelper {
     public static function getPhone($inputString) {
 
         //remove any arabic digit
-        $string3 = $this->convertArabicDigitstoEnglish($inputString);
+        $string3 = self::convertArabicDigitstoEnglish($inputString);
 
         //Keep Only digits
         $string4 = preg_replace('/[^0-9]/', '', $string3);
