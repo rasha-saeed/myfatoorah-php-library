@@ -26,17 +26,7 @@ class MyFatoorahHelper {
     public static function getPhone($inputString) {
 
         //remove any arabic digit
-        $newNumbers = range(0, 9);
-
-        $persianDecimal = ['&#1776;', '&#1777;', '&#1778;', '&#1779;', '&#1780;', '&#1781;', '&#1782;', '&#1783;', '&#1784;', '&#1785;']; // 1. Persian HTML decimal
-        $arabicDecimal  = ['&#1632;', '&#1633;', '&#1634;', '&#1635;', '&#1636;', '&#1637;', '&#1638;', '&#1639;', '&#1640;', '&#1641;']; // 2. Arabic HTML decimal
-        $arabic         = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']; // 3. Arabic Numeric
-        $persian        = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹']; // 4. Persian Numeric
-
-        $string0 = str_replace($persianDecimal, $newNumbers, $inputString);
-        $string1 = str_replace($arabicDecimal, $newNumbers, $string0);
-        $string2 = str_replace($arabic, $newNumbers, $string1);
-        $string3 = str_replace($persian, $newNumbers, $string2);
+        $string3 = $this->convertArabicDigitstoEnglish($inputString);
 
         //Keep Only digits
         $string4 = preg_replace('/[^0-9]/', '', $string3);
@@ -68,6 +58,30 @@ class MyFatoorahHelper {
             '',
             $string4
         ];
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Converts any Arabic or Persian numbers to English digits
+     * 
+     * @param string $inputString It is the input phone number provide by the end user.
+     * @return string
+     */
+    private static function convertArabicDigitstoEnglish($inputString) {
+
+        $newNumbers = range(0, 9);
+
+        $persianDecimal = ['&#1776;', '&#1777;', '&#1778;', '&#1779;', '&#1780;', '&#1781;', '&#1782;', '&#1783;', '&#1784;', '&#1785;']; // 1. Persian HTML decimal
+        $arabicDecimal  = ['&#1632;', '&#1633;', '&#1634;', '&#1635;', '&#1636;', '&#1637;', '&#1638;', '&#1639;', '&#1640;', '&#1641;']; // 2. Arabic HTML decimal
+        $arabic         = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩']; // 3. Arabic Numeric
+        $persian        = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹']; // 4. Persian Numeric
+
+        $string0 = str_replace($persianDecimal, $newNumbers, $inputString);
+        $string1 = str_replace($arabicDecimal, $newNumbers, $string0);
+        $string2 = str_replace($arabic, $newNumbers, $string1);
+
+        return str_replace($persian, $newNumbers, $string2);
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
