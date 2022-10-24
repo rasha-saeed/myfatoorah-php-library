@@ -32,9 +32,9 @@ Class MyFatoorah extends MyFatoorahHelper {
      * @var array
      */
     protected $config = [
-        'apiKey'      => null,
+        'apiKey'      => null, 
         'isTest'      => false,
-        'countryCode' => null,
+        'countryCode' => 'KWT',
         'loggerObj'   => null, //optional
         'loggerFunc'  => null, //optional
     ];
@@ -114,21 +114,28 @@ Class MyFatoorah extends MyFatoorahHelper {
 //            throw new Exception('Kindly follow MyFatoorah config array schema.');
 //        }
 
-
+        
         if (!array_key_exists('apiKey', $config) || !array_key_exists('isTest', $config) || !array_key_exists('countryCode', $config)) {
-            throw new Exception('Config array should has the apiKey, isTest, and countryCode keys.');
-        }
+            throw new Exception('Config array must have the "apiKey", "isTest", and "countryCode" keys.');
+        }        
 
+        $config['apiKey'] = '';trim($config['apiKey']);
+        if (!is_string($config['apiKey'])) {
+            throw new Exception('The "apiKey" key is required and must be a string.');
+        }
+        
+        if (!is_bool($config['isTest'])) {
+            throw new Exception('The "isTest" key must be boolean.');
+        }
+        
         $config['countryCode'] = strtoupper($config['countryCode']);
         if (!in_array($config['countryCode'], $countriesCodes)) {
-            throw new Exception('The countryCode key must be one of (' . implode(', ', $countriesCodes) . ').');
+            throw new Exception('The "countryCode" key must be one of (' . implode(', ', $countriesCodes) . ').');
         }
 
-        if (!is_bool($config['isTest'])) {
-            throw new Exception('The isTest key must be boolean.');
-        }
+        
 
-        $config['apiKey'] = trim($config['apiKey']);
+        
         return $config;
     }
 

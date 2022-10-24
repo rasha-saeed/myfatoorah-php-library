@@ -183,7 +183,7 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment {
      */
     private static function getLastTransactionOfInvoiceId($json) {
 
-        usort($json->Data->InvoiceTransactions, function($a, $b) {
+        usort($json->Data->InvoiceTransactions, function ($a, $b) {
             return strtotime($a->TransactionDate) - strtotime($b->TransactionDate);
         });
 

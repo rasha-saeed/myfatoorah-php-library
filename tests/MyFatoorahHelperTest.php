@@ -4,7 +4,7 @@ namespace MyFatoorah\Test;
 
 use MyFatoorah\Library\MyFatoorah;
 
-class MyFatoorahTraitTest extends \PHPUnit\Framework\TestCase {
+class MyFatoorahHelperTest extends \PHPUnit\Framework\TestCase {
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
     public function testGetPhone() {
