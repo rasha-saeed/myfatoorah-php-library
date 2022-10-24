@@ -71,27 +71,15 @@ Class MyFatoorah extends MyFatoorahHelper {
 
         $mfConfig = self::getMFConfig();
 
-        $this->setConfigArray($config, array_keys($mfConfig));
+        $this->setApiKey($config);
+        $this->setIsTest($config);
+        $this->setCountryCode($config, array_keys($mfConfig));
 
         $code         = $this->config['countryCode'];
         $this->apiURL = ($config['isTest']) ? $mfConfig[$code]['testv2'] : $mfConfig[$code]['v2'];
 
         self::$loggerObj  = empty($config['loggerObj']) ? null : $config['loggerObj'];
         self::$loggerFunc = empty($config['loggerFunc']) ? null : $config['loggerFunc'];
-    }
-
-    //-----------------------------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * 
-     * @param array $config
-     * @param array $countriesCodes
-     */
-    private function setConfigArray($config, $countriesCodes) {
-
-        $this->setApiKey($config);
-        $this->setIsTest($config);
-        $this->setCountryCode($config, $countriesCodes);
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
