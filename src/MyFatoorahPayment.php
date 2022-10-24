@@ -14,15 +14,11 @@ use Exception;
  */
 class MyFatoorahPayment extends MyFatoorah {
 
-    use MyFatoorahPaymentStatus;
-    use MyFatoorahPaymentForm;
-
     /**
      *
      * @var string
      */
     public static $pmCachedFile = __DIR__ . '/mf-methods.json';
-
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -102,7 +98,7 @@ class MyFatoorahPayment extends MyFatoorah {
      * @return array
      */
     protected function addGatewayToPaymentMethodsArray($gateway, $paymentMethods, $isAppleRegistered) {
-        
+
         if ($gateway->PaymentMethodCode == 'ap') {
             if ($isAppleRegistered) {
                 $paymentMethods['ap'][] = $gateway;
@@ -113,15 +109,15 @@ class MyFatoorahPayment extends MyFatoorah {
         } else {
             if ($gateway->IsEmbeddedSupported) {
                 $paymentMethods['form'][] = $gateway;
-                $paymentMethods['all'][] = $gateway;
+                $paymentMethods['all'][]  = $gateway;
             } elseif (!$gateway->IsDirectPayment) {
                 $paymentMethods['cards'][] = $gateway;
-                $paymentMethods['all'][] = $gateway;
+                $paymentMethods['all'][]   = $gateway;
             }
         }
-        
+
         return $paymentMethods;
-        
+
 //        if ($gateway->IsEmbeddedSupported && $gateway->PaymentMethodCode != 'ap') {
 //            self::$paymentMethods['form'][] = $gateway;
 //        } elseif (!$gateway->IsDirectPayment) {
@@ -164,7 +160,7 @@ class MyFatoorahPayment extends MyFatoorah {
         if (!isset($pm)) {
             throw new Exception('Please contact Account Manager to enable the used payment method in your account');
         }
-        
+
         return $pm;
     }
 

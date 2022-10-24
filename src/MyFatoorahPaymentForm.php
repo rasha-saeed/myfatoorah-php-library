@@ -9,13 +9,14 @@ namespace MyFatoorah\Library;
  * @copyright 2021 MyFatoorah, All rights reserved
  * @license   GNU General Public License v3.0
  */
-Trait MyFatoorahPaymentForm {
+class MyFatoorahPaymentForm extends MyFatoorahPayment {
 
     /**
      *
      * @var array
      */
     protected static $paymentMethods;
+
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -34,9 +35,9 @@ Trait MyFatoorahPaymentForm {
         }
 
         $gateways = $this->getVendorGateways($invoiceValue, $displayCurrencyIso);
-        
+
         $mfListObj = new MyFatoorahList($this->config);
-        $allRates = $mfListObj->getCurrencyRates();
+        $allRates  = $mfListObj->getCurrencyRates();
 
         self::$paymentMethods = ['all' => [], 'cards' => [], 'form' => [], 'ap' => []];
 

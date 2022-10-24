@@ -11,7 +11,7 @@ use Exception;
  * @copyright 2021 MyFatoorah, All rights reserved
  * @license   GNU General Public License v3.0
  */
-Trait MyFatoorahPaymentStatus {
+class MyFatoorahPaymentStatus extends MyFatoorahPayment {
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -183,7 +183,7 @@ Trait MyFatoorahPaymentStatus {
      */
     private static function getLastTransactionOfInvoiceId($json) {
 
-        usort($json->Data->InvoiceTransactions, function ($a, $b) {
+        usort($json->Data->InvoiceTransactions, function($a, $b) {
             return strtotime($a->TransactionDate) - strtotime($b->TransactionDate);
         });
 

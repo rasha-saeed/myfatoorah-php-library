@@ -157,7 +157,7 @@ Trait MyFatoorahTrait {
         uksort($dataArray, 'strcasecmp');
 
         $output = implode(',', array_map(
-                        function ($v, $k) {
+                        function($v, $k) {
                             return sprintf("%s=%s", $k, $v);
                         },
                         $dataArray,
