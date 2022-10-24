@@ -8,6 +8,22 @@ use Exception;
  * Trait MyFatoorah is responsible for helping calling MyFatoorah API endpoints.
  */
 class MyFatoorahHelper {
+
+    /**
+     * The file name or the logger object
+     * It is used in logging the payment/shipping events to help in debugging and monitor the process and connections.
+     *
+     * @var string|object
+     */
+    protected static $loggerObj;
+
+    /**
+     * If $loggerObj is set as a logger object, you should set $loggerFunc with the function name that will be used in the debugging.
+     *
+     * @var string
+     */
+    protected static $loggerFunc;
+
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -184,6 +200,31 @@ class MyFatoorahHelper {
             return true;
         } else {
             return false;
+        }
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * It will log the events
+     *
+     * @param string $msg It is the string message that will be written in the log file
+     *
+     * @return null
+     */
+    public static function log($msg) {
+
+        $loggerObj  = self::$loggerObj;
+        $loggerFunc = self::$loggerFunc;
+
+        if (empty($loggerObj)) {
+            return;
+        }
+
+        if (is_string($loggerObj)) {
+            error_log(PHP_EOL . date('d.m.Y h:i:s') . ' - ' . $msg, 3, $loggerObj);
+        } elseif (method_exists($loggerObj, $loggerFunc)) {
+            $loggerObj->{$loggerFunc}($msg);
         }
     }
 
