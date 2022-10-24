@@ -118,17 +118,17 @@ class MyFatoorahPayment extends MyFatoorah {
 
         return $paymentMethods;
 
-//        if ($gateway->IsEmbeddedSupported && $gateway->PaymentMethodCode != 'ap') {
-//            self::$paymentMethods['form'][] = $gateway;
-//        } elseif (!$gateway->IsDirectPayment) {
-//            self::$paymentMethods['cards'][] = $gateway;
-//        }
-//        if ($isAppleRegistered) {
-//            //add apple payment in case of registered
-//            self::$paymentMethods['ap'][] = $gateway;
-//        }
-//        self::$paymentMethods['all'][] = $gateway;
-//        return self::$paymentMethods;
+        //        if ($gateway->IsEmbeddedSupported && $gateway->PaymentMethodCode != 'ap') {
+        //            self::$paymentMethods['form'][] = $gateway;
+        //        } elseif (!$gateway->IsDirectPayment) {
+        //            self::$paymentMethods['cards'][] = $gateway;
+        //        }
+        //        if ($isAppleRegistered) {
+        //            //add apple payment in case of registered
+        //            self::$paymentMethods['ap'][] = $gateway;
+        //        }
+        //        self::$paymentMethods['all'][] = $gateway;
+        //        return self::$paymentMethods;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------

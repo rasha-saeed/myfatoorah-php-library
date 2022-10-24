@@ -11,9 +11,9 @@ use MyFatoorah\Library\MyFatoorah;
  * @copyright 2021 MyFatoorah, All rights reserved
  * @license   GNU General Public License v3.0
  */
-class MyFatoorahShipping  extends MyFatoorah{
-
+class MyFatoorahShipping extends MyFatoorah {
     //-----------------------------------------------------------------------------------------------------------------------------------------
+
     /**
      * Get MyFatoorah Shipping Countries (GET API)
      *

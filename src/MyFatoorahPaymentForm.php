@@ -98,9 +98,10 @@ class MyFatoorahPaymentForm extends MyFatoorahPayment {
 
     /**
      * Returns One Apple pay array in case multiple are enabled in the account
-     * @param array $apGateways
-     * @param string $displayCurrency
-     * @param array $allRates
+     *
+     * @param  array  $apGateways
+     * @param  string $displayCurrency
+     * @param  array  $allRates
      * @return array
      */
     protected function getOneApplePayGateway($apGateways, $displayCurrency, $allRates) {

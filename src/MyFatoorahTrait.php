@@ -6,7 +6,6 @@ use Exception;
 
 /**
  * Trait MyFatoorah is responsible for helping calling MyFatoorah API endpoints.
- * 
  */
 Trait MyFatoorahTrait {
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -64,7 +63,7 @@ Trait MyFatoorahTrait {
                 substr($string4, 3)
             ];
         }
-        
+
         return [
             '',
             $string4

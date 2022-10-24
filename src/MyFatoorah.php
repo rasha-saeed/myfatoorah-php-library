@@ -26,11 +26,6 @@ use Exception;
 Class MyFatoorah {
 
     use MyFatoorahTrait;
-//    use MyFatoorahPayment;
-//    use MyFatoorahPaymentStatus;
-//    use MyFatoorahShipping;
-//    use MyFatoorahRefund;
-//    use MyFatoorahList;
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -40,7 +35,7 @@ Class MyFatoorah {
      * @var array
      */
     protected $config = '';
-    
+
     /**
      * The URL used to connect to MyFatoorah test/live API server
      *
