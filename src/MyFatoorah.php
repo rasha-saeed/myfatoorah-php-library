@@ -84,19 +84,18 @@ Class MyFatoorah extends MyFatoorahHelper {
     //-----------------------------------------------------------------------------------------------------------------------------------------
     private static function validateConfigArray($config, $countriesCodes) {
 
-//        if (!array_key_exists('apiKey', $config) || !array_key_exists('isTest', $config) || !array_key_exists('countryCode', $config)) {
-//        if (empty($config['apiKey']) || empty($config['isTest']) || empty($config['countryCode'])) {
-//            throw new Exception('Config array must have the "apiKey", "isTest", and "countryCode" keys.');
-//        }
-//
-//        $config['apiKey'] = trim($config['apiKey']);
-//        if (empty($config['apiKey']) || !is_string($config['apiKey'])) {
-//            throw new Exception('The "apiKey" key is required and must be a string.');
-//        }
-//
-//        if (!is_bool($config['isTest'])) {
-//            throw new Exception('The "isTest" key must be boolean.');
-//        }
+        if (empty($config['apiKey']) || empty($config['isTest']) || empty($config['countryCode'])) {
+            throw new Exception('Config array must have the "apiKey", "isTest", and "countryCode" keys.');
+        }
+
+        $config['apiKey'] = trim($config['apiKey']);
+        if (empty($config['apiKey']) || !is_string($config['apiKey'])) {
+            throw new Exception('The "apiKey" key is required and must be a string.');
+        }
+
+        if (!is_bool($config['isTest'])) {
+            throw new Exception('The "isTest" key must be boolean.');
+        }
 
         $config['countryCode'] = strtoupper($config['countryCode']);
         if (!in_array($config['countryCode'], $countriesCodes)) {
