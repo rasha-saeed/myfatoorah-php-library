@@ -2,6 +2,7 @@
 
 namespace MyFatoorah\Library;
 
+use MyFatoorah\Library\MyFatoorahHelper;
 use Exception;
 
 /**
@@ -23,11 +24,7 @@ use Exception;
  * @copyright 2021 MyFatoorah, All rights reserved
  * @license   GNU General Public License v3.0
  */
-Class MyFatoorah {
-
-    use MyFatoorahTrait;
-
-    //-----------------------------------------------------------------------------------------------------------------------------------------
+Class MyFatoorah extends MyFatoorahHelper {
 
     /**
      * The configuration used to connect to MyFatoorah test/live API server
@@ -78,7 +75,7 @@ Class MyFatoorah {
      * @param string|object $loggerObj   The file name or the logger object. It is used in logging the payment/shipping events to help in debugging and monitor the process and connections. Leave it null, if you don't want to log the events.
      * @param string        $loggerFunc  If $loggerObj is set as a logger object, you should set $loggerFunc with the function name that will be used in the debugging.
      */
-    public function __construct($config, $loggerObj = null, $loggerFunc = null) {
+    public function __construct($config) {
 
         $mfConfig = self::getMFConfig();
 
@@ -93,8 +90,8 @@ Class MyFatoorah {
         $this->config     = $config;
 
         $this->apiKey     = $config['apiKey'];
-        $this->loggerObj  = $loggerObj;
-        $this->loggerFunc = $loggerFunc;
+        $this->loggerObj  = isset($config['loggerObj']) ? $config['loggerObj'] : null;
+        $this->loggerFunc = isset($config['loggerFunc']) ? $config['loggerFunc'] : null;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -228,7 +225,7 @@ Class MyFatoorah {
             $errorsObj = isset($json->ValidationErrors) ? $json->ValidationErrors : $json->FieldsErrors;
             $blogDatas = array_column($errorsObj, 'Error', 'Name');
 
-            return implode(', ', array_map(function($k, $v) {
+            return implode(', ', array_map(function ($k, $v) {
                         return "$k: $v";
                     }, array_keys($blogDatas), array_values($blogDatas)));
         }

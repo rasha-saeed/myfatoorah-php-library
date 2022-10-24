@@ -7,7 +7,7 @@ use Exception;
 /**
  * Trait MyFatoorah is responsible for helping calling MyFatoorah API endpoints.
  */
-Trait MyFatoorahTrait {
+class MyFatoorahHelper{
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**

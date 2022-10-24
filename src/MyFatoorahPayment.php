@@ -31,7 +31,7 @@ class MyFatoorahPayment extends MyFatoorah {
      *
      * @return array
      */
-    public function getVendorGateways($invoiceValue = 0, $displayCurrencyIso = '', $isCached = false) {
+    public function initiatePayment($invoiceValue = 0, $displayCurrencyIso = '', $isCached = false) {
 
         $postFields = [
             'InvoiceAmount' => $invoiceValue,
@@ -61,7 +61,7 @@ class MyFatoorahPayment extends MyFatoorah {
             $cache = file_get_contents(self::$pmCachedFile);
             return ($cache) ? json_decode($cache) : [];
         } else {
-            return $this->getVendorGateways(0, '', true);
+            return $this->initiatePayment(0, '', true);
         }
     }
 
@@ -117,18 +117,6 @@ class MyFatoorahPayment extends MyFatoorah {
         }
 
         return $paymentMethods;
-
-        //        if ($gateway->IsEmbeddedSupported && $gateway->PaymentMethodCode != 'ap') {
-        //            self::$paymentMethods['form'][] = $gateway;
-        //        } elseif (!$gateway->IsDirectPayment) {
-        //            self::$paymentMethods['cards'][] = $gateway;
-        //        }
-        //        if ($isAppleRegistered) {
-        //            //add apple payment in case of registered
-        //            self::$paymentMethods['ap'][] = $gateway;
-        //        }
-        //        self::$paymentMethods['all'][] = $gateway;
-        //        return self::$paymentMethods;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -147,7 +135,7 @@ class MyFatoorahPayment extends MyFatoorah {
      */
     public function getOnePaymentMethod($gateway, $gatewayType = 'PaymentMethodId', $invoiceValue = 0, $displayCurrencyIso = '') {
 
-        $paymentMethods = $this->getVendorGateways($invoiceValue, $displayCurrencyIso);
+        $paymentMethods = $this->initiatePayment($invoiceValue, $displayCurrencyIso);
 
         $pm = null;
         foreach ($paymentMethods as $method) {
@@ -180,6 +168,8 @@ class MyFatoorahPayment extends MyFatoorah {
 
         $this->log('------------------------------------------------------------');
 
+        $curlData['CustomerEmail'] = empty($curlData['CustomerEmail']) ? null : $curlData['CustomerEmail'];
+
         if (!empty($sessionId)) {
             return $this->embeddedPayment($curlData, $sessionId, $orderId);
         } elseif ($gatewayId == 'myfatoorah' || empty($gatewayId)) {
@@ -200,7 +190,7 @@ class MyFatoorahPayment extends MyFatoorah {
      *
      * @return array
      */
-    protected function excutePayment($curlData, $gatewayId, $orderId = null) {
+    private function excutePayment($curlData, $gatewayId, $orderId = null) {
 
         $curlData['PaymentMethodId'] = $gatewayId;
 
@@ -219,7 +209,7 @@ class MyFatoorahPayment extends MyFatoorah {
      *
      * @return array
      */
-    protected function sendPayment($curlData, $orderId = null) {
+    private function sendPayment($curlData, $orderId = null) {
 
         $curlData['NotificationOption'] = 'Lnk';
 
@@ -239,7 +229,7 @@ class MyFatoorahPayment extends MyFatoorah {
      *
      * @return array
      */
-    public function embeddedPayment($curlData, $sessionId, $orderId = null) {
+    private function embeddedPayment($curlData, $sessionId, $orderId = null) {
 
         $curlData['SessionId'] = $sessionId;
 

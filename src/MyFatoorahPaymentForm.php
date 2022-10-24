@@ -34,7 +34,7 @@ class MyFatoorahPaymentForm extends MyFatoorahPayment {
             return self::$paymentMethods;
         }
 
-        $gateways = $this->getVendorGateways($invoiceValue, $displayCurrencyIso);
+        $gateways = $this->initiatePayment($invoiceValue, $displayCurrencyIso);
 
         $mfListObj = new MyFatoorahList($this->config);
         $allRates  = $mfListObj->getCurrencyRates();
@@ -67,7 +67,6 @@ class MyFatoorahPaymentForm extends MyFatoorahPayment {
      */
     protected function calcGatewayData($totalAmount, $currency, $paymentCurrencyIso, $allRatesData) {
 
-        //if ($currency != $paymentCurrencyIso) {
         foreach ($allRatesData as $data) {
             if ($data->Text == $currency) {
                 $baseCurrencyRate = $data->Value;

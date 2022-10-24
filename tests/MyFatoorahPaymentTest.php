@@ -15,12 +15,12 @@ class MyFatoorahPaymentTest extends \PHPUnit\Framework\TestCase {
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testGetVendorGateways() {
+    public function testInitiatePayment() {
 
         foreach ($this->keys as $config) {
             try {
                 $mfObj = new MyFatoorahPayment($config);
-                $json  = $mfObj->getVendorGateways();
+                $json  = $mfObj->initiatePayment();
 
                 $this->assertEquals('Sadad', $json[0]->PaymentMethodEn);
             } catch (\Exception $ex) {
