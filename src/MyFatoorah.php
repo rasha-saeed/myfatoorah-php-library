@@ -31,13 +31,7 @@ Class MyFatoorah extends MyFatoorahHelper {
      *
      * @var array
      */
-    protected $config = [
-        'apiKey'      => null,
-        'isTest'      => false,
-        'countryCode' => 'KWT',
-        'loggerObj'   => null, //optional
-        'loggerFunc'  => null, //optional
-    ];
+    protected $config = [];
 
     /**
      * The URL used to connect to MyFatoorah test/live API server
@@ -46,13 +40,6 @@ Class MyFatoorah extends MyFatoorahHelper {
      */
     protected $apiURL = '';
 
-    /**
-     * The API Token Key is the authentication which identify a user that is using the app
-     * To generate one follow instruction here https://myfatoorah.readme.io/docs/live-token
-     *
-     * @var string
-     */
-    protected $apiKey;
 
     /**
      * The file name or the logger object
@@ -97,26 +84,24 @@ Class MyFatoorah extends MyFatoorahHelper {
     //-----------------------------------------------------------------------------------------------------------------------------------------
     private static function validateConfigArray($config, $countriesCodes) {
 
-        if (!array_key_exists('apiKey', $config) || !array_key_exists('isTest', $config) || !array_key_exists('countryCode', $config)) {
-            throw new Exception('Config array must have the "apiKey", "isTest", and "countryCode" keys.');
-        }
-
-        $config['apiKey'] = trim($config['apiKey']);
-        if (empty($config['apiKey']) || !is_string($config['apiKey'])) {
-            throw new Exception('The "apiKey" key is required and must be a string.');
-        }
-
-        if (!is_bool($config['isTest'])) {
-            throw new Exception('The "isTest" key must be boolean.');
-        }
+//        if (!array_key_exists('apiKey', $config) || !array_key_exists('isTest', $config) || !array_key_exists('countryCode', $config)) {
+//        if (empty($config['apiKey']) || empty($config['isTest']) || empty($config['countryCode'])) {
+//            throw new Exception('Config array must have the "apiKey", "isTest", and "countryCode" keys.');
+//        }
+//
+//        $config['apiKey'] = trim($config['apiKey']);
+//        if (empty($config['apiKey']) || !is_string($config['apiKey'])) {
+//            throw new Exception('The "apiKey" key is required and must be a string.');
+//        }
+//
+//        if (!is_bool($config['isTest'])) {
+//            throw new Exception('The "isTest" key must be boolean.');
+//        }
 
         $config['countryCode'] = strtoupper($config['countryCode']);
         if (!in_array($config['countryCode'], $countriesCodes)) {
             throw new Exception('The "countryCode" key must be one of (' . implode(', ', $countriesCodes) . ').');
         }
-
-
-
 
         return $config;
     }

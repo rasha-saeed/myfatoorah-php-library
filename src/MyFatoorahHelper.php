@@ -7,7 +7,7 @@ use Exception;
 /**
  * Trait MyFatoorah is responsible for helping calling MyFatoorah API endpoints.
  */
-class MyFatoorahHelper{
+class MyFatoorahHelper {
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -156,7 +156,7 @@ class MyFatoorahHelper{
         uksort($dataArray, 'strcasecmp');
 
         $output = implode(',', array_map(
-                        function($v, $k) {
+                        function ($v, $k) {
                             return sprintf("%s=%s", $k, $v);
                         },
                         $dataArray,
