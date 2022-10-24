@@ -32,7 +32,7 @@ Class MyFatoorah extends MyFatoorahHelper {
      * @var array
      */
     protected $config = [
-        'apiKey'      => null, 
+        'apiKey'      => null,
         'isTest'      => false,
         'countryCode' => 'KWT',
         'loggerObj'   => null, //optional
@@ -88,54 +88,36 @@ Class MyFatoorah extends MyFatoorahHelper {
         $this->config = self::validateConfigArray($config, array_keys($mfConfig));
 
         $code = $this->config['countryCode'];
-        if (isset($mfConfig[$code])) {
-            $this->apiURL = ($config['isTest']) ? $mfConfig[$code]['testv2'] : $mfConfig[$code]['v2'];
-        } else {
-            $this->apiURL = ($config['isTest']) ? 'https://apitest.myfatoorah.com' : 'https://api.myfatoorah.com';
-        }
-
+        $this->apiURL = ($config['isTest']) ? $mfConfig[$code]['testv2'] : $mfConfig[$code]['v2'];
+        
         self::$loggerObj  = empty($config['loggerObj']) ? null : $config['loggerObj'];
         self::$loggerFunc = empty($config['loggerFunc']) ? null : $config['loggerFunc'];
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
     private static function validateConfigArray($config, $countriesCodes) {
-//        $configModel = [
-//            'apiKey'                    => (string) null,
-//            'isTest'                    => (bool) false,
-//            'countryCode'               => (string) null,
-//            'loggerObj'                 => (string) null, //optional
-//            'loggerFunc'                => (string) null, //optional
-//            'message'                   => (string) null, //optional
-//            'exception'                 => (string) null, //optional
-//            'getCurrencyRatesException' => (string) null, //optional
-//        ];
-//        if (array_diff(array_merge($config, $configModel), $configModel)) {
-//            throw new Exception('Kindly follow MyFatoorah config array schema.');
-//        }
 
-        
         if (!array_key_exists('apiKey', $config) || !array_key_exists('isTest', $config) || !array_key_exists('countryCode', $config)) {
             throw new Exception('Config array must have the "apiKey", "isTest", and "countryCode" keys.');
-        }        
+        }
 
-        $config['apiKey'] = '';trim($config['apiKey']);
-        if (!is_string($config['apiKey'])) {
+        $config['apiKey'] = trim($config['apiKey']);
+        if (empty($config['apiKey']) || !is_string($config['apiKey'])) {
             throw new Exception('The "apiKey" key is required and must be a string.');
         }
-        
+
         if (!is_bool($config['isTest'])) {
             throw new Exception('The "isTest" key must be boolean.');
         }
-        
+
         $config['countryCode'] = strtoupper($config['countryCode']);
         if (!in_array($config['countryCode'], $countriesCodes)) {
             throw new Exception('The "countryCode" key must be one of (' . implode(', ', $countriesCodes) . ').');
         }
 
-        
 
-        
+
+
         return $config;
     }
 
@@ -370,7 +352,7 @@ Class MyFatoorah extends MyFatoorahHelper {
      *
      * @return null
      */
-    public function log($msg) {
+    public static function log($msg) {
 
         $loggerObj  = self::$loggerObj;
         $loggerFunc = self::$loggerFunc;
