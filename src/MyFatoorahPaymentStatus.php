@@ -36,7 +36,7 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment {
         $msgLog = 'Order #' . $json->Data->CustomerReference . ' ----- Get Payment Status';
 
         //check for the order information
-        if (!self::checkOrderInformation($json, $orderId, $price, $currncy)) {
+        if (!self::checkOrderInformation($json->Data, $orderId, $price, $currncy)) {
             $err = 'Trying to call data of another order';
             $this->log("$msgLog - Exception is $err");
             throw new Exception($err);
@@ -58,32 +58,40 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment {
 
     /**
      *
-     * @param object $json
+     * @param object $data
      * @param string $orderId
      * @param string $price
      * @param string $currncy
      *
      * @return boolean
      */
-    private static function checkOrderInformation($json, $orderId = null, $price = null, $currncy = null) {
+    private static function checkOrderInformation($data, $orderId = null, $price = null, $currncy = null) {
 
         //check for the order ID
-        if ($orderId && $json->Data->CustomerReference != $orderId) {
-            return false;
-        }
+//        if ($orderId && $orderId != $data->CustomerReference) {
+//            return false;
+//        }
 
         //check for the order price and currency
-        list($valStr, $mfCurrncy) = explode(' ', $json->Data->InvoiceDisplayValue);
+        list($valStr, $mfCurrncy) = explode(' ', $data->InvoiceDisplayValue);
         $mfPrice = floatval(preg_replace('/[^\d.]/', '', $valStr));
 
-        if ($price && $price != $mfPrice) {
-            return false;
-        }
-        if ($currncy && $currncy != $mfCurrncy) {
-            return false;
-        }
+//        if ($price && $price != $mfPrice) {
+//            return false;
+//        }
 
-        return true;
+//        if ($currncy && $currncy != $mfCurrncy) {
+//            return false;
+//        }
+
+//        return true;
+
+
+        $isOrderCorrect   = $orderId && $orderId == $data->CustomerReference;
+        $isPriceCorrect   = $price && $price == $mfPrice;
+        $isCurrncyCorrect = $currncy && $currncy == $mfCurrncy;
+
+        return $isOrderCorrect && $isPriceCorrect && $isCurrncyCorrect;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
