@@ -226,6 +226,34 @@ Class MyFatoorah extends MyFatoorahHelper {
             return '';
         }
 
+        $hErr = self::getHtmlErrors($res);
+        if ($hErr) {
+            return $hErr;
+        }
+
+        //Check for the errors
+        $jErr = self::getJsonErrors($json);
+        if ($jErr) {
+            return $jErr;
+        }
+
+        if (!$json) {
+            return (!empty($res) ? $res : 'Kindly review your MyFatoorah admin configuration due to a wrong entry.');
+        }
+
+        return is_string($json) ? $json : '';
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Check for the HTML (response model) errors
+     *
+     * @param string $res
+     *
+     * @return string
+     */
+    protected static function getHtmlErrors($res) {
         //to avoid blocked IP like:
         //<html>
         //<head><title>403 Forbidden</title></head>
@@ -238,18 +266,7 @@ Class MyFatoorah extends MyFatoorahHelper {
         if ($res != $stripHtmlStr && !stripos($stripHtmlStr, 'apple-developer-merchantid-domain-association')) {
             return trim(preg_replace('/\s+/', ' ', $stripHtmlStr));
         }
-
-        //Check for the errors
-        $err = self::getJsonErrors($json);
-        if ($err) {
-            return $err;
-        }
-
-        if (!$json) {
-            return (!empty($res) ? $res : 'Kindly review your MyFatoorah admin configuration due to a wrong entry.');
-        }
-
-        return is_string($json) ? $json : '';
+        return '';
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
