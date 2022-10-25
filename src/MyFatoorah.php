@@ -197,15 +197,14 @@ Class MyFatoorah extends MyFatoorahHelper {
         //***************************************
         //check for errors
         //***************************************
-
         //Check for the HTML errors
-        $hErr = self::getHtmlErrors($res);
+        $hErr = self::getHtmlErrors((string) $res);
         if ($hErr) {
             $this->log("$msgLog - Error: $hErr");
             throw new Exception($hErr);
-//            return $hErr;
         }
         
+        //Check for the reponse errors
         $error = self::getAPIError($json, (string) $res);
         if ($error) {
             $this->log("$msgLog - Error: $error");
@@ -234,7 +233,6 @@ Class MyFatoorah extends MyFatoorahHelper {
             return '';
         }
 
-        
         if (is_string($json)) {
             return $json;
         }
@@ -242,7 +240,7 @@ Class MyFatoorah extends MyFatoorahHelper {
         if (empty($json)) {
             return (!empty($res) ? $res : 'Kindly review your MyFatoorah admin configuration due to a wrong entry.');
         }
-        
+
         //Check for the JSON errors
         return self::getJsonErrors($json);
     }
@@ -281,15 +279,15 @@ Class MyFatoorah extends MyFatoorahHelper {
      *
      * @return string
      */
-    protected static function getJsonErrors($json) {       
-        
+    protected static function getJsonErrors($json) {
+
         $errorsVar = isset($json->ValidationErrors) ? 'ValidationErrors' : 'FieldsErrors';
         if (isset($json->$errorsVar)) {
             $blogDatas = array_column($json->$errorsVar, 'Error', 'Name');
             return implode(', ', array_map(function ($k, $v) {
                         return "$k: $v";
                     }, array_keys($blogDatas), array_values($blogDatas)));
-                    
+
             //return implode(', ', array_column($json->ValidationErrors, 'Error'));        
         }
 
