@@ -249,11 +249,7 @@ Class MyFatoorah extends MyFatoorahHelper {
             return (!empty($res) ? $res : 'Kindly review your MyFatoorah admin configuration due to a wrong entry.');
         }
 
-        if (is_string($json)) {
-            return $json;
-        }
-
-        return '';
+        return is_string($json) ? $json : '';
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -297,11 +293,7 @@ Class MyFatoorah extends MyFatoorahHelper {
         //"No route providing a controller name was found to match request URI 'https://apitest.myfatoorah.com/v2/SendPayment222'"
         //}
 
-        if (isset($json->Message)) {
-            return $json->Message;
-        }
-
-        return '';
+        return empty($json->Message) ? '' : $json->Message;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
