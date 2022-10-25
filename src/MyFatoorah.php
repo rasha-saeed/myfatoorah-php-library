@@ -40,6 +40,21 @@ Class MyFatoorah extends MyFatoorahHelper {
      */
     protected $apiURL = '';
 
+    /**
+     * The file name or the logger object
+     * It is used in logging the payment/shipping events to help in debugging and monitor the process and connections.
+     *
+     * @var string|object
+     */
+    protected static $loggerObj;
+
+    /**
+     * If $loggerObj is set as a logger object, you should set $loggerFunc with the function name that will be used in the debugging.
+     *
+     * @var string
+     */
+    protected static $loggerFunc;
+
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -63,8 +78,8 @@ Class MyFatoorah extends MyFatoorahHelper {
         $code         = $this->config['countryCode'];
         $this->apiURL = ($config['isTest']) ? $mfConfig[$code]['testv2'] : $mfConfig[$code]['v2'];
 
-        self::$loggerObj  = empty($config['loggerObj']) ? null : $config['loggerObj'];
-        self::$loggerFunc = empty($config['loggerFunc']) ? null : $config['loggerFunc'];
+        self::$loggerObj  = $this->config['loggerObj'] = empty($config['loggerObj']) ? null : $config['loggerObj'];
+        self::$loggerFunc = $this->config['loggerFunc'] = empty($config['loggerFunc']) ? null : $config['loggerFunc'];
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -223,20 +238,20 @@ Class MyFatoorah extends MyFatoorahHelper {
         if ($res != $stripHtmlStr && !stripos($stripHtmlStr, 'apple-developer-merchantid-domain-association')) {
             return trim(preg_replace('/\s+/', ' ', $stripHtmlStr));
         }
-
-        //Check for the errors
-        $err = self::getJsonErrors($json);
-        if ($err) {
-            return $err;
-        }
-
-        if (!$json) {
-            return (!empty($res) ? $res : 'Kindly review your MyFatoorah admin configuration due to a wrong entry.');
-        }
-
-        if (is_string($json)) {
-            return $json;
-        }
+//
+//        //Check for the errors
+//        $err = self::getJsonErrors($json);
+//        if ($err) {
+//            return $err;
+//        }
+//
+//        if (!$json) {
+//            return (!empty($res) ? $res : 'Kindly review your MyFatoorah admin configuration due to a wrong entry.');
+//        }
+//
+//        if (is_string($json)) {
+//            return $json;
+//        }
 
         return '';
     }
@@ -347,6 +362,31 @@ Class MyFatoorah extends MyFatoorahHelper {
             }
         }
         return [];
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * It will log the events
+     *
+     * @param string $msg It is the string message that will be written in the log file
+     *
+     * @return null
+     */
+    public static function log($msg) {
+
+        $loggerObj  = self::$loggerObj;
+        $loggerFunc = self::$loggerFunc;
+
+        if (empty($loggerObj)) {
+            return;
+        }
+
+        if (is_string($loggerObj)) {
+            error_log(PHP_EOL . date('d.m.Y h:i:s') . ' - ' . $msg, 3, $loggerObj);
+        } elseif (method_exists($loggerObj, $loggerFunc)) {
+            $loggerObj->{$loggerFunc}($msg);
+        }
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
