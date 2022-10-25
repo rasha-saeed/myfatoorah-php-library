@@ -231,18 +231,17 @@ Class MyFatoorah extends MyFatoorahHelper {
         if ($hErr) {
             return $hErr;
         }
-
-        //Check for the JSON errors
-        $jErr = self::getJsonErrors($json);
-        if ($jErr) {
-            return $jErr;
+        
+        if (is_string($json)) {
+            return $json;
         }
 
         if (!$json) {
             return (!empty($res) ? $res : 'Kindly review your MyFatoorah admin configuration due to a wrong entry.');
         }
-
-        return is_string($json) ? $json : '';
+        
+        //Check for the JSON errors
+        return self::getJsonErrors($json);
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
