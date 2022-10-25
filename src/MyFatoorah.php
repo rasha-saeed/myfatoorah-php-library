@@ -198,12 +198,10 @@ Class MyFatoorah extends MyFatoorahHelper {
         //check for errors
         //***************************************
 
-        if (!isset($json->IsSuccess) || $json->IsSuccess == false) {
-            $error = self::getAPIError($json, (string) $res);
-            if ($error) {
-                $this->log("$msgLog - Error: $error");
-                throw new Exception($error);
-            }
+        $error = self::getAPIError($json, (string) $res);
+        if ($error) {
+            $this->log("$msgLog - Error: $error");
+            throw new Exception($error);
         }
 
         //***************************************
@@ -224,6 +222,10 @@ Class MyFatoorah extends MyFatoorahHelper {
      */
     protected static function getAPIError($json, $res) {
 
+        if (isset($json->IsSuccess) && $json->IsSuccess == true) {
+            return '';
+        }
+
         //Check for the HTML errors
         $hErr = self::getHtmlErrors($res);
         if ($hErr) {
@@ -240,7 +242,11 @@ Class MyFatoorah extends MyFatoorahHelper {
             return (!empty($res) ? $res : 'Kindly review your MyFatoorah admin configuration due to a wrong entry.');
         }
 
-        return is_string($json) ? $json : '';
+        if (is_string($json)) {
+            return $json;
+        }
+
+        return '';
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
