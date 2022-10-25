@@ -198,10 +198,12 @@ Class MyFatoorah extends MyFatoorahHelper {
         //check for errors
         //***************************************
 
-        $error = self::getAPIError($json, (string) $res);
-        if ($error) {
-            $this->log("$msgLog - Error: $error");
-            throw new Exception($error);
+        if (!isset($json->IsSuccess) || $json->IsSuccess == false) {
+            $error = self::getAPIError($json, (string) $res);
+            if ($error) {
+                $this->log("$msgLog - Error: $error");
+                throw new Exception($error);
+            }
         }
 
         //***************************************
@@ -222,10 +224,6 @@ Class MyFatoorah extends MyFatoorahHelper {
      */
     protected static function getAPIError($json, $res) {
 
-        if (isset($json->IsSuccess) && $json->IsSuccess == true) {
-            return '';
-        }
-
         //Check for the HTML errors
         $hErr = self::getHtmlErrors($res);
         if ($hErr) {
@@ -238,7 +236,9 @@ Class MyFatoorah extends MyFatoorahHelper {
             return $jErr;
         }
 
-
+        if (!$json) {
+            return (!empty($res) ? $res : 'Kindly review your MyFatoorah admin configuration due to a wrong entry.');
+        }
 
         return is_string($json) ? $json : '';
     }
@@ -274,11 +274,10 @@ Class MyFatoorah extends MyFatoorahHelper {
      * Check for the json (response model) errors
      *
      * @param object|string $json
-     * @param string $res
      *
      * @return string
      */
-    protected static function getJsonErrors($json, $res) {
+    protected static function getJsonErrors($json) {
 
         if (isset($json->ValidationErrors) || isset($json->FieldsErrors)) {
             //$err = implode(', ', array_column($json->ValidationErrors, 'Error'));
@@ -310,15 +309,7 @@ Class MyFatoorah extends MyFatoorahHelper {
         //"No route providing a controller name was found to match request URI 'https://apitest.myfatoorah.com/v2/SendPayment222'"
         //}
 
-        if (isset($json->Message)) {
-            return $json->Message;
-        }
-        
-        if (!$json) {
-            return (!empty($res) ? $res : 'Kindly review your MyFatoorah admin configuration due to a wrong entry.');
-        }
-
-        return '';
+        return empty($json->Message) ? '' : $json->Message;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
