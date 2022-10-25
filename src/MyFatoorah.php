@@ -231,7 +231,7 @@ Class MyFatoorah extends MyFatoorahHelper {
         if ($hErr) {
             return $hErr;
         }
-        
+
         if (is_string($json)) {
             return $json;
         }
@@ -239,7 +239,7 @@ Class MyFatoorah extends MyFatoorahHelper {
         if (empty($json)) {
             return (!empty($res) ? $res : 'Kindly review your MyFatoorah admin configuration due to a wrong entry.');
         }
-        
+
         //Check for the JSON errors
         return self::getJsonErrors($json);
     }
@@ -280,10 +280,11 @@ Class MyFatoorah extends MyFatoorahHelper {
      */
     protected static function getJsonErrors($json) {
 
-        if (isset($json->ValidationErrors) || isset($json->FieldsErrors)) {
-            //$err = implode(', ', array_column($json->ValidationErrors, 'Error'));
+        $errorsObj = isset($json->ValidationErrors) ? $json->ValidationErrors : (isset($json->FieldsErrors) ? $json->FieldsErrors : null);
+        if ($errorsObj) {
+            //$err = implode(', ', array_column($errorsObj, 'Error'));
 
-            $errorsObj = isset($json->ValidationErrors) ? $json->ValidationErrors : $json->FieldsErrors;
+//            $errorsObj = isset($json->ValidationErrors) ? $json->ValidationErrors : $json->FieldsErrors;
             $blogDatas = array_column($errorsObj, 'Error', 'Name');
 
             return implode(', ', array_map(function ($k, $v) {
