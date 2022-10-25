@@ -24,7 +24,8 @@ use Exception;
  * @copyright 2021 MyFatoorah, All rights reserved
  * @license   GNU General Public License v3.0
  */
-class MyFatoorah extends MyFatoorahHelper {
+class MyFatoorah extends MyFatoorahHelper
+{
 
     /**
      * The configuration used to connect to MyFatoorah test/live API server
@@ -40,40 +41,22 @@ class MyFatoorah extends MyFatoorahHelper {
      */
     protected $apiURL = '';
 
-    /**
-     * The file name or the logger object
-     * It is used in logging the payment/shipping events to help in debugging and monitor the process and connections.
-     *
-     * @var string|object
-     */
-    protected static $loggerObj;
-
-    /**
-     * If $loggerObj is set as a logger object, you should set $loggerFunc with the function name that will be used in the debugging.
-     *
-     * @var string
-     */
-    protected static $loggerFunc;
-
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * Constructor
      * Initiate new MyFatoorah API process
      *
-     * @param string        $apiKey      The API Token Key is the authentication which identify a user that is using the app. To generate one follow instruction here https://myfatoorah.readme.io/docs/live-token.
-     * @param string        $countryCode Select the country mode.
-     * @param boolean       $isTest      Set it to false for live mode.
-     * @param string|object $loggerObj   The file name or the logger object. It is used in logging the payment/shipping events to help in debugging and monitor the process and connections. Leave it null, if you don't want to log the events.
-     * @param string        $loggerFunc  If $loggerObj is set as a logger object, you should set $loggerFunc with the function name that will be used in the debugging.
+     * @param array $config It contains the needed information to process a MyFatoorah API request (the required keys are apiKey, isTest, and countryCode).
      */
-    public function __construct($config) {
+    public function __construct($config)
+    {
 
         $mfConfig = self::getMFConfig();
 
         $this->setApiKey($config);
         $this->setIsTest($config);
-        $this->setCountryCode($config, array_keys($mfConfig));
+        $this->setCountryCode($config);
 
         self::$loggerObj            = $this->config['loggerObj']  = empty($config['loggerObj']) ? null : $config['loggerObj'];
         self::$loggerFunc           = $this->config['loggerFunc'] = empty($config['loggerFunc']) ? null : $config['loggerFunc'];
@@ -85,11 +68,17 @@ class MyFatoorah extends MyFatoorahHelper {
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
+     * Set the API token Key
+     * The API Token Key is the authentication which identify a user that is using the app. To generate one follow instruction here https://myfatoorah.readme.io/docs/live-token.
      *
-     * @param  array $config
+     * @param array $config It contains the needed information to process a MyFatoorah API request (the required keys are apiKey, isTest, and countryCode).
+     *
+     * @return void
+     *
      * @throws Exception
      */
-    private function setApiKey($config) {
+    protected function setApiKey($config)
+    {
         if (empty($config['apiKey'])) {
             throw new Exception('Config array must have the "apiKey" key.');
         }
@@ -105,11 +94,16 @@ class MyFatoorah extends MyFatoorahHelper {
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
+     * Set the test mode. Set it to false for live mode.
      *
-     * @param  array $config
+     * @param array $config It contains the needed information to process a MyFatoorah API request (the required keys are apiKey, isTest, and countryCode).
+     *
+     * @return void
+     *
      * @throws Exception
      */
-    private function setIsTest($config) {
+    protected function setIsTest($config)
+    {
         if (empty($config['isTest'])) {
             throw new Exception('Config array must have the "isTest" key.');
         }
@@ -124,15 +118,22 @@ class MyFatoorah extends MyFatoorahHelper {
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
+     * Set the country code of the used MyFatoorah account.
      *
-     * @param  array $config
-     * @param  array $countriesCodes
+     * @param array $config It contains the needed information to process a MyFatoorah API request (the required keys are apiKey, isTest, and countryCode).
+     *
+     * @return void
+     *
      * @throws Exception
      */
-    private function setCountryCode($config, $countriesCodes) {
+    protected function setCountryCode($config)
+    {
         if (empty($config['countryCode'])) {
             throw new Exception('Config array must have the "countryCode" key.');
         }
+
+        $mfConfig       = self::getMFConfig();
+        $countriesCodes = array_keys($mfConfig);
 
         $config['countryCode'] = strtoupper($config['countryCode']);
         if (!in_array($config['countryCode'], $countriesCodes)) {
@@ -145,6 +146,7 @@ class MyFatoorah extends MyFatoorahHelper {
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
+     * It calls the MyFatoorah API endpoint request and handles the MyFatoorah API endpoint response.
      *
      * @param string         $url        MyFatoorah API endpoint URL
      * @param array          $postFields POST request parameters array. It should be set to null if the request is GET.
@@ -155,7 +157,8 @@ class MyFatoorah extends MyFatoorahHelper {
      *
      * @throws Exception    Throw exception if there is any curl/validation error in the MyFatoorah API endpoint URL
      */
-    public function callAPI($url, $postFields = null, $orderId = null, $function = null) {
+    public function callAPI($url, $postFields = null, $orderId = null, $function = null)
+    {
 
         //to prevent json_encode adding lots of decimal digits
         ini_set('precision', 14);
@@ -215,12 +218,13 @@ class MyFatoorah extends MyFatoorahHelper {
     /**
      * Handles Endpoint Errors Function
      *
-     * @param object|string $json
-     * @param string        $res
+     * @param object|string $json MyFatoorah response JSON object
+     * @param string        $res  MyFatoorah response string
      *
      * @return string
      */
-    protected static function getAPIError($json, $res) {
+    protected static function getAPIError($json, $res)
+    {
 
         if (isset($json->IsSuccess) && $json->IsSuccess == true) {
             return '';
@@ -249,11 +253,12 @@ class MyFatoorah extends MyFatoorahHelper {
     /**
      * Check for the HTML (response model) errors
      *
-     * @param string $res
+     * @param string $res MyFatoorah response string
      *
      * @return string
      */
-    protected static function getHtmlErrors($res) {
+    protected static function getHtmlErrors($res)
+    {
         //to avoid blocked IP like:
         //<html>
         //<head><title>403 Forbidden</title></head>
@@ -274,17 +279,18 @@ class MyFatoorah extends MyFatoorahHelper {
     /**
      * Check for the json (response model) errors
      *
-     * @param object|string $json
+     * @param object|string $json MyFatoorah response JSON object
      *
      * @return string
      */
-    protected static function getJsonErrors($json) {
+    protected static function getJsonErrors($json)
+    {
 
         $errorsVar = isset($json->ValidationErrors) ? 'ValidationErrors' : 'FieldsErrors';
         if (isset($json->$errorsVar)) {
             $blogDatas = array_column($json->$errorsVar, 'Error', 'Name');
             return implode(', ', array_map(function ($k, $v) {
-                        return "$k: $v";
+                            return "$k: $v";
                     }, array_keys($blogDatas), array_values($blogDatas)));
 
             //return implode(', ', array_column($json->ValidationErrors, 'Error'));
@@ -321,7 +327,8 @@ class MyFatoorah extends MyFatoorahHelper {
      *
      * @return null
      */
-    public static function log($msg) {
+    public static function log($msg)
+    {
 
         $loggerObj  = self::$loggerObj;
         $loggerFunc = self::$loggerFunc;
