@@ -198,6 +198,14 @@ Class MyFatoorah extends MyFatoorahHelper {
         //check for errors
         //***************************************
 
+        //Check for the HTML errors
+        $hErr = self::getHtmlErrors($res);
+        if ($hErr) {
+            $this->log("$msgLog - Error: $hErr");
+            throw new Exception($hErr);
+//            return $hErr;
+        }
+        
         $error = self::getAPIError($json, (string) $res);
         if ($error) {
             $this->log("$msgLog - Error: $error");
@@ -226,12 +234,7 @@ Class MyFatoorah extends MyFatoorahHelper {
             return '';
         }
 
-        //Check for the HTML errors
-//        $hErr = self::getHtmlErrors($res);
-//        if ($hErr) {
-//            return $hErr;
-//        }
-//        
+        
         if (is_string($json)) {
             return $json;
         }
