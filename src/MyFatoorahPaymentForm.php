@@ -23,7 +23,7 @@ class MyFatoorahPaymentForm extends MyFatoorahPayment {
      * List available Payment Methods
      *
      * @param double|integer $invoiceValue
-     * @param string         $displayCurrencyIso   
+     * @param string         $displayCurrencyIso
      * @param bool           $isAppleRegistered
      *
      * @return array

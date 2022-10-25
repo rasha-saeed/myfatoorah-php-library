@@ -79,9 +79,8 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment {
         if ($price && $price != $mfPrice) {
             return false;
         }
-        
+
         return !($currncy && $currncy != $mfCurrncy);
-        
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------

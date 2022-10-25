@@ -18,7 +18,7 @@ class MyFatoorahHelper {
     protected static $loggerObj;
 
     /**
-     * If $loggerObj is set as a logger object, you should set $loggerFunc with the function name that will be used in the debugging.
+     * The function name that will be used in the debugging if $loggerObj is set as a logger object.
      *
      * @var string
      */
@@ -80,8 +80,8 @@ class MyFatoorahHelper {
 
     /**
      * Converts any Arabic or Persian numbers to English digits
-     * 
-     * @param string $inputString It is the input phone number provide by the end user.
+     *
+     * @param  string $inputString It is the input phone number provide by the end user.
      * @return string
      */
     private static function convertArabicDigitstoEnglish($inputString) {
@@ -202,7 +202,6 @@ class MyFatoorahHelper {
             return false;
         }
     }
-
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
 

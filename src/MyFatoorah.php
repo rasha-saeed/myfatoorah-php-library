@@ -24,7 +24,7 @@ use Exception;
  * @copyright 2021 MyFatoorah, All rights reserved
  * @license   GNU General Public License v3.0
  */
-Class MyFatoorah extends MyFatoorahHelper {
+class MyFatoorah extends MyFatoorahHelper {
 
     /**
      * The configuration used to connect to MyFatoorah test/live API server
@@ -85,8 +85,8 @@ Class MyFatoorah extends MyFatoorahHelper {
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * 
-     * @param array $config
+     *
+     * @param  array $config
      * @throws Exception
      */
     private function setApiKey($config) {
@@ -105,8 +105,8 @@ Class MyFatoorah extends MyFatoorahHelper {
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * 
-     * @param array $config
+     *
+     * @param  array $config
      * @throws Exception
      */
     private function setIsTest($config) {
@@ -124,9 +124,9 @@ Class MyFatoorah extends MyFatoorahHelper {
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * 
-     * @param array $config
-     * @param array $countriesCodes
+     *
+     * @param  array $config
+     * @param  array $countriesCodes
      * @throws Exception
      */
     private function setCountryCode($config, $countriesCodes) {
@@ -197,13 +197,6 @@ Class MyFatoorah extends MyFatoorahHelper {
         //***************************************
         //check for errors
         //***************************************
-        //Check for the HTML errors
-        $hErr = self::getHtmlErrors((string) $res);
-        if ($hErr) {
-            $this->log("$msgLog - Error: $hErr");
-            throw new Exception($hErr);
-        }
-        
         //Check for the reponse errors
         $error = self::getAPIError($json, (string) $res);
         if ($error) {
@@ -231,6 +224,12 @@ Class MyFatoorah extends MyFatoorahHelper {
 
         if (isset($json->IsSuccess) && $json->IsSuccess == true) {
             return '';
+        }
+
+        //Check for the HTML errors
+        $hErr = self::getHtmlErrors($res);
+        if ($hErr) {
+            return $hErr;
         }
 
         if (is_string($json)) {
@@ -288,7 +287,7 @@ Class MyFatoorah extends MyFatoorahHelper {
                         return "$k: $v";
                     }, array_keys($blogDatas), array_values($blogDatas)));
 
-            //return implode(', ', array_column($json->ValidationErrors, 'Error'));        
+            //return implode(', ', array_column($json->ValidationErrors, 'Error'));
         }
 
         if (isset($json->Data->ErrorMessage)) {
