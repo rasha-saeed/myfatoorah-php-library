@@ -74,12 +74,12 @@ Class MyFatoorah extends MyFatoorahHelper {
         $this->setApiKey($config);
         $this->setIsTest($config);
         $this->setCountryCode($config, array_keys($mfConfig));
+        self::$loggerObj  = $this->config['loggerObj'] = empty($config['loggerObj']) ? null : $config['loggerObj'];
+        self::$loggerFunc = $this->config['loggerFunc'] = empty($config['loggerFunc']) ? null : $config['loggerFunc'];
+        
 
         $code         = $this->config['countryCode'];
         $this->apiURL = ($config['isTest']) ? $mfConfig[$code]['testv2'] : $mfConfig[$code]['v2'];
-
-        self::$loggerObj  = $this->config['loggerObj'] = empty($config['loggerObj']) ? null : $config['loggerObj'];
-        self::$loggerFunc = $this->config['loggerFunc'] = empty($config['loggerFunc']) ? null : $config['loggerFunc'];
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -238,20 +238,20 @@ Class MyFatoorah extends MyFatoorahHelper {
         if ($res != $stripHtmlStr && !stripos($stripHtmlStr, 'apple-developer-merchantid-domain-association')) {
             return trim(preg_replace('/\s+/', ' ', $stripHtmlStr));
         }
-//
-//        //Check for the errors
-//        $err = self::getJsonErrors($json);
-//        if ($err) {
-//            return $err;
-//        }
-//
-//        if (!$json) {
-//            return (!empty($res) ? $res : 'Kindly review your MyFatoorah admin configuration due to a wrong entry.');
-//        }
-//
-//        if (is_string($json)) {
-//            return $json;
-//        }
+
+        //Check for the errors
+        $err = self::getJsonErrors($json);
+        if ($err) {
+            return $err;
+        }
+
+        if (!$json) {
+            return (!empty($res) ? $res : 'Kindly review your MyFatoorah admin configuration due to a wrong entry.');
+        }
+
+        if (is_string($json)) {
+            return $json;
+        }
 
         return '';
     }
