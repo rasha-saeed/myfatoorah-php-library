@@ -236,7 +236,7 @@ Class MyFatoorah extends MyFatoorahHelper {
             return $json;
         }
 
-        if (!$json) {
+        if (empty($json)) {
             return (!empty($res) ? $res : 'Kindly review your MyFatoorah admin configuration due to a wrong entry.');
         }
         
@@ -311,66 +311,6 @@ Class MyFatoorah extends MyFatoorahHelper {
         //}
 
         return empty($json->Message) ? '' : $json->Message;
-    }
-
-    //-----------------------------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * Get a list of MyFatoorah countries and their API URLs and names
-     *
-     * @return array of MyFatoorah data
-     */
-    private static function getMFConfig() {
-
-        $cachedFile = dirname(__FILE__) . '/mf-config.json';
-
-        if (file_exists($cachedFile)) {
-            if ((time() - filemtime($cachedFile) > 3600)) {
-                $countries = self::createNewMFConfigFile($cachedFile);
-            }
-
-            if (!empty($countries)) {
-                return $countries;
-            }
-
-            $cache = file_get_contents($cachedFile);
-            return ($cache) ? json_decode($cache, true) : [];
-        } else {
-            return self::createNewMFConfigFile($cachedFile);
-        }
-    }
-
-    //-----------------------------------------------------------------------------------------------------------------------------------------
-
-    /**
-     *
-     * @param string $cachedFile
-     *
-     * @return array
-     */
-    private static function createNewMFConfigFile($cachedFile) {
-
-        $curl = curl_init('https://portal.myfatoorah.com/Files/API/mf-config.json');
-        curl_setopt_array($curl, array(
-            CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
-            CURLOPT_RETURNTRANSFER => true
-        ));
-
-        $response  = curl_exec($curl);
-        $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        curl_close($curl);
-
-        if ($http_code == 200 && is_string($response)) {
-            file_put_contents($cachedFile, $response);
-            return json_decode($response, true);
-        } elseif ($http_code == 403) {
-            touch($cachedFile);
-            $fileContent = file_get_contents($cachedFile);
-            if (!empty($fileContent)) {
-                return json_decode($fileContent, true);
-            }
-        }
-        return [];
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------

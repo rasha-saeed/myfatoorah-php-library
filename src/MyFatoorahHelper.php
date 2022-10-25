@@ -203,29 +203,65 @@ class MyFatoorahHelper {
         }
     }
 
+
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * It will log the events
+     * Get a list of MyFatoorah countries and their API URLs and names
      *
-     * @param string $msg It is the string message that will be written in the log file
-     *
-     * @return null
+     * @return array of MyFatoorah data
      */
-    public static function log($msg) {
+    protected static function getMFConfig() {
 
-        $loggerObj  = self::$loggerObj;
-        $loggerFunc = self::$loggerFunc;
+        $cachedFile = dirname(__FILE__) . '/mf-config.json';
 
-        if (empty($loggerObj)) {
-            return;
+        if (file_exists($cachedFile)) {
+            if ((time() - filemtime($cachedFile) > 3600)) {
+                $countries = self::createNewMFConfigFile($cachedFile);
+            }
+
+            if (!empty($countries)) {
+                return $countries;
+            }
+
+            $cache = file_get_contents($cachedFile);
+            return ($cache) ? json_decode($cache, true) : [];
+        } else {
+            return self::createNewMFConfigFile($cachedFile);
         }
+    }
 
-        if (is_string($loggerObj)) {
-            error_log(PHP_EOL . date('d.m.Y h:i:s') . ' - ' . $msg, 3, $loggerObj);
-        } elseif (method_exists($loggerObj, $loggerFunc)) {
-            $loggerObj->{$loggerFunc}($msg);
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     *
+     * @param string $cachedFile
+     *
+     * @return array
+     */
+    private static function createNewMFConfigFile($cachedFile) {
+
+        $curl = curl_init('https://portal.myfatoorah.com/Files/API/mf-config.json');
+        curl_setopt_array($curl, array(
+            CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
+            CURLOPT_RETURNTRANSFER => true
+        ));
+
+        $response  = curl_exec($curl);
+        $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        curl_close($curl);
+
+        if ($http_code == 200 && is_string($response)) {
+            file_put_contents($cachedFile, $response);
+            return json_decode($response, true);
+        } elseif ($http_code == 403) {
+            touch($cachedFile);
+            $fileContent = file_get_contents($cachedFile);
+            if (!empty($fileContent)) {
+                return json_decode($fileContent, true);
+            }
         }
+        return [];
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
