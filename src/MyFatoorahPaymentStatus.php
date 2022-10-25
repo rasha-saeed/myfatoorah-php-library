@@ -68,30 +68,26 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment {
     private static function checkOrderInformation($data, $orderId = null, $price = null, $currncy = null) {
 
         //check for the order ID
-//        if ($orderId && $orderId != $data->CustomerReference) {
-//            return false;
-//        }
+        $falseOrder   = $orderId && $orderId != $data->CustomerReference;
+        if ($falseOrder) {
+            return false;
+        }
 
         //check for the order price and currency
         list($valStr, $mfCurrncy) = explode(' ', $data->InvoiceDisplayValue);
         $mfPrice = floatval(preg_replace('/[^\d.]/', '', $valStr));
 
-//        if ($price && $price != $mfPrice) {
-//            return false;
-//        }
+        $falsePrice   = $price && $price != $mfPrice;
+        if ($falsePrice) {
+            return false;
+        }
 
-//        if ($currncy && $currncy != $mfCurrncy) {
-//            return false;
-//        }
+        $falseCurrncy = $currncy && $currncy != $mfCurrncy;
+        if ($falseCurrncy) {
+            return false;
+        }
 
-//        return true;
-
-
-        $isOrderCorrect   = $orderId && $orderId == $data->CustomerReference;
-        $isPriceCorrect   = $price && $price == $mfPrice;
-        $isCurrncyCorrect = $currncy && $currncy == $mfCurrncy;
-
-        return $isOrderCorrect && $isPriceCorrect && $isCurrncyCorrect;
+        return true;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
