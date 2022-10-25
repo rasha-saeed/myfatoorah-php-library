@@ -227,17 +227,21 @@ Class MyFatoorah extends MyFatoorahHelper {
         }
 
         //Check for the HTML errors
-        $hErr = self::getHtmlErrors($res);
-        if ($hErr) {
-            return $hErr;
-        }
-
+//        $hErr = self::getHtmlErrors($res);
+//        if ($hErr) {
+//            return $hErr;
+//        }
+//        
         if (is_string($json)) {
             return $json;
         }
 
+        if (empty($json)) {
+            return (!empty($res) ? $res : 'Kindly review your MyFatoorah admin configuration due to a wrong entry.');
+        }
+        
         //Check for the JSON errors
-        return self::getJsonErrors($json, $res);
+        return self::getJsonErrors($json);
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -274,15 +278,15 @@ Class MyFatoorah extends MyFatoorahHelper {
      *
      * @return string
      */
-    protected static function getJsonErrors($json, $res) {
-
+    protected static function getJsonErrors($json) {       
+        
         $errorsVar = isset($json->ValidationErrors) ? 'ValidationErrors' : 'FieldsErrors';
         if (isset($json->$errorsVar)) {
             $blogDatas = array_column($json->$errorsVar, 'Error', 'Name');
             return implode(', ', array_map(function ($k, $v) {
                         return "$k: $v";
                     }, array_keys($blogDatas), array_values($blogDatas)));
-
+                    
             //return implode(', ', array_column($json->ValidationErrors, 'Error'));        
         }
 
@@ -305,15 +309,7 @@ Class MyFatoorah extends MyFatoorahHelper {
         //"No route providing a controller name was found to match request URI 'https://apitest.myfatoorah.com/v2/SendPayment222'"
         //}
 
-        if (isset($json->Message)) {
-            return $json->Message;
-        }
-
-        if (empty($json)) {
-            return (!empty($res) ? $res : 'Kindly review your MyFatoorah admin configuration due to a wrong entry.');
-        }
-        
-        return '';
+        return empty($json->Message) ? '' : $json->Message;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
