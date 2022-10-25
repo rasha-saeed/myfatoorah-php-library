@@ -242,11 +242,7 @@ Class MyFatoorah extends MyFatoorahHelper {
             return (!empty($res) ? $res : 'Kindly review your MyFatoorah admin configuration due to a wrong entry.');
         }
 
-        if (is_string($json)) {
-            return $json;
-        }
-
-        return '';
+        return is_string($json) ? $json : '';
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
