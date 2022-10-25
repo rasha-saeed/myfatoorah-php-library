@@ -226,20 +226,19 @@ Class MyFatoorah extends MyFatoorahHelper {
             return '';
         }
 
+        //Check for the HTML errors
         $hErr = self::getHtmlErrors($res);
         if ($hErr) {
             return $hErr;
         }
 
-        //Check for the errors
+        //Check for the JSON errors
         $jErr = self::getJsonErrors($json);
         if ($jErr) {
             return $jErr;
         }
 
-        if (!$json) {
-            return (!empty($res) ? $res : 'Kindly review your MyFatoorah admin configuration due to a wrong entry.');
-        }
+
 
         return is_string($json) ? $json : '';
     }
@@ -275,10 +274,11 @@ Class MyFatoorah extends MyFatoorahHelper {
      * Check for the json (response model) errors
      *
      * @param object|string $json
+     * @param string $res
      *
      * @return string
      */
-    protected static function getJsonErrors($json) {
+    protected static function getJsonErrors($json, $res) {
 
         if (isset($json->ValidationErrors) || isset($json->FieldsErrors)) {
             //$err = implode(', ', array_column($json->ValidationErrors, 'Error'));
@@ -310,7 +310,15 @@ Class MyFatoorah extends MyFatoorahHelper {
         //"No route providing a controller name was found to match request URI 'https://apitest.myfatoorah.com/v2/SendPayment222'"
         //}
 
-        return empty($json->Message) ? '' : $json->Message;
+        if (isset($json->Message)) {
+            return $json->Message;
+        }
+        
+        if (!$json) {
+            return (!empty($res) ? $res : 'Kindly review your MyFatoorah admin configuration due to a wrong entry.');
+        }
+
+        return '';
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
