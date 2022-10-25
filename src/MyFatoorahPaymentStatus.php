@@ -68,8 +68,7 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment {
     private static function checkOrderInformation($data, $orderId = null, $price = null, $currncy = null) {
 
         //check for the order ID
-        $falseOrder   = $orderId && $orderId != $data->CustomerReference;
-        if ($falseOrder) {
+        if ($orderId && $orderId != $data->CustomerReference) {
             return false;
         }
 
@@ -77,17 +76,12 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment {
         list($valStr, $mfCurrncy) = explode(' ', $data->InvoiceDisplayValue);
         $mfPrice = floatval(preg_replace('/[^\d.]/', '', $valStr));
 
-        $falsePrice   = $price && $price != $mfPrice;
-        if ($falsePrice) {
+        if ($price && $price != $mfPrice) {
             return false;
         }
-
-        $falseCurrncy = $currncy && $currncy != $mfCurrncy;
-        if ($falseCurrncy) {
-            return false;
-        }
-
-        return true;
+        
+        return !($currncy && $currncy != $mfCurrncy);
+        
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
