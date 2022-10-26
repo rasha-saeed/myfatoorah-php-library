@@ -52,7 +52,7 @@ $config = [
     isTest => false,
 ];
 $mfObj = new MyFatoorahShipping($config);
-$json  = $mfObj->getShippingCountries();
+$data  = $mfObj->getShippingCountries();
 
 echo 'Country code: ' . $data[0]->CountryCode;
 echo 'Country name: ' . $data[0]->CountryName;
