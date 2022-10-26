@@ -227,8 +227,8 @@ class MyFatoorah extends MyFatoorahHelper
     protected static function getAPIError($json, $res)
     {
 
-        $IsSuccess = $json->IsSuccess ?? false;
-        if ($IsSuccess) {
+        $isSuccess = $json->IsSuccess ?? false;
+        if ($isSuccess) {
             return '';
         }
 
