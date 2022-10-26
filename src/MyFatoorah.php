@@ -24,8 +24,7 @@ use Exception;
  * @copyright 2021 MyFatoorah, All rights reserved
  * @license   GNU General Public License v3.0
  */
-class MyFatoorah extends MyFatoorahHelper
-{
+class MyFatoorah extends MyFatoorahHelper {
 
     /**
      * The configuration used to connect to MyFatoorah test/live API server
@@ -48,8 +47,7 @@ class MyFatoorah extends MyFatoorahHelper
      *
      * @param array $config It has the required keys (apiKey, isTest, and countryCode) to process a MyFatoorah API request.
      */
-    public function __construct($config)
-    {
+    public function __construct($config) {
 
         $mfConfig = self::getMFConfig();
 
@@ -76,8 +74,7 @@ class MyFatoorah extends MyFatoorahHelper
      *
      * @throws Exception
      */
-    protected function setApiKey($config)
-    {
+    protected function setApiKey($config) {
         if (empty($config['apiKey'])) {
             throw new Exception('Config array must have the "apiKey" key.');
         }
@@ -101,8 +98,7 @@ class MyFatoorah extends MyFatoorahHelper
      *
      * @throws Exception
      */
-    protected function setIsTest($config)
-    {
+    protected function setIsTest($config) {
         if (empty($config['isTest'])) {
             throw new Exception('Config array must have the "isTest" key.');
         }
@@ -125,8 +121,7 @@ class MyFatoorah extends MyFatoorahHelper
      *
      * @throws Exception
      */
-    protected function setCountryCode($config)
-    {
+    protected function setCountryCode($config) {
         if (empty($config['countryCode'])) {
             throw new Exception('Config array must have the "countryCode" key.');
         }
@@ -156,8 +151,7 @@ class MyFatoorah extends MyFatoorahHelper
      *
      * @throws Exception    Throw exception if there is any curl/validation error in the MyFatoorah API endpoint URL.
      */
-    public function callAPI($url, $postFields = null, $orderId = null, $function = null)
-    {
+    public function callAPI($url, $postFields = null, $orderId = null, $function = null) {
 
         //to prevent json_encode adding lots of decimal digits
         ini_set('precision', 14);
@@ -224,8 +218,7 @@ class MyFatoorah extends MyFatoorahHelper
      *
      * @return string
      */
-    protected static function getAPIError($json, $res)
-    {
+    protected static function getAPIError($json, $res) {
 
         if (isset($json->IsSuccess) && $json->IsSuccess == true) {
             return '';
@@ -243,7 +236,7 @@ class MyFatoorah extends MyFatoorahHelper
         }
 
         if (empty($json)) {
-            return (!empty($res) ? $res : 'Kindly review your MyFatoorah admin configuration due to a wrong entry.');
+            return $res ?? 'Kindly review your MyFatoorah admin configuration due to a wrong entry.';
         }
 
         return self::getJsonErrors($json);
@@ -258,8 +251,7 @@ class MyFatoorah extends MyFatoorahHelper
      *
      * @return string
      */
-    protected static function getHtmlErrors($res)
-    {
+    protected static function getHtmlErrors($res) {
         //to avoid blocked IP like:
         //<html>
         //<head><title>403 Forbidden</title></head>
@@ -284,8 +276,7 @@ class MyFatoorah extends MyFatoorahHelper
      *
      * @return string
      */
-    protected static function getJsonErrors($json)
-    {
+    protected static function getJsonErrors($json) {
 
         $errorsVar = isset($json->ValidationErrors) ? 'ValidationErrors' : 'FieldsErrors';
         if (isset($json->$errorsVar)) {
@@ -331,8 +322,7 @@ class MyFatoorah extends MyFatoorahHelper
      *
      * @return null
      */
-    public static function log($msg)
-    {
+    public static function log($msg) {
 
         $loggerObj  = self::$loggerObj;
         $loggerFunc = self::$loggerFunc;
