@@ -2,7 +2,6 @@
 
 namespace MyFatoorah\Library;
 
-use MyFatoorah\Library\MyFatoorahHelper;
 use Exception;
 
 /**
