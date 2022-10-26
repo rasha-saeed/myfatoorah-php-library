@@ -3,7 +3,6 @@
 namespace MyFatoorah\Library\API;
 
 use MyFatoorah\Library\MyFatoorah;
-use MyFatoorah\Library\MyFatoorah\API\MyFatoorahList;
 
 /**
  *  MyFatoorahRefund handles the refund process of MyFatoorah API endpoints
