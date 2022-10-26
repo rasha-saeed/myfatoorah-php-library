@@ -9,9 +9,11 @@ namespace MyFatoorah\Library;
  * @copyright 2021 MyFatoorah, All rights reserved
  * @license   GNU General Public License v3.0
  */
-class MyFatoorahPaymentForm extends MyFatoorahPayment {
+class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
+{
 
     /**
+     * The paymentMethods array is used to display the payment in the checkout page.
      *
      * @var array
      */
@@ -22,13 +24,14 @@ class MyFatoorahPaymentForm extends MyFatoorahPayment {
     /**
      * List available Payment Methods
      *
-     * @param double|integer $invoiceValue
-     * @param string         $displayCurrencyIso
-     * @param bool           $isAppleRegistered
+     * @param double|integer $invoiceValue       Total invoice amount.
+     * @param string         $displayCurrencyIso Total invoice currency.
+     * @param bool           $isAppleRegistered  Is site domain is registered with applePay and MyFatoorah or not.
      *
      * @return array
      */
-    public function getPaymentMethodsForDisplay($invoiceValue, $displayCurrencyIso, $isAppleRegistered) {
+    public function getPaymentMethodsForDisplay($invoiceValue, $displayCurrencyIso, $isAppleRegistered)
+    {
 
         if (!empty(self::$paymentMethods)) {
             return self::$paymentMethods;
@@ -58,16 +61,17 @@ class MyFatoorahPaymentForm extends MyFatoorahPayment {
     /**
      * Calculate the amount value that will be paid in each gateway
      *
-     * @param double|integer $totalAmount
-     * @param string         $currency
-     * @param string         $paymentCurrencyIso
-     * @param array          $allRatesData
+     * @param double|integer $totalAmount        The total amount of the invoice.
+     * @param string         $currency           The currency of the invoice total amount.
+     * @param string         $paymentCurrencyIso The currency of the gateway.
+     * @param array          $allRates           The MyFatoorah currency rate array of all gateways.
      *
      * @return array
      */
-    protected function calcGatewayData($totalAmount, $currency, $paymentCurrencyIso, $allRatesData) {
+    protected function calcGatewayData($totalAmount, $currency, $paymentCurrencyIso, $allRates)
+    {
 
-        foreach ($allRatesData as $data) {
+        foreach ($allRates as $data) {
             if ($data->Text == $currency) {
                 $baseCurrencyRate = $data->Value;
             }
@@ -98,12 +102,14 @@ class MyFatoorahPaymentForm extends MyFatoorahPayment {
     /**
      * Returns One Apple pay array in case multiple are enabled in the account
      *
-     * @param  array  $apGateways
-     * @param  string $displayCurrency
-     * @param  array  $allRates
+     * @param array  $apGateways      The all available AP gateways
+     * @param string $displayCurrency The currency of the invoice total amount.
+     * @param array  $allRates        The MyFatoorah currency rate array of all gateways.
+     *
      * @return array
      */
-    protected function getOneApplePayGateway($apGateways, $displayCurrency, $allRates) {
+    protected function getOneApplePayGateway($apGateways, $displayCurrency, $allRates)
+    {
 
         $displayCurrencyIndex = array_search($displayCurrency, array_column($apGateways, 'PaymentCurrencyIso'));
         if ($displayCurrencyIndex) {

@@ -12,9 +12,11 @@ use Exception;
  * @copyright 2021 MyFatoorah, All rights reserved
  * @license   GNU General Public License v3.0
  */
-class MyFatoorahPayment extends MyFatoorah {
+class MyFatoorahPayment extends MyFatoorah
+{
 
     /**
+     * The file name used in caching the gateways data
      *
      * @var string
      */
@@ -23,15 +25,16 @@ class MyFatoorahPayment extends MyFatoorah {
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * List available Payment Gateways. (POST API)
+     * List available Payment Gateways (POST API)
      *
-     * @param double|integer $invoiceValue
-     * @param string         $displayCurrencyIso
-     * @param boolean        $isCached
+     * @param double|integer $invoiceValue       Total invoice amount.
+     * @param string         $displayCurrencyIso Total invoice currency.
+     * @param boolean        $isCached           It used to cache the gateways
      *
      * @return array
      */
-    public function initiatePayment($invoiceValue = 0, $displayCurrencyIso = '', $isCached = false) {
+    public function initiatePayment($invoiceValue = 0, $displayCurrencyIso = '', $isCached = false)
+    {
 
         $postFields = [
             'InvoiceAmount' => $invoiceValue,
@@ -51,11 +54,12 @@ class MyFatoorahPayment extends MyFatoorah {
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * List available Cached Payment Gateways.
+     * List available Cached Payment Gateways
      *
-     * @return array of Cached payment methods
+     * @return array of Cached payment methods.
      */
-    public function getCachedVendorGateways() {
+    public function getCachedVendorGateways()
+    {
 
         if (file_exists(self::$pmCachedFile)) {
             $cache = file_get_contents(self::$pmCachedFile);
@@ -70,10 +74,12 @@ class MyFatoorahPayment extends MyFatoorah {
     /**
      * List available cached  Payment Methods
      *
-     * @param  bool $isAppleRegistered
+     * @param bool $isAppleRegistered Is site domain is registered with applePay and MyFatoorah or not
+     *
      * @return array
      */
-    public function getCachedPaymentMethodsArray($isAppleRegistered = false) {
+    public function getCachedPaymentMethodsArray($isAppleRegistered = false)
+    {
 
         $gateways       = $this->getCachedVendorGateways();
         $paymentMethods = ['all' => [], 'cards' => [], 'form' => [], 'ap' => []];
@@ -90,14 +96,16 @@ class MyFatoorahPayment extends MyFatoorah {
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
+     * Add the MyFatoorah gateway object to the a given Payment Methods Array
      *
-     * @param object  $gateway
-     * @param array   $paymentMethods
-     * @param boolean $isAppleRegistered
+     * @param object  $gateway           MyFatoorah gateway object.
+     * @param array   $paymentMethods    Payment Methods Array.
+     * @param boolean $isAppleRegistered Is site domain is registered with applePay and MyFatoorah or not.
      *
      * @return array
      */
-    protected function addGatewayToPaymentMethodsArray($gateway, $paymentMethods, $isAppleRegistered) {
+    protected function addGatewayToPaymentMethodsArray($gateway, $paymentMethods, $isAppleRegistered)
+    {
 
         if ($gateway->PaymentMethodCode == 'ap') {
             if ($isAppleRegistered) {
@@ -124,16 +132,17 @@ class MyFatoorahPayment extends MyFatoorah {
     /**
      * Get Payment Method Object
      *
-     * @param string         $gateway
-     * @param string         $gatewayType        ['PaymentMethodId', 'PaymentMethodCode']
-     * @param double|integer $invoiceValue
-     * @param string         $displayCurrencyIso
+     * @param string         $gateway            MyFatoorah gateway object.
+     * @param string         $gatewayType        The Search key     ['PaymentMethodId', 'PaymentMethodCode'].
+     * @param double|integer $invoiceValue       Total invoice amount.
+     * @param string         $displayCurrencyIso Total invoice currency.
      *
      * @return object
      *
      * @throws Exception
      */
-    public function getOnePaymentMethod($gateway, $gatewayType = 'PaymentMethodId', $invoiceValue = 0, $displayCurrencyIso = '') {
+    public function getOnePaymentMethod($gateway, $gatewayType = 'PaymentMethodId', $invoiceValue = 0, $displayCurrencyIso = '')
+    {
 
         $paymentMethods = $this->initiatePayment($invoiceValue, $displayCurrencyIso);
 
@@ -157,14 +166,15 @@ class MyFatoorahPayment extends MyFatoorah {
     /**
      * Get the invoice/payment URL and the invoice id
      *
-     * @param array          $curlData
-     * @param string         $gatewayId (default value: 'myfatoorah')
-     * @param integer|string $orderId   (default value: null) used in log file
-     * @param string         $sessionId
+     * @param array          $curlData  Invoice information.
+     * @param string         $gatewayId MyFatoorah Gateway ID (default value: '0').
+     * @param integer|string $orderId   It used in log file (default value: null).
+     * @param string         $sessionId The payment session used in embedded payment.
      *
-     * @return array
+     * @return array of invoiceURL and invoiceURL
      */
-    public function getInvoiceURL($curlData, $gatewayId = 0, $orderId = null, $sessionId = null) {
+    public function getInvoiceURL($curlData, $gatewayId = 0, $orderId = null, $sessionId = null)
+    {
 
         $this->log('------------------------------------------------------------');
 
@@ -184,13 +194,14 @@ class MyFatoorahPayment extends MyFatoorah {
     /**
      * (POST API)
      *
-     * @param array          $curlData
-     * @param integer|string $gatewayId
-     * @param integer|string $orderId   (default value: null) used in log file
+     * @param array          $curlData  Invoice information.
+     * @param integer|string $gatewayId MyFatoorah Gateway ID.
+     * @param integer|string $orderId   It used in log file (default value: null).
      *
      * @return array
      */
-    private function excutePayment($curlData, $gatewayId, $orderId = null) {
+    private function excutePayment($curlData, $gatewayId, $orderId = null)
+    {
 
         $curlData['PaymentMethodId'] = $gatewayId;
 
@@ -202,14 +213,15 @@ class MyFatoorahPayment extends MyFatoorah {
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * (POST API)
+     * Create an invoice Link (POST API)
      *
-     * @param array          $curlData
-     * @param integer|string $orderId  (default value: null) used in log file
+     * @param array          $curlData Invoice information.
+     * @param integer|string $orderId  It used in log file (default value: null).
      *
      * @return array
      */
-    private function sendPayment($curlData, $orderId = null) {
+    private function sendPayment($curlData, $orderId = null)
+    {
 
         $curlData['NotificationOption'] = 'Lnk';
 
@@ -223,13 +235,14 @@ class MyFatoorahPayment extends MyFatoorah {
     /**
      * Create an invoice using Embedded session (POST API)
      *
-     * @param array          $curlData  invoice information
-     * @param integer|string $sessionId session id used in payment process
-     * @param integer|string $orderId   used in log file (default value: null)
+     * @param array          $curlData  Invoice information.
+     * @param integer|string $sessionId Session id used in payment process.
+     * @param integer|string $orderId   It used in log file (default value: null).
      *
      * @return array
      */
-    private function embeddedPayment($curlData, $sessionId, $orderId = null) {
+    private function embeddedPayment($curlData, $sessionId, $orderId = null)
+    {
 
         $curlData['SessionId'] = $sessionId;
 
@@ -242,12 +255,13 @@ class MyFatoorahPayment extends MyFatoorah {
     /**
      * Get session Data (POST API)
      *
-     * @param string         $userDefinedField Customer Identifier to dispaly its saved data
-     * @param integer|string $orderId          used in log file (default value: null)
+     * @param string         $userDefinedField Customer Identifier to dispaly its saved data.
+     * @param integer|string $orderId          It used in log file (default value: null).
      *
      * @return object
      */
-    public function getEmbeddedSession($userDefinedField = '', $orderId = null) {
+    public function getEmbeddedSession($userDefinedField = '', $orderId = null)
+    {
 
         $customerIdentifier = ['CustomerIdentifier' => $userDefinedField];
 
@@ -264,7 +278,8 @@ class MyFatoorahPayment extends MyFatoorah {
      *
      * @return object
      */
-    public function registerApplePayDomain($url) {
+    public function registerApplePayDomain($url)
+    {
 
         $domainName = ['DomainName' => parse_url($url, PHP_URL_HOST)];
         return $this->callAPI("$this->apiURL/v2/RegisterApplePayDomain", $domainName, '', 'Register Apple Pay Domain');

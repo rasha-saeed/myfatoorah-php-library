@@ -11,7 +11,8 @@ use MyFatoorah\Library\MyFatoorah;
  * @copyright 2021 MyFatoorah, All rights reserved
  * @license   GNU General Public License v3.0
  */
-class MyFatoorahRefund extends MyFatoorah {
+class MyFatoorahRefund extends MyFatoorah
+{
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -25,7 +26,8 @@ class MyFatoorahRefund extends MyFatoorah {
      *
      * @return object
      */
-    public function refund($paymentId, $amount, $currencyCode, $reason, $orderId = null) {
+    public function refund($paymentId, $amount, $currencyCode, $reason, $orderId = null)
+    {
 
         $mfListObj = new MyFatoorahList($this->config);
         $rate      = $mfListObj->getCurrencyRate($currencyCode);

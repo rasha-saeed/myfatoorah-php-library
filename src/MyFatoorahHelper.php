@@ -7,7 +7,8 @@ use Exception;
 /**
  * Trait MyFatoorah is responsible for helping calling MyFatoorah API endpoints.
  */
-class MyFatoorahHelper {
+class MyFatoorahHelper
+{
 
     /**
      * The file name or the logger object
@@ -39,7 +40,8 @@ class MyFatoorahHelper {
      *
      * @throws Exception    Throw exception if the input length is less than 3 chars or long than 14 chars.
      */
-    public static function getPhone($inputString) {
+    public static function getPhone($inputString)
+    {
 
         //remove any arabic digit
         $string3 = self::convertArabicDigitstoEnglish($inputString);
@@ -81,10 +83,12 @@ class MyFatoorahHelper {
     /**
      * Converts any Arabic or Persian numbers to English digits
      *
-     * @param  string $inputString It is the input phone number provide by the end user.
+     * @param string $inputString It is the input phone number provide by the end user.
+     *
      * @return string
      */
-    private static function convertArabicDigitstoEnglish($inputString) {
+    protected static function convertArabicDigitstoEnglish($inputString)
+    {
 
         $newNumbers = range(0, 9);
 
@@ -112,7 +116,8 @@ class MyFatoorahHelper {
      *
      * @throws Exception Throw exception if the input unit is not support.
      */
-    public static function getWeightRate($unit) {
+    public static function getWeightRate($unit)
+    {
 
         $lUnit = strtolower($unit);
 
@@ -144,7 +149,8 @@ class MyFatoorahHelper {
      *
      * @throws Exception        Throw exception if the input unit is not support.
      */
-    public static function getDimensionRate($unit) {
+    public static function getDimensionRate($unit)
+    {
 
         $lUnit = strtolower($unit);
 
@@ -177,7 +183,8 @@ class MyFatoorahHelper {
      *
      * @return boolean
      */
-    public static function isSignatureValid($dataArray, $secret, $signature, $eventType = 0) {
+    public static function isSignatureValid($dataArray, $secret, $signature, $eventType = 0)
+    {
 
         if ($eventType == 2) {
             unset($dataArray['GatewayReference']);
@@ -185,13 +192,11 @@ class MyFatoorahHelper {
 
         uksort($dataArray, 'strcasecmp');
 
-        $output = implode(',', array_map(
-                        function ($v, $k) {
-                            return sprintf("%s=%s", $k, $v);
-                        },
-                        $dataArray,
-                        array_keys($dataArray)
-        ));
+        $mapFun = function ($v, $k) {
+            return sprintf("%s=%s", $k, $v);
+        };
+        $outputArr = array_map($mapFun, $dataArray, array_keys($dataArray));
+        $output    = implode(',', $outputArr);
 
         // generate hash of $field string
         $hash = base64_encode(hash_hmac('sha256', $output, $secret, true));
@@ -206,11 +211,12 @@ class MyFatoorahHelper {
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Get a list of MyFatoorah countries and their API URLs and names
+     * Get a list of MyFatoorah countries, their API URLs, and names.
      *
      * @return array of MyFatoorah data
      */
-    protected static function getMFConfig() {
+    protected static function getMFConfig()
+    {
 
         $cachedFile = dirname(__FILE__) . '/mf-config.json';
 
@@ -233,18 +239,22 @@ class MyFatoorahHelper {
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
+     * Cache a list of MyFatoorah countries, their API URLs, and names.
      *
-     * @param string $cachedFile
+     * @param string $cachedFile The file name used in caching data.
      *
-     * @return array
+     * @return array of MyFatoorah data
      */
-    private static function createNewMFConfigFile($cachedFile) {
+    protected static function createNewMFConfigFile($cachedFile)
+    {
 
         $curl = curl_init('https://portal.myfatoorah.com/Files/API/mf-config.json');
-        curl_setopt_array($curl, array(
+
+        $option = [
             CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
             CURLOPT_RETURNTRANSFER => true
-        ));
+        ];
+        curl_setopt_array($curl, $option);
 
         $response  = curl_exec($curl);
         $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);

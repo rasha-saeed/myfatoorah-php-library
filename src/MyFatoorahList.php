@@ -12,7 +12,8 @@ use Exception;
  * @copyright 2021 MyFatoorah, All rights reserved
  * @license   GNU General Public License v3.0
  */
-class MyFatoorahList extends MyFatoorah {
+class MyFatoorahList extends MyFatoorah
+{
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -24,7 +25,8 @@ class MyFatoorahList extends MyFatoorah {
      *
      * @throws Exception    Throw exception if the input currency is not support by MyFatoorah portal account.
      */
-    public function getCurrencyRate($currency) {
+    public function getCurrencyRate($currency)
+    {
 
         $json = $this->getCurrencyRates();
         foreach ($json as $value) {
@@ -42,7 +44,8 @@ class MyFatoorahList extends MyFatoorah {
      *
      * @return array
      */
-    public function getCurrencyRates() {
+    public function getCurrencyRates()
+    {
 
         $url = "$this->apiURL/v2/GetCurrenciesExchangeList";
         return (array) $this->callAPI($url, null, null, 'Get Currencies Exchange List');

@@ -11,7 +11,8 @@ use MyFatoorah\Library\MyFatoorah;
  * @copyright 2021 MyFatoorah, All rights reserved
  * @license   GNU General Public License v3.0
  */
-class MyFatoorahShipping extends MyFatoorah {
+class MyFatoorahShipping extends MyFatoorah
+{
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -19,7 +20,8 @@ class MyFatoorahShipping extends MyFatoorah {
      *
      * @return array
      */
-    public function getShippingCountries() {
+    public function getShippingCountries()
+    {
 
         $url  = "$this->apiURL/v2/GetCountries";
         $json = $this->callAPI($url, null, null, 'Get Countries');
@@ -37,7 +39,8 @@ class MyFatoorahShipping extends MyFatoorah {
      *
      * @return array
      */
-    public function getShippingCities($method, $countryCode, $searchValue = '') {
+    public function getShippingCities($method, $countryCode, $searchValue = '')
+    {
 
         $url = $this->apiURL . '/v2/GetCities'
                 . '?shippingMethod=' . $method
@@ -57,7 +60,8 @@ class MyFatoorahShipping extends MyFatoorah {
      *
      * @return object
      */
-    public function calculateShippingCharge($curlData) {
+    public function calculateShippingCharge($curlData)
+    {
 
         $url  = "$this->apiURL/v2/CalculateShippingCharge";
         $json = $this->callAPI($url, $curlData, null, 'Calculate Shipping Charge');

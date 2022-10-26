@@ -11,61 +11,67 @@ use Exception;
  * @copyright 2021 MyFatoorah, All rights reserved
  * @license   GNU General Public License v3.0
  */
-class MyFatoorahPaymentStatus extends MyFatoorahPayment {
+class MyFatoorahPaymentStatus extends MyFatoorahPayment
+{
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * Get the Payment Transaction Status (POST API)
      *
-     * @param string         $keyId
-     * @param string         $KeyType
-     * @param integer|string $orderId (default value: null)
-     * @param string         $price
-     * @param string         $currncy
+     * @param string         $keyId    MyFatoorah InvoiceId, PaymentId, or CustomerReference value.
+     * @param string         $KeyType  The supported key types are "InvoiceId", "PaymentId", or "CustomerReference".
+     * @param integer|string $orderId  The order id in the store used to match the invoice data with store order.
+     * @param string         $price    The order price in the store used to match the invoice data with store order.
+     * @param string         $currency The order currency in the store used to match the invoice data with store order.
      *
      * @return object
      *
      * @throws Exception
      */
-    public function getPaymentStatus($keyId, $KeyType, $orderId = null, $price = null, $currncy = null) {
+    public function getPaymentStatus($keyId, $KeyType, $orderId = null, $price = null, $currency = null)
+    {
 
         //payment inquiry
         $curlData = ['Key' => $keyId, 'KeyType' => $KeyType];
         $json     = $this->callAPI("$this->apiURL/v2/GetPaymentStatus", $curlData, $orderId, 'Get Payment Status');
 
-        $msgLog = 'Order #' . $json->Data->CustomerReference . ' ----- Get Payment Status';
+        $data = $json->Data;
+
+        $msgLog = 'Order #' . $data->CustomerReference . ' ----- Get Payment Status';
 
         //check for the order information
-        if (!self::checkOrderInformation($json->Data, $orderId, $price, $currncy)) {
+        if (!self::checkOrderInformation($data, $orderId, $price, $currency)) {
             $err = 'Trying to call data of another order';
             $this->log("$msgLog - Exception is $err");
             throw new Exception($err);
         }
 
         //check invoice status (Paid and Not Paid Cases)
-        if ($json->Data->InvoiceStatus == 'Paid' || $json->Data->InvoiceStatus == 'DuplicatePayment') {
-            $json->Data = self::getSuccessData($json);
+        if ($data->InvoiceStatus == 'Paid' || $data->InvoiceStatus == 'DuplicatePayment') {
+            $data = self::getSuccessData($data);
             $this->log("$msgLog - Status is Paid");
-        } elseif ($json->Data->InvoiceStatus != 'Paid') {
-            $json->Data = self::getErrorData($json, $keyId, $KeyType);
-            $this->log("$msgLog - Status is " . $json->Data->InvoiceStatus . '. Error is ' . $json->Data->InvoiceError);
+        } elseif ($data->InvoiceStatus != 'Paid') {
+            $data = self::getErrorData($data, $keyId, $KeyType);
+            $this->log("$msgLog - Status is " . $data->InvoiceStatus . '. Error is ' . $data->InvoiceError);
         }
 
-        return $json->Data;
+        return $data;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
+     * Validate the invoice data with store order data
      *
-     * @param object $data
-     * @param string $orderId
-     * @param string $price
-     * @param string $currncy
+     * @param object         $data     The MyFatoorah invoice data
+     * @param integer|string $orderId  The order id in the store used to match the invoice data with store order.
+     * @param string         $price    The order price in the store used to match the invoice data with store order.
+     * @param string         $currency The order currency in the store used to match the invoice data with store order.
      *
      * @return boolean
      */
-    private static function checkOrderInformation($data, $orderId = null, $price = null, $currncy = null) {
+    private static function checkOrderInformation($data, $orderId = null, $price = null, $currency = null)
+    {
 
         //check for the order ID
         if ($orderId && $orderId != $data->CustomerReference) {
@@ -73,98 +79,104 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment {
         }
 
         //check for the order price and currency
-        list($valStr, $mfCurrncy) = explode(' ', $data->InvoiceDisplayValue);
+        list($valStr, $mfCurrency) = explode(' ', $data->InvoiceDisplayValue);
         $mfPrice = floatval(preg_replace('/[^\d.]/', '', $valStr));
 
         if ($price && $price != $mfPrice) {
             return false;
         }
 
-        return !($currncy && $currncy != $mfCurrncy);
+        return !($currency && $currency != $mfCurrency);
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
+     * Search for the success transaction and return it in the focusTransaction object
      *
-     * @param object $json
+     * @param object $data The payment data object
      *
      * @return object
      */
-    private static function getSuccessData($json) {
+    private static function getSuccessData($data)
+    {
 
-        foreach ($json->Data->InvoiceTransactions as $transaction) {
+        foreach ($data->InvoiceTransactions as $transaction) {
             if ($transaction->TransactionStatus == 'Succss') {
-                $json->Data->InvoiceStatus = 'Paid';
-                $json->Data->InvoiceError  = '';
+                $data->InvoiceStatus = 'Paid';
+                $data->InvoiceError  = '';
 
-                $json->Data->focusTransaction = $transaction;
-                return $json->Data;
+                $data->focusTransaction = $transaction;
+                return $data;
             }
         }
-        return $json->Data;
+        return $data;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
+     * Search for the failed transaction and return it in the focusTransaction object
      *
-     * @param object $json
-     * @param string $keyId
-     * @param string $KeyType
+     * @param object $data    The payment data object
+     * @param string $keyId   MyFatoorah InvoiceId, PaymentId, or CustomerReference value.
+     * @param string $KeyType The supported key types are "InvoiceId", "PaymentId", or "CustomerReference".
      *
      * @return object
      */
-    private static function getErrorData($json, $keyId, $KeyType) {
+    private static function getErrorData($data, $keyId, $KeyType)
+    {
 
         //------------------
         //case 1: payment is Failed
-        $focusTransaction = self::{"getLastTransactionOf$KeyType"}($json, $keyId);
+        $focusTransaction = self::{"getLastTransactionOf$KeyType"}($data->InvoiceTransactions, $keyId);
         if ($focusTransaction && $focusTransaction->TransactionStatus == 'Failed') {
-            $json->Data->InvoiceStatus = 'Failed';
-            $json->Data->InvoiceError  = $focusTransaction->Error . '.';
+            $data->InvoiceStatus = 'Failed';
+            $data->InvoiceError  = $focusTransaction->Error . '.';
 
-            $json->Data->focusTransaction = $focusTransaction;
+            $data->focusTransaction = $focusTransaction;
 
-            return $json->Data;
+            return $data;
         }
 
         //------------------
         //case 2: payment is Expired
         //all myfatoorah gateway is set to Asia/Kuwait
-        $ExpiryDateTime = $json->Data->ExpiryDate . ' ' . $json->Data->ExpiryTime;
+        $ExpiryDateTime = $data->ExpiryDate . ' ' . $data->ExpiryTime;
         $ExpiryDate     = new \DateTime($ExpiryDateTime, new \DateTimeZone('Asia/Kuwait'));
         $currentDate    = new \DateTime('now', new \DateTimeZone('Asia/Kuwait'));
 
         if ($ExpiryDate < $currentDate) {
-            $json->Data->InvoiceStatus = 'Expired';
-            $json->Data->InvoiceError  = 'Invoice is expired since ' . $json->Data->ExpiryDate . '.';
+            $data->InvoiceStatus = 'Expired';
+            $data->InvoiceError  = 'Invoice is expired since ' . $data->ExpiryDate . '.';
 
-            return $json->Data;
+            return $data;
         }
 
         //------------------
         //case 3: payment is Pending
         //payment is pending .. user has not paid yet and the invoice is not expired
-        $json->Data->InvoiceStatus = 'Pending';
-        $json->Data->InvoiceError  = 'Pending Payment.';
+        $data->InvoiceStatus = 'Pending';
+        $data->InvoiceError  = 'Pending Payment.';
 
-        return $json->Data;
+        return $data;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
+     * Search for the failed transaction by the payment Id
      *
-     * @param object         $json
-     * @param integer|string $keyId
+     * @param array          $transactions The transactions array
+     * @param integer|string $paymentId    the failed payment Id
      *
      * @return object
      */
-    private static function getLastTransactionOfPaymentId($json, $keyId) {
+    private static function getLastTransactionOfPaymentId($transactions, $paymentId)
+    {
 
-        foreach ($json->Data->InvoiceTransactions as $transaction) {
-            if ($transaction->PaymentId == $keyId && $transaction->Error) {
+        foreach ($transactions->InvoiceTransactions as $transaction) {
+            if ($transaction->PaymentId == $paymentId && $transaction->Error) {
                 return $transaction;
             }
         }
@@ -173,18 +185,21 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment {
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
+     * Search for the last transaction of an invoice
      *
-     * @param object $json
+     * @param array $transactions The transactions array
      *
      * @return object
      */
-    private static function getLastTransactionOfInvoiceId($json) {
+    private static function getLastTransactionOfInvoiceId($transactions)
+    {
 
-        usort($json->Data->InvoiceTransactions, function ($a, $b) {
+        $usortFun = function ($a, $b) {
             return strtotime($a->TransactionDate) - strtotime($b->TransactionDate);
-        });
+        };
+        usort($transactions, $usortFun);
 
-        return end($json->Data->InvoiceTransactions);
+        return end($transactions);
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
