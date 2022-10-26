@@ -1,6 +1,6 @@
 <?php
 
-namespace MyFatoorah\Library;
+namespace MyFatoorah\Library\API\Payment;
 
 use Exception;
 

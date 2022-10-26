@@ -1,8 +1,8 @@
 <?php
 
-namespace MyFatoorah\Test;
+namespace MyFatoorah\Test\API;
 
-use MyFatoorah\Library\MyFatoorahShipping;
+use MyFatoorah\Library\API\MyFatoorahShipping;
 
 class MyFatoorahShippingTest extends \PHPUnit\Framework\TestCase {
 
@@ -11,7 +11,7 @@ class MyFatoorahShippingTest extends \PHPUnit\Framework\TestCase {
 //-----------------------------------------------------------------------------------------------------------------------------------------
     public function __construct() {
         parent::__construct();
-        $this->keys = include('apiKeys.php');
+        $this->keys = include(__DIR__ . '/../apiKeys.php');
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------

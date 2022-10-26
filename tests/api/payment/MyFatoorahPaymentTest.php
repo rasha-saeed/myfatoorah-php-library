@@ -1,8 +1,8 @@
 <?php
 
-namespace MyFatoorah\Test;
+namespace MyFatoorah\Test\API\Payment;
 
-use MyFatoorah\Library\MyFatoorahPayment;
+use MyFatoorah\Library\API\Payment\MyFatoorahPayment;
 
 class MyFatoorahPaymentTest extends \PHPUnit\Framework\TestCase {
 
@@ -11,7 +11,7 @@ class MyFatoorahPaymentTest extends \PHPUnit\Framework\TestCase {
 //-----------------------------------------------------------------------------------------------------------------------------------------
     public function __construct() {
         parent::__construct();
-        $this->keys = include('apiKeys.php');
+        $this->keys = include(__DIR__ . '/../../apiKeys.php');
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
