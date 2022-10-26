@@ -2,7 +2,7 @@
 
 namespace MyFatoorah\Library\API\Payment;
 
-use MyFatoorah\Library\MyFatoorah\API\MyFatoorahList;
+use MyFatoorah\Library\API\MyFatoorahList;
 /**
  *  MyFatoorahPaymentForm handles the form process of MyFatoorah API endpoints
  *
