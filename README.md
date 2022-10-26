@@ -22,7 +22,12 @@ composer require myfatoorah/library
 ### Payment Operations
 
 ``` php
-$mfObj = new PaymentMyfatoorahApiV2($apiKey, $countryMode, $isTest);
+$config = [
+    apiKey => '',
+    countryCode => 'KWT',
+    isTest => false,
+];
+$mfObj = new MyFatoorahPayment($config);
 $postFields = [
     'NotificationOption' => 'Lnk',
     'InvoiceValue'       => '50',
@@ -41,17 +46,22 @@ echo "Click on <a href='$paymentLink' target='_blank'>$paymentLink</a> to pay wi
 ### Shipping Operations
 
 ``` php
-$mfObj = new ShippingMyfatoorahApiV2($apiKey, $countryMode, $isTest);
+$config = [
+    apiKey => '',
+    countryCode => 'KWT',
+    isTest => false,
+];
+$mfObj = new MyFatoorahShipping($config);
 $json  = $mfObj->getShippingCountries();
 
-echo 'Country code: ' . $json->Data[0]->CountryCode;
-echo 'Country name: ' . $json->Data[0]->CountryName;
+echo 'Country code: ' . $data[0]->CountryCode;
+echo 'Country name: ' . $data[0]->CountryName;
 ```
 
 ### General Operations
 
 ``` php
-$phone = MyfatoorahApiV2::getPhone('+2 01234567890');
+$phone = MyFatoorah::getPhone('+2 01234567890');
 
 echo 'Phone code: ' . $phone[0];
 echo 'Phone number: ' . $phone[1];
@@ -67,7 +77,8 @@ phpunit
 ## Credits
 
 - [MyFatoorah Plugin Team](https://github.com/my-fatoorah)
-- [All Contributors](https://dev.azure.com/myfatoorahsc/Public-Repo/_git/Library/contributors)
+- [Nermeen Shoman](https://github.com/nermeenshoman)
+- [Rasha Saeed](https://github.com/rasha-saeed)
 
 ## License
 

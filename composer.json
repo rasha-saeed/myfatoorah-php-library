@@ -17,7 +17,7 @@
     "autoload": {
         "files": ["autoload.php"],
         "psr-4": {
-            "MyFatoorah\\Library\\": "src"
+            "MyFatoorah\\Library\\": "src/"
         }
     },
     "autoload-dev": {
