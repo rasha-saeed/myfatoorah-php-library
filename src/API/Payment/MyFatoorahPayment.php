@@ -25,7 +25,7 @@ class MyFatoorahPayment extends MyFatoorah
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * List available Payment Gateways (POST API)
+     * List available Payment Methods (POST API)
      *
      * @param double|integer $invoiceValue       Total invoice amount.
      * @param string         $displayCurrencyIso Total invoice currency.
@@ -78,19 +78,19 @@ class MyFatoorahPayment extends MyFatoorah
      *
      * @return array
      */
-    public function getCachedPaymentMethodsArray($isAppleRegistered = false)
+    public function getCachedCheckoutGateways($isAppleRegistered = false)
     {
 
         $gateways       = $this->getCachedVendorGateways();
-        $paymentMethods = ['all' => [], 'cards' => [], 'form' => [], 'ap' => []];
+        $cachedCheckoutGateways = ['all' => [], 'cards' => [], 'form' => [], 'ap' => []];
         foreach ($gateways as $gateway) {
-            $paymentMethods = $this->addGatewayToPaymentMethodsArray($gateway, $paymentMethods, $isAppleRegistered);
+            $cachedCheckoutGateways = $this->addGatewayToCheckoutGateways($gateway, $cachedCheckoutGateways, $isAppleRegistered);
         }
 
         //add only one ap gateway
-        $paymentMethods['ap'] = (isset($paymentMethods['ap'][0])) ? $paymentMethods['ap'][0] : [];
+        $cachedCheckoutGateways['ap'] = (isset($cachedCheckoutGateways['ap'][0])) ? $cachedCheckoutGateways['ap'][0] : [];
 
-        return $paymentMethods;
+        return $cachedCheckoutGateways;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -99,32 +99,32 @@ class MyFatoorahPayment extends MyFatoorah
      * Add the MyFatoorah gateway object to the a given Payment Methods Array
      *
      * @param object  $gateway           MyFatoorah gateway object.
-     * @param array   $paymentMethods    Payment Methods Array.
+     * @param array   $checkoutGateways  Payment Methods Array.
      * @param boolean $isAppleRegistered Is site domain is registered with applePay and MyFatoorah or not.
      *
      * @return array
      */
-    protected function addGatewayToPaymentMethodsArray($gateway, $paymentMethods, $isAppleRegistered)
+    protected function addGatewayToCheckoutGateways($gateway, $checkoutGateways, $isAppleRegistered)
     {
 
         if ($gateway->PaymentMethodCode == 'ap') {
             if ($isAppleRegistered) {
-                $paymentMethods['ap'][] = $gateway;
+                $checkoutGateways['ap'][] = $gateway;
             } else {
-                $paymentMethods['cards'][] = $gateway;
+                $checkoutGateways['cards'][] = $gateway;
             }
-            $paymentMethods['all'][] = $gateway;
+            $checkoutGateways['all'][] = $gateway;
         } else {
             if ($gateway->IsEmbeddedSupported) {
-                $paymentMethods['form'][] = $gateway;
-                $paymentMethods['all'][]  = $gateway;
+                $checkoutGateways['form'][] = $gateway;
+                $checkoutGateways['all'][]  = $gateway;
             } elseif (!$gateway->IsDirectPayment) {
-                $paymentMethods['cards'][] = $gateway;
-                $paymentMethods['all'][]   = $gateway;
+                $checkoutGateways['cards'][] = $gateway;
+                $checkoutGateways['all'][]   = $gateway;
             }
         }
 
-        return $paymentMethods;
+        return $checkoutGateways;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -146,19 +146,19 @@ class MyFatoorahPayment extends MyFatoorah
 
         $paymentMethods = $this->initiatePayment($invoiceValue, $displayCurrencyIso);
 
-        $pm = null;
-        foreach ($paymentMethods as $method) {
-            if ($method->$gatewayType == $gateway) {
-                $pm = $method;
+        $paymentMethod = null;
+        foreach ($paymentMethods as $pm) {
+            if ($pm->$gatewayType == $gateway) {
+                $paymentMethod = $pm;
                 break;
             }
         }
 
-        if (!isset($pm)) {
+        if (!isset($paymentMethod)) {
             throw new Exception('Please contact Account Manager to enable the used payment method in your account');
         }
 
-        return $pm;
+        return $paymentMethod;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------

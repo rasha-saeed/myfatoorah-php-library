@@ -23,7 +23,7 @@ $mfLibFile   = $mfLibFolder . '/MyFatoorah.php';
 
 if (!file_exists($mfLibFile) || (time() - filemtime($mfLibFile) > 86400)) {
 
-    $mfCurl = curl_init('https://portal.myfatoorah.com/Files/API/php/library/2.1/MyFatoorahLibrary.txt');
+    $mfCurl = curl_init('https://portal.myfatoorah.com/Files/API/php/library/2.2/MyFatoorahLibrary.txt');
     curl_setopt_array($mfCurl, [CURLOPT_RETURNTRANSFER => true]);
 
     $mfResponse = curl_exec($mfCurl);

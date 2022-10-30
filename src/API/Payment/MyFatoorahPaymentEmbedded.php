@@ -14,11 +14,11 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
 {
 
     /**
-     * The paymentMethods array is used to display the payment in the checkout page.
+     * The checkoutGateways array is used to display the payment in the checkout page.
      *
      * @var array
      */
-    protected static $paymentMethods;
+    protected static $checkoutGateways;
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -31,11 +31,11 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
      *
      * @return array
      */
-    public function getPaymentMethodsForDisplay($invoiceValue, $displayCurrencyIso, $isAppleRegistered)
+    public function getCheckoutGateways($invoiceValue, $displayCurrencyIso, $isAppleRegistered)
     {
 
-        if (!empty(self::$paymentMethods)) {
-            return self::$paymentMethods;
+        if (!empty(self::$checkoutGateways)) {
+            return self::$checkoutGateways;
         }
 
         $gateways = $this->initiatePayment($invoiceValue, $displayCurrencyIso);
@@ -43,18 +43,18 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
         $mfListObj = new MyFatoorahList($this->config);
         $allRates  = $mfListObj->getCurrencyRates();
 
-        self::$paymentMethods = ['all' => [], 'cards' => [], 'form' => [], 'ap' => []];
+        self::$checkoutGateways = ['all' => [], 'cards' => [], 'form' => [], 'ap' => []];
 
         foreach ($gateways as $gateway) {
             $gateway->GatewayData = $this->calcGatewayData($gateway->TotalAmount, $gateway->CurrencyIso, $gateway->PaymentCurrencyIso, $allRates);
 
-            self::$paymentMethods = $this->addGatewayToPaymentMethodsArray($gateway, self::$paymentMethods, $isAppleRegistered);
+            self::$checkoutGateways = $this->addGatewayToCheckoutGateways($gateway, self::$checkoutGateways, $isAppleRegistered);
         }
         if ($isAppleRegistered) {
             //add only one ap gateway
-            self::$paymentMethods['ap'] = $this->getOneApplePayGateway(self::$paymentMethods['ap'], $displayCurrencyIso, $allRates);
+            self::$checkoutGateways['ap'] = $this->getOneApplePayGateway(self::$checkoutGateways['ap'], $displayCurrencyIso, $allRates);
         }
-        return self::$paymentMethods;
+        return self::$checkoutGateways;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
