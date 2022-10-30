@@ -81,7 +81,8 @@ class MyFatoorahPayment extends MyFatoorah
     public function getCachedCheckoutGateways($isAppleRegistered = false)
     {
 
-        $gateways       = $this->getCachedVendorGateways();
+        $gateways = $this->getCachedVendorGateways();
+
         $cachedCheckoutGateways = ['all' => [], 'cards' => [], 'form' => [], 'ap' => []];
         foreach ($gateways as $gateway) {
             $cachedCheckoutGateways = $this->addGatewayToCheckoutGateways($gateway, $cachedCheckoutGateways, $isAppleRegistered);
