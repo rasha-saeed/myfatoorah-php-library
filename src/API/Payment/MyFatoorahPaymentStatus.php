@@ -175,7 +175,7 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
     private static function getLastTransactionOfPaymentId($transactions, $paymentId)
     {
 
-        foreach ($transactions->InvoiceTransactions as $transaction) {
+        foreach ($transactions as $transaction) {
             if ($transaction->PaymentId == $paymentId && $transaction->Error) {
                 return $transaction;
             }

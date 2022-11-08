@@ -102,7 +102,7 @@ class MyFatoorah extends MyFatoorahHelper
      */
     protected function setIsTest($config)
     {
-        if (empty($config['isTest'])) {
+        if (!isset($config['isTest'])) {
             throw new Exception('Config array must have the "isTest" key.');
         }
 

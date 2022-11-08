@@ -215,7 +215,7 @@ class MyFatoorahHelper
      *
      * @return array of MyFatoorah data
      */
-    protected static function getMFConfig()
+    public static function getMFConfig()
     {
 
         $cachedFile = dirname(__FILE__) . '/mf-config.json';
@@ -273,5 +273,18 @@ class MyFatoorahHelper
         return [];
     }
 
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+    /**
+     * Get Input data $_GET, $_POST, $_SERVER
+     * @param string $name
+     * @param string $type
+     * @return string
+     */
+    
+    public static function getInputData($name, $type) {
+        $value = $GLOBALS["_$type"][$name] ?? null;
+    	return htmlspecialchars($value);
+    }
+    
     //-----------------------------------------------------------------------------------------------------------------------------------------
 }
