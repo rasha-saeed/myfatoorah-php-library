@@ -274,17 +274,20 @@ class MyFatoorahHelper
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
+
     /**
-     * Get Input data $_GET, $_POST, $_SERVER
-     * @param string $name
-     * @param string $type
+     * Filter an input from global variables like $_GET, $_POST, $_REQUEST, $_COOKIE, $_SERVER
+     * 
+     * @param string $name The field name the need to be filter.
+     * @param string $type The input type to be filter (GET, POST, REQUEST, COOKIE, SERVER).
+     * 
      * @return string
      */
-    
-    public static function getInputData($name, $type) {
-        $value = $GLOBALS["_$type"][$name] ?? null;
-    	return htmlspecialchars($value);
+    public static function filterInputField($name, $type = 'GET')
+    {
+        $value = $GLOBALS["_$type"][$name] ?? '';
+        return htmlspecialchars($value);
     }
-    
+
     //-----------------------------------------------------------------------------------------------------------------------------------------
 }

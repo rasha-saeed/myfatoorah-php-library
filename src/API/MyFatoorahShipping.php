@@ -22,7 +22,6 @@ class MyFatoorahShipping extends MyFatoorah
      */
     public function getShippingCountries()
     {
-
         $url  = "$this->apiURL/v2/GetCountries";
         $json = $this->callAPI($url, null, null, 'Get Countries');
         return $json->Data;
@@ -41,7 +40,6 @@ class MyFatoorahShipping extends MyFatoorah
      */
     public function getShippingCities($method, $countryCode, $searchValue = '')
     {
-
         $url = $this->apiURL . '/v2/GetCities'
                 . '?shippingMethod=' . $method
                 . '&countryCode=' . $countryCode
@@ -62,7 +60,6 @@ class MyFatoorahShipping extends MyFatoorah
      */
     public function calculateShippingCharge($curlData)
     {
-
         $url  = "$this->apiURL/v2/CalculateShippingCharge";
         $json = $this->callAPI($url, $curlData, null, 'Calculate Shipping Charge');
         return $json->Data;
