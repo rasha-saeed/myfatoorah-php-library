@@ -33,8 +33,8 @@ class MyFatoorahShippingTest extends \PHPUnit\Framework\TestCase {
     public function testGetShippingCities() {
         foreach ($this->keys as $config) {
             try {
-                $mfObj = new MyfatoorahShipping($config);
-                $cities  = $mfObj->getShippingCities(1, 'KW', 'ada');
+                $mfObj  = new MyfatoorahShipping($config);
+                $cities = $mfObj->getShippingCities(1, 'KW', 'ada');
 
                 $this->assertEquals('ADAN', $cities[0]);
                 $this->assertEquals('SHUHADA', $cities[1]);
@@ -50,16 +50,18 @@ class MyFatoorahShippingTest extends \PHPUnit\Framework\TestCase {
 
         $shippingData = [
             'ShippingMethod' => 1,
-            'Items'          => [[
-            'ProductName' => 'product',
-            'Description' => 'product',
-            'Weight'      => 10,
-            'Width'       => 10,
-            'Height'      => 10,
-            'Depth'       => 10,
-            'Quantity'    => 1,
-            'UnitPrice'   => '17.234',
-                ]],
+            'Items'          => [
+                [
+                    'ProductName' => 'product',
+                    'Description' => 'product',
+                    'Weight'      => 10,
+                    'Width'       => 10,
+                    'Height'      => 10,
+                    'Depth'       => 10,
+                    'Quantity'    => 1,
+                    'UnitPrice'   => '17.234',
+                ]
+            ],
             'CountryCode'    => 'KW',
             'CityName'       => 'adan',
             'PostalCode'     => '12345',

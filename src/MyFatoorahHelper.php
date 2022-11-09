@@ -215,14 +215,14 @@ class MyFatoorahHelper
      *
      * @return array of MyFatoorah data
      */
-    public static function getMFConfig()
+    public static function getMFCountries()
     {
 
         $cachedFile = dirname(__FILE__) . '/mf-config.json';
 
         if (file_exists($cachedFile)) {
             if ((time() - filemtime($cachedFile) > 3600)) {
-                $countries = self::createNewMFConfigFile($cachedFile);
+                $countries = self::getMFConfigFileContent($cachedFile);
             }
 
             if (!empty($countries)) {
@@ -232,7 +232,7 @@ class MyFatoorahHelper
             $cache = file_get_contents($cachedFile);
             return ($cache) ? json_decode($cache, true) : [];
         } else {
-            return self::createNewMFConfigFile($cachedFile);
+            return self::getMFConfigFileContent($cachedFile);
         }
     }
 
@@ -245,7 +245,7 @@ class MyFatoorahHelper
      *
      * @return array of MyFatoorah data
      */
-    protected static function createNewMFConfigFile($cachedFile)
+    protected static function getMFConfigFileContent($cachedFile)
     {
 
         $curl = curl_init('https://portal.myfatoorah.com/Files/API/mf-config.json');

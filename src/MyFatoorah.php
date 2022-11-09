@@ -50,7 +50,7 @@ class MyFatoorah extends MyFatoorahHelper
     public function __construct($config)
     {
 
-        $mfConfig = self::getMFConfig();
+        $mfCountries = self::getMFCountries();
 
         $this->setApiKey($config);
         $this->setIsTest($config);
@@ -60,7 +60,7 @@ class MyFatoorah extends MyFatoorahHelper
         self::$loggerFunc           = $this->config['loggerFunc'] = empty($config['loggerFunc']) ? null : $config['loggerFunc'];
 
         $code         = $this->config['countryCode'];
-        $this->apiURL = $this->config['isTest'] ? $mfConfig[$code]['testv2'] : $mfConfig[$code]['v2'];
+        $this->apiURL = $this->config['isTest'] ? $mfCountries[$code]['testv2'] : $mfCountries[$code]['v2'];
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -130,8 +130,8 @@ class MyFatoorah extends MyFatoorahHelper
             throw new Exception('Config array must have the "countryCode" key.');
         }
 
-        $mfConfig       = self::getMFConfig();
-        $countriesCodes = array_keys($mfConfig);
+        $mfCountries    = self::getMFCountries();
+        $countriesCodes = array_keys($mfCountries);
 
         $config['countryCode'] = strtoupper($config['countryCode']);
         if (!in_array($config['countryCode'], $countriesCodes)) {
