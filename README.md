@@ -1,10 +1,9 @@
 # MyFatoorah - Library
 
-[![Latest Stable Version](http://poser.pugx.org/myfatoorah/library/v)](https://dev.azure.com/myfatoorahsc/Public-Repo/_git/Library/releases)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Build Status](https://scrutinizer-ci.com/g/my-fatoorah/library/badges/build.png?b=main)](https://scrutinizer-ci.com/g/my-fatoorah/library/build-status/main)
-[![Code Intelligence Status](https://scrutinizer-ci.com/g/my-fatoorah/library/badges/code-intelligence.svg?b=main)](https://scrutinizer-ci.com/code-intelligence)
-[![Total Downloads](http://poser.pugx.org/myfatoorah/library/downloads)](https://packagist.org/packages/myfatoorah/library)
+[![Build Status](https://scrutinizer-ci.com/g/rasha-saeed/myfatoorah-php-library/badges/build.png?b=main)](https://scrutinizer-ci.com/g/rasha-saeed/myfatoorah-php-library/build-status/main)
+[![Code Intelligence Status](https://scrutinizer-ci.com/g/rasha-saeed/myfatoorah-php-library/badges/code-intelligence.svg?b=main)](https://scrutinizer-ci.com/code-intelligence)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/rasha-saeed/myfatoorah-php-library/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/rasha-saeed/myfatoorah-php-library/?branch=main)
 
 
 MyFatoorah Payment Gateway PHP library. It is a PHP library to integrate MyFatoorah APIs with your website.
