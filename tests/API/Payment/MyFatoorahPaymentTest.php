@@ -6,7 +6,6 @@ use MyFatoorah\Library\API\Payment\MyFatoorahPayment;
 
 class MyFatoorahPaymentTest extends \PHPUnit\Framework\TestCase
 {
-
     private $keys;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------

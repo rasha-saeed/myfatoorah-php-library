@@ -4,10 +4,11 @@ namespace MyFatoorah\Test;
 
 use MyFatoorah\Library\MyFatoorah;
 
-class MyFatoorahHelperTest extends \PHPUnit\Framework\TestCase {
-
+class MyFatoorahHelperTest extends \PHPUnit\Framework\TestCase
+{
 //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testGetPhone() {
+    public function testGetPhone()
+    {
         $expected = MyFatoorah::getPhone('');
         $this->assertEquals('', $expected[0]);
         $this->assertEquals('', $expected[1]);
@@ -33,20 +34,23 @@ class MyFatoorahHelperTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals('234567890', $expected5[1]);
     }
 
-    public function testGetPhoneException1() {
+    public function testGetPhoneException1()
+    {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Phone Number lenght must be between 3 to 14 digits');
         MyFatoorah::getPhone('12');
     }
 
-    public function testGetPhoneException2() {
+    public function testGetPhoneException2()
+    {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Phone Number lenght must be between 3 to 14 digits');
         MyFatoorah::getPhone('12345678910123456');
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testGetWeightRate() {
+    public function testGetWeightRate()
+    {
         $expected1 = MyFatoorah::getWeightRate('KG');
         $this->assertEquals(1, $expected1);
 
@@ -57,20 +61,23 @@ class MyFatoorahHelperTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals(0.0283495, $expected3);
     }
 
-    public function testGetWeightRateException1() {
+    public function testGetWeightRateException1()
+    {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Weight units must be in kg, g, lbs, or oz. Default is kg');
         MyFatoorah::getWeightRate('');
     }
 
-    public function testGetWeightRateException2() {
+    public function testGetWeightRateException2()
+    {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Weight units must be in kg, g, lbs, or oz. Default is kg');
         MyFatoorah::getWeightRate('sss');
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testGetDimensionRate() {
+    public function testGetDimensionRate()
+    {
         $expected = MyFatoorah::getDimensionRate('CM');
         $this->assertEquals(1, $expected);
 
@@ -81,20 +88,23 @@ class MyFatoorahHelperTest extends \PHPUnit\Framework\TestCase {
         $this->assertEquals(0.1, $expected3);
     }
 
-    public function testGetDimensionRateException1() {
+    public function testGetDimensionRateException1()
+    {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Dimension units must be in cm, m, mm, in, or yd. Default is cm');
         MyFatoorah::getDimensionRate('');
     }
 
-    public function testGetDimensionRateException2() {
+    public function testGetDimensionRateException2()
+    {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Dimension units must be in cm, m, mm, in, or yd. Default is cm');
         MyFatoorah::getDimensionRate('sss');
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testIsSignatureValid() {
+    public function testIsSignatureValid()
+    {
         $MyFatoorah_Signature1 = 'uRBOogk9ek7Hgsxs/Rt7Nvbu7Vxf+4eI5gwvbtg0NCw=';
         $MyFatoorah_Signature2 = '0YPWuCj1yxScY1gWMUCtilqTL76AAPna8EqedMikhuI=';
         $MyFatoorah_Signature3 = 'XdNvAIV8ZN6CmB2zzapnSemO6lDUpwKk2g/a11GxI8U=';

@@ -34,6 +34,7 @@ class MyFatoorahSupplier extends MyFatoorah
 
     /**
      * Returns the supplier status in MyFatoorah account
+     *
      * @param integer $supplierCode The supplier code that exists in MyFatoorah portal account.
      *
      * @return boolean

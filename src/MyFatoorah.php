@@ -25,7 +25,6 @@ use Exception;
  */
 class MyFatoorah extends MyFatoorahHelper
 {
-
     /**
      * The configuration used to connect to MyFatoorah test/live API server
      *

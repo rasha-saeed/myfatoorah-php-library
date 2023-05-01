@@ -7,7 +7,6 @@ use MyFatoorah\Library\API\MyFatoorahRefund;
 
 class MyFatoorahRefundTest extends TestCase
 {
-
     private $keys;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------

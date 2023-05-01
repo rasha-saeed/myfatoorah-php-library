@@ -14,7 +14,6 @@ use Exception;
  */
 class MyFatoorahPayment extends MyFatoorah
 {
-
     /**
      * The file name used in caching the gateways data
      *
@@ -167,10 +166,10 @@ class MyFatoorahPayment extends MyFatoorah
     /**
      * Get the invoice/payment URL and the invoice id
      *
-     * @param array          $curlData  Invoice information.
-     * @param string         $gatewayId MyFatoorah Gateway ID (default value: '0').
-     * @param integer|string $orderId   It used in log file (default value: null).
-     * @param string         $sessionId The payment session used in embedded payment.
+     * @param array          $curlData           Invoice information.
+     * @param string         $gatewayId          MyFatoorah Gateway ID (default value: '0').
+     * @param integer|string $orderId            It used in log file (default value: null).
+     * @param string         $sessionId          The payment session used in embedded payment.
      * @param string         $notificationOption could be EML, SMS, LNK, or ALL.
      *
      * @return array of invoiceURL and invoiceURL
@@ -217,8 +216,8 @@ class MyFatoorahPayment extends MyFatoorah
     /**
      * Create an invoice Link (POST API)
      *
-     * @param array          $curlData Invoice information.
-     * @param integer|string $orderId  It used in log file (default value: null).
+     * @param array          $curlData           Invoice information.
+     * @param integer|string $orderId            It used in log file (default value: null).
      * @param string         $notificationOption could be EML, SMS, LNK, or ALL.
      *
      * @return array

@@ -4,18 +4,20 @@ namespace MyFatoorah\Test\API;
 
 use MyFatoorah\Library\API\MyFatoorahList;
 
-class MyFatoorahListTest extends \PHPUnit\Framework\TestCase {
-
+class MyFatoorahListTest extends \PHPUnit\Framework\TestCase
+{
     private $keys;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->keys = include(__DIR__ . '/../apiKeys.php');
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testGetCurrencyRates() {
+    public function testGetCurrencyRates()
+    {
 
         foreach ($this->keys as $config) {
             try {
