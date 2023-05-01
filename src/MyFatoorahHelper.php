@@ -16,14 +16,14 @@ class MyFatoorahHelper
      *
      * @var string|object
      */
-    protected static $loggerObj;
+    public static $loggerObj;
 
     /**
      * The function name that will be used in the debugging if $loggerObj is set as a logger object.
      *
      * @var string
      */
-    protected static $loggerFunc;
+    public static $loggerFunc;
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -201,11 +201,7 @@ class MyFatoorahHelper
         // generate hash of $field string
         $hash = base64_encode(hash_hmac('sha256', $output, $secret, true));
 
-        if ($signature === $hash) {
-            return true;
-        } else {
-            return false;
-        }
+        return $signature === $hash;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -277,16 +273,18 @@ class MyFatoorahHelper
 
     /**
      * Filter an input from global variables like $_GET, $_POST, $_REQUEST, $_COOKIE, $_SERVER
-     * 
+     *
      * @param string $name The field name the need to be filter.
      * @param string $type The input type to be filter (GET, POST, REQUEST, COOKIE, SERVER).
-     * 
+     *
      * @return string
      */
     public static function filterInputField($name, $type = 'GET')
     {
-        $value = $GLOBALS["_$type"][$name] ?? '';
-        return htmlspecialchars($value);
+        if (isset($GLOBALS["_$type"][$name])) {
+            return htmlspecialchars($GLOBALS["_$type"][$name]);
+        }
+        return null;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------

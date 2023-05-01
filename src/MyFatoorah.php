@@ -269,7 +269,7 @@ class MyFatoorah extends MyFatoorahHelper
         //</html>
         //and, skip apple register <YourDomainName> tag error
         $stripHtmlStr = strip_tags($res);
-        if ($res != $stripHtmlStr && !stripos($stripHtmlStr, 'apple-developer-merchantid-domain-association')) {
+        if ($res != $stripHtmlStr && stripos($stripHtmlStr, 'apple-developer-merchantid-domain-association') !== false) {
             return trim(preg_replace('/\s+/', ' ', $stripHtmlStr));
         }
         return '';

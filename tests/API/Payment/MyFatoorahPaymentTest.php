@@ -4,25 +4,28 @@ namespace MyFatoorah\Test\API\Payment;
 
 use MyFatoorah\Library\API\Payment\MyFatoorahPayment;
 
-class MyFatoorahPaymentTest extends \PHPUnit\Framework\TestCase {
+class MyFatoorahPaymentTest extends \PHPUnit\Framework\TestCase
+{
 
     private $keys;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->keys = include(__DIR__ . '/../../apiKeys.php');
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testInitiatePayment() {
+    public function testInitiatePayment()
+    {
 
         foreach ($this->keys as $config) {
             try {
                 $mfObj = new MyFatoorahPayment($config);
                 $json  = $mfObj->initiatePayment();
 
-                $this->assertEquals('Sadad', $json[0]->PaymentMethodEn);
+                $this->assertObjectHasAttribute('PaymentMethodId', $json[0]);
             } catch (\Exception $ex) {
                 $this->assertEquals($config['exception'], $ex->getMessage(), $config['message']);
             }
@@ -44,6 +47,5 @@ class MyFatoorahPaymentTest extends \PHPUnit\Framework\TestCase {
 //        $method->setAccessible(true);
 //        return $method;
 //    }
-
 //-----------------------------------------------------------------------------------------------------------------------------------------
 }

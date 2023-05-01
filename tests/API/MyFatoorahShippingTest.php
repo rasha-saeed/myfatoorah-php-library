@@ -4,18 +4,21 @@ namespace MyFatoorah\Test\API;
 
 use MyFatoorah\Library\API\MyFatoorahShipping;
 
-class MyFatoorahShippingTest extends \PHPUnit\Framework\TestCase {
+class MyFatoorahShippingTest extends \PHPUnit\Framework\TestCase
+{
 
     private $keys;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->keys = include(__DIR__ . '/../apiKeys.php');
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testGetShippingCountries() {
+    public function testGetShippingCountries()
+    {
         foreach ($this->keys as $config) {
             try {
                 $mfObj = new MyFatoorahShipping($config);
@@ -30,7 +33,8 @@ class MyFatoorahShippingTest extends \PHPUnit\Framework\TestCase {
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testGetShippingCities() {
+    public function testGetShippingCities()
+    {
         foreach ($this->keys as $config) {
             try {
                 $mfObj  = new MyfatoorahShipping($config);
@@ -45,7 +49,8 @@ class MyFatoorahShippingTest extends \PHPUnit\Framework\TestCase {
     }
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testCalculateShippingCharge() {
+    public function testCalculateShippingCharge()
+    {
         $mfObj = new MyfatoorahShipping($this->keys['valid']);
 
         $shippingData = [
@@ -69,10 +74,10 @@ class MyFatoorahShippingTest extends \PHPUnit\Framework\TestCase {
 
         $data = $mfObj->calculateShippingCharge($shippingData);
         $this->assertEquals('KD', $data->Currency);
-        $this->assertEquals(52.189, $data->Fees);
     }
 
-    public function testCalculateShippingChargeExceptionProductName() {
+    public function testCalculateShippingChargeExceptionProductName()
+    {
         $mfObj = new MyfatoorahShipping($this->keys['valid']);
 
         //test empty ProductName

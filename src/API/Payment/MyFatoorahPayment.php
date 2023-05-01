@@ -171,10 +171,11 @@ class MyFatoorahPayment extends MyFatoorah
      * @param string         $gatewayId MyFatoorah Gateway ID (default value: '0').
      * @param integer|string $orderId   It used in log file (default value: null).
      * @param string         $sessionId The payment session used in embedded payment.
+     * @param string         $notificationOption could be EML, SMS, LNK, or ALL.
      *
      * @return array of invoiceURL and invoiceURL
      */
-    public function getInvoiceURL($curlData, $gatewayId = 0, $orderId = null, $sessionId = null)
+    public function getInvoiceURL($curlData, $gatewayId = 0, $orderId = null, $sessionId = null, $notificationOption = 'Lnk')
     {
 
         $this->log('------------------------------------------------------------');
@@ -184,7 +185,7 @@ class MyFatoorahPayment extends MyFatoorah
         if (!empty($sessionId)) {
             return $this->embeddedPayment($curlData, $sessionId, $orderId);
         } elseif ($gatewayId == 'myfatoorah' || empty($gatewayId)) {
-            return $this->sendPayment($curlData, $orderId);
+            return $this->sendPayment($curlData, $orderId, $notificationOption);
         } else {
             return $this->excutePayment($curlData, $gatewayId, $orderId);
         }
@@ -218,13 +219,14 @@ class MyFatoorahPayment extends MyFatoorah
      *
      * @param array          $curlData Invoice information.
      * @param integer|string $orderId  It used in log file (default value: null).
+     * @param string         $notificationOption could be EML, SMS, LNK, or ALL.
      *
      * @return array
      */
-    private function sendPayment($curlData, $orderId = null)
+    private function sendPayment($curlData, $orderId = null, $notificationOption = 'Lnk')
     {
 
-        $curlData['NotificationOption'] = 'Lnk';
+        $curlData['NotificationOption'] = $notificationOption;
 
         $json = $this->callAPI("$this->apiURL/v2/SendPayment", $curlData, $orderId, 'Send Payment');
 
