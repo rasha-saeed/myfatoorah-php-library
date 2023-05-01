@@ -22,7 +22,7 @@ class MyFatoorahRefundTest extends TestCase
         try {
             $mfObj = new MyFatoorahRefund($this->keys['valid']);
 
-            $json = $mfObj->refund('100202312116138082', 10);
+            $json = $mfObj->refund('100202312116138082', 10, 'KWD', 'test');
 
             $this->assertEquals('100202312116138082', $json->Key);
             $this->assertNotNull($json->RefundReference);
