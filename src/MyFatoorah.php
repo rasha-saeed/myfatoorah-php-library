@@ -145,10 +145,10 @@ class MyFatoorah extends MyFatoorahHelper
     /**
      * It calls the MyFatoorah API endpoint request and handles the MyFatoorah API endpoint response.
      *
-     * @param string         $url        MyFatoorah API endpoint URL
-     * @param array          $postFields POST request parameters array. It should be set to null if the request is GET.
-     * @param integer|string $orderId    The order id or the payment id of the process, used for the events logging.
-     * @param string         $function   The requester function name, used for the events logging.
+     * @param string              $url        MyFatoorah API endpoint URL
+     * @param array|null          $postFields POST request parameters array. It should be set to null if the request is GET.
+     * @param integer|string|null $orderId    The order id or the payment id of the process, used for the events logging.
+     * @param string|null         $function   The requester function name, used for the events logging.
      *
      * @return object       The response object as the result of a successful calling to the API.
      *

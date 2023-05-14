@@ -42,7 +42,7 @@ class MyFatoorahPayment extends MyFatoorah
 
         $json = $this->callAPI("$this->apiURL/v2/InitiatePayment", $postFields, null, 'Initiate Payment');
 
-        $paymentMethods = isset($json->Data->PaymentMethods) ? $json->Data->PaymentMethods : [];
+        $paymentMethods = ($json->Data->PaymentMethods) ?? [];
 
         if (!empty($paymentMethods) && $isCached) {
             file_put_contents(self::$pmCachedFile, json_encode($paymentMethods));
@@ -88,7 +88,7 @@ class MyFatoorahPayment extends MyFatoorah
         }
 
         //add only one ap gateway
-        $cachedCheckoutGateways['ap'] = (isset($cachedCheckoutGateways['ap'][0])) ? $cachedCheckoutGateways['ap'][0] : [];
+        $cachedCheckoutGateways['ap'] = $cachedCheckoutGateways['ap'][0] ?? [];
 
         return $cachedCheckoutGateways;
     }
@@ -167,7 +167,7 @@ class MyFatoorahPayment extends MyFatoorah
      * Get the invoice/payment URL and the invoice id
      *
      * @param array          $curlData           Invoice information.
-     * @param string         $gatewayId          MyFatoorah Gateway ID (default value: '0').
+     * @param int|string     $gatewayId          MyFatoorah Gateway ID (default value: '0').
      * @param integer|string $orderId            It used in log file (default value: null).
      * @param string         $sessionId          The payment session used in embedded payment.
      * @param string         $notificationOption could be EML, SMS, LNK, or ALL.

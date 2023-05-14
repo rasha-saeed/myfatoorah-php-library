@@ -20,8 +20,6 @@ class MyFatoorahSupplier extends MyFatoorah
      *
      * @param integer $supplierCode The supplier code that exists in MyFatoorah portal account.
      *
-     * @throws Exception    Throw exception if the input supplier code is not exists in MyFatoorah portal account.
-     *
      * @return object
      */
     public function getSupplierDashboard($supplierCode)

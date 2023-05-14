@@ -276,7 +276,7 @@ class MyFatoorahHelper
      * @param string $name The field name the need to be filter.
      * @param string $type The input type to be filter (GET, POST, REQUEST, COOKIE, SERVER).
      *
-     * @return string
+     * @return string|null
      */
     public static function filterInputField($name, $type = 'GET')
     {

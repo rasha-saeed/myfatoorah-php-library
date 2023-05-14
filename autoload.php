@@ -18,42 +18,42 @@
  * @copyright 2021 MyFatoorah, All rights reserved
  * @license GNU General Public License v3.0
  */
+
 $mfVersion   = '2.2';
+
+if (!in_array('curl', get_loaded_extensions())) {
+    trigger_error('Kindly install and enable PHP cURL extension in your server.', E_USER_WARNING);
+    return;
+}
+
 $mfLibFolder = __DIR__ . '/src/';
 $mfLibFile   = $mfLibFolder . 'MyFatoorah.php';
+if (!is_writable($mfLibFile) || (time() - filemtime($mfLibFile) < 86400)) {
+    return;
+}
 
-if (!is_writable($mfLibFile)) {
-    $mfError = 'To enable MyFatoorah auto-update, kindly give the write/read permissions to the library folder ' . __DIR__ . ' on your server and its files.';
-    trigger_error($mfError, E_USER_WARNING);
-} elseif ((time() - filemtime($mfLibFile) > 86400)) {
-    touch($mfLibFile);
+touch($mfLibFile);
+try {
+    $mfCurl = curl_init("https://portal.myfatoorah.com/Files/API/php/library/$mfVersion/MyfatoorahLibrary.txt");
+    curl_setopt_array($mfCurl, array(
+        CURLOPT_RETURNTRANSFER => true,
+    ));
 
-    if (in_array('curl', get_loaded_extensions())) {
-        try {
-            $mfCurl = curl_init("https://portal.myfatoorah.com/Files/API/php/library/$mfVersion/MyfatoorahLibrary.txt");
-            curl_setopt_array($mfCurl, array(
-                CURLOPT_RETURNTRANSFER => true,
-            ));
+    $mfResponse = curl_exec($mfCurl);
+    $mfHttpCode = curl_getinfo($mfCurl, CURLINFO_HTTP_CODE);
+    $mfCurlErr  = curl_error($mfCurl);
 
-            $mfResponse = curl_exec($mfCurl);
-            $mfHttpCode = curl_getinfo($mfCurl, CURLINFO_HTTP_CODE);
-            $mfCurlErr  = curl_error($mfCurl);
+    curl_close($mfCurl);
 
-            curl_close($mfCurl);
-
-            if ($mfCurlErr) {
-                trigger_error('cURL Error: ' . $mfCurlErr, E_USER_WARNING);
-            }
-
-            if ($mfHttpCode == 200 && is_string($mfResponse)) {
-                mfPutFileContent($mfLibFolder, $mfResponse);
-            }
-        } catch (\Exception $ex) {
-            trigger_error('Exception: ' . $ex->getMessage(), E_USER_WARNING);
-        }
-    } else {
-        trigger_error('Kindly install and enable PHP cURL extension in your server.', E_USER_WARNING);
+    if ($mfCurlErr) {
+        trigger_error('cURL Error: ' . $mfCurlErr, E_USER_WARNING);
     }
+
+    if ($mfHttpCode == 200 && is_string($mfResponse)) {
+        mfPutFileContent($mfLibFolder, $mfResponse);
+    }
+} catch (\Exception $ex) {
+    trigger_error('Exception: ' . $ex->getMessage(), E_USER_WARNING);
 }
 
 function mfPutFileContent($mfLibFolder, $mfResponse)

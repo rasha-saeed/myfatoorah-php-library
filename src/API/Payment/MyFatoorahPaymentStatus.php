@@ -170,7 +170,7 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
      * @param array          $transactions The transactions array
      * @param integer|string $paymentId    the failed payment Id
      *
-     * @return object
+     * @return object|null
      */
     private static function getLastTransactionOfPaymentId($transactions, $paymentId)
     {
@@ -180,6 +180,7 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
                 return $transaction;
             }
         }
+        return null;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
