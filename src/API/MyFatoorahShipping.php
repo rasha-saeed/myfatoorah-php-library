@@ -32,9 +32,9 @@ class MyFatoorahShipping extends MyFatoorah
     /**
      * Get Shipping Cities (GET API)
      *
-     * @param integer $method      [1 for DHL, 2 for Aramex]
-     * @param string  $countryCode It can be obtained from getShippingCountries
-     * @param string  $searchValue The key word that will be used in searching
+     * @param int    $method      [1 for DHL, 2 for Aramex]
+     * @param string $countryCode It can be obtained from getShippingCountries
+     * @param string $searchValue The key word that will be used in searching
      *
      * @return array
      */

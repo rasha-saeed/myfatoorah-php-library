@@ -26,9 +26,9 @@ class MyFatoorahPayment extends MyFatoorah
     /**
      * List available Payment Methods (POST API)
      *
-     * @param double|integer $invoiceValue       Total invoice amount.
-     * @param string         $displayCurrencyIso Total invoice currency.
-     * @param boolean        $isCached           It used to cache the gateways
+     * @param double|int $invoiceValue       Total invoice amount.
+     * @param string     $displayCurrencyIso Total invoice currency.
+     * @param boolean    $isCached           It used to cache the gateways
      *
      * @return array
      */
@@ -55,7 +55,7 @@ class MyFatoorahPayment extends MyFatoorah
     /**
      * List available Cached Payment Gateways
      *
-     * @return array of Cached payment methods.
+     * @return mixed of Cached payment methods.
      */
     public function getCachedVendorGateways()
     {
@@ -132,10 +132,10 @@ class MyFatoorahPayment extends MyFatoorah
     /**
      * Get Payment Method Object
      *
-     * @param string         $gateway            MyFatoorah gateway object.
-     * @param string         $gatewayType        The Search key     ['PaymentMethodId', 'PaymentMethodCode'].
-     * @param double|integer $invoiceValue       Total invoice amount.
-     * @param string         $displayCurrencyIso Total invoice currency.
+     * @param string     $gateway            MyFatoorah gateway object.
+     * @param string     $gatewayType        The Search key     ['PaymentMethodId', 'PaymentMethodCode'].
+     * @param double|int $invoiceValue       Total invoice amount.
+     * @param string     $displayCurrencyIso Total invoice currency.
      *
      * @return object
      *
@@ -166,11 +166,11 @@ class MyFatoorahPayment extends MyFatoorah
     /**
      * Get the invoice/payment URL and the invoice id
      *
-     * @param array          $curlData           Invoice information.
-     * @param int|string     $gatewayId          MyFatoorah Gateway ID (default value: '0').
-     * @param integer|string $orderId            It used in log file (default value: null).
-     * @param string         $sessionId          The payment session used in embedded payment.
-     * @param string         $notificationOption could be EML, SMS, LNK, or ALL.
+     * @param array      $curlData           Invoice information.
+     * @param int|string $gatewayId          MyFatoorah Gateway ID (default value: '0').
+     * @param int|string $orderId            It used in log file (default value: null).
+     * @param string     $sessionId          The payment session used in embedded payment.
+     * @param string     $notificationOption could be EML, SMS, LNK, or ALL.
      *
      * @return array of invoiceURL and invoiceURL
      */
@@ -195,9 +195,9 @@ class MyFatoorahPayment extends MyFatoorah
     /**
      * (POST API)
      *
-     * @param array          $curlData  Invoice information.
-     * @param integer|string $gatewayId MyFatoorah Gateway ID.
-     * @param integer|string $orderId   It used in log file (default value: null).
+     * @param array      $curlData  Invoice information.
+     * @param int|string $gatewayId MyFatoorah Gateway ID.
+     * @param int|string $orderId   It used in log file (default value: null).
      *
      * @return array
      */
@@ -216,9 +216,9 @@ class MyFatoorahPayment extends MyFatoorah
     /**
      * Create an invoice Link (POST API)
      *
-     * @param array          $curlData           Invoice information.
-     * @param integer|string $orderId            It used in log file (default value: null).
-     * @param string         $notificationOption could be EML, SMS, LNK, or ALL.
+     * @param array      $curlData           Invoice information.
+     * @param int|string $orderId            It used in log file (default value: null).
+     * @param string     $notificationOption could be EML, SMS, LNK, or ALL.
      *
      * @return array
      */
@@ -237,9 +237,9 @@ class MyFatoorahPayment extends MyFatoorah
     /**
      * Create an invoice using Embedded session (POST API)
      *
-     * @param array          $curlData  Invoice information.
-     * @param integer|string $sessionId Session id used in payment process.
-     * @param integer|string $orderId   It used in log file (default value: null).
+     * @param array      $curlData  Invoice information.
+     * @param int|string $sessionId Session id used in payment process.
+     * @param int|string $orderId   It used in log file (default value: null).
      *
      * @return array
      */
@@ -257,8 +257,8 @@ class MyFatoorahPayment extends MyFatoorah
     /**
      * Get session Data (POST API)
      *
-     * @param string         $userDefinedField Customer Identifier to dispaly its saved data.
-     * @param integer|string $orderId          It used in log file (default value: null).
+     * @param string     $userDefinedField Customer Identifier to dispaly its saved data.
+     * @param int|string $orderId          It used in log file (default value: null).
      *
      * @return object
      */

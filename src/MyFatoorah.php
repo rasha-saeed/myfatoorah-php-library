@@ -145,12 +145,12 @@ class MyFatoorah extends MyFatoorahHelper
     /**
      * It calls the MyFatoorah API endpoint request and handles the MyFatoorah API endpoint response.
      *
-     * @param string              $url        MyFatoorah API endpoint URL
-     * @param array|null          $postFields POST request parameters array. It should be set to null if the request is GET.
-     * @param integer|string|null $orderId    The order id or the payment id of the process, used for the events logging.
-     * @param string|null         $function   The requester function name, used for the events logging.
+     * @param string          $url        MyFatoorah API endpoint URL
+     * @param array|null      $postFields POST request parameters array. It should be set to null if the request is GET.
+     * @param int|string|null $orderId    The order id or the payment id of the process, used for the events logging.
+     * @param string|null     $function   The requester function name, used for the events logging.
      *
-     * @return object       The response object as the result of a successful calling to the API.
+     * @return mixed       The response object as the result of a successful calling to the API.
      *
      * @throws Exception    Throw exception if there is any curl/validation error in the MyFatoorah API endpoint URL.
      */
@@ -217,8 +217,8 @@ class MyFatoorah extends MyFatoorahHelper
     /**
      * Handle Endpoint Errors Function
      *
-     * @param object|string $json MyFatoorah response JSON object.
-     * @param string        $res  MyFatoorah response string.
+     * @param mixed  $json MyFatoorah response JSON object.
+     * @param string $res  MyFatoorah response string.
      *
      * @return string
      */
@@ -279,7 +279,7 @@ class MyFatoorah extends MyFatoorahHelper
     /**
      * Check for the json (response model) errors
      *
-     * @param object|string $json MyFatoorah response JSON object.
+     * @param mixed $json MyFatoorah response JSON object.
      *
      * @return string
      */
@@ -327,8 +327,6 @@ class MyFatoorah extends MyFatoorahHelper
      * Log the events
      *
      * @param string $msg It is the string message that will be written in the log file.
-     *
-     * @return null
      */
     public static function log($msg)
     {

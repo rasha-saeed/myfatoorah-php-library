@@ -14,12 +14,11 @@
  * API Documentation on https://myfatoorah.readme.io/docs
  * Library Documentation and Download link on https://myfatoorah.readme.io/docs/php-library
  *
- * @author MyFatoorah <tech@myfatoorah.com>
+ * @author    MyFatoorah <tech@myfatoorah.com>
  * @copyright 2021 MyFatoorah, All rights reserved
- * @license GNU General Public License v3.0
+ * @license   GNU General Public License v3.0
  */
-
-$mfVersion   = '2.2';
+$mfVersion = '2.2';
 
 if (!in_array('curl', get_loaded_extensions())) {
     trigger_error('Kindly install and enable PHP cURL extension in your server.', E_USER_WARNING);

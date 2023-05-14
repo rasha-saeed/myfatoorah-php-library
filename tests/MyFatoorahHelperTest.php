@@ -6,7 +6,7 @@ use MyFatoorah\Library\MyFatoorah;
 
 class MyFatoorahHelperTest extends \PHPUnit\Framework\TestCase
 {
-//-----------------------------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------
     public function testGetPhone()
     {
         $expected = MyFatoorah::getPhone('');
@@ -48,7 +48,7 @@ class MyFatoorahHelperTest extends \PHPUnit\Framework\TestCase
         MyFatoorah::getPhone('12345678910123456');
     }
 
-//-----------------------------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------
     public function testGetWeightRate()
     {
         $expected1 = MyFatoorah::getWeightRate('KG');
@@ -75,7 +75,7 @@ class MyFatoorahHelperTest extends \PHPUnit\Framework\TestCase
         MyFatoorah::getWeightRate('sss');
     }
 
-//-----------------------------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------
     public function testGetDimensionRate()
     {
         $expected = MyFatoorah::getDimensionRate('CM');
@@ -102,7 +102,7 @@ class MyFatoorahHelperTest extends \PHPUnit\Framework\TestCase
         MyFatoorah::getDimensionRate('sss');
     }
 
-//-----------------------------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------
     public function testIsSignatureValid()
     {
         $MyFatoorah_Signature1 = 'uRBOogk9ek7Hgsxs/Rt7Nvbu7Vxf+4eI5gwvbtg0NCw=';
@@ -133,5 +133,5 @@ class MyFatoorahHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse(MyFatoorah::isSignatureValid($data3['Data'], $secret4, $MyFatoorah_Signature4));
     }
 
-//-----------------------------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------
 }

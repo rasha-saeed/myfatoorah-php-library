@@ -18,7 +18,7 @@ class MyFatoorahSupplier extends MyFatoorah
     /**
      * Gets Supplier Dashboard information if Supplier exists in the MyFatoorah portal account.
      *
-     * @param integer $supplierCode The supplier code that exists in MyFatoorah portal account.
+     * @param int $supplierCode The supplier code that exists in MyFatoorah portal account.
      *
      * @return object
      */
@@ -33,14 +33,14 @@ class MyFatoorahSupplier extends MyFatoorah
     /**
      * Returns the supplier status in MyFatoorah account
      *
-     * @param integer $supplierCode The supplier code that exists in MyFatoorah portal account.
+     * @param int $supplierCode The supplier code that exists in MyFatoorah portal account.
      *
      * @return boolean
      */
     public function isSupplierApproved($supplierCode)
     {
         $supplier = $this->getSupplierDashboard($supplierCode);
-        return (!empty($supplier) && $supplier->IsApproved && $supplier->IsActive);
+        return ($supplier->IsApproved && $supplier->IsActive);
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------

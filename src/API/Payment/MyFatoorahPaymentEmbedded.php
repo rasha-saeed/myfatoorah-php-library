@@ -25,9 +25,9 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
     /**
      * List available Payment Methods
      *
-     * @param double|integer $invoiceValue       Total invoice amount.
-     * @param string         $displayCurrencyIso Total invoice currency.
-     * @param bool           $isAppleRegistered  Is site domain is registered with applePay and MyFatoorah or not.
+     * @param double|int $invoiceValue       Total invoice amount.
+     * @param string     $displayCurrencyIso Total invoice currency.
+     * @param bool       $isAppleRegistered  Is site domain is registered with applePay and MyFatoorah or not.
      *
      * @return array
      */
@@ -61,10 +61,10 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
     /**
      * Calculate the amount value that will be paid in each gateway
      *
-     * @param double|integer $totalAmount        The total amount of the invoice.
-     * @param string         $currency           The currency of the invoice total amount.
-     * @param string         $paymentCurrencyIso The currency of the gateway.
-     * @param array          $allRates           The MyFatoorah currency rate array of all gateways.
+     * @param double|int $totalAmount        The total amount of the invoice.
+     * @param string     $currency           The currency of the invoice total amount.
+     * @param string     $paymentCurrencyIso The currency of the gateway.
+     * @param array      $allRates           The MyFatoorah currency rate array of all gateways.
      *
      * @return array
      */

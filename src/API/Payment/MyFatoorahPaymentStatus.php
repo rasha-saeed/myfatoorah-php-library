@@ -18,11 +18,11 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
     /**
      * Get the Payment Transaction Status (POST API)
      *
-     * @param string         $keyId    MyFatoorah InvoiceId, PaymentId, or CustomerReference value.
-     * @param string         $KeyType  The supported key types are "InvoiceId", "PaymentId", or "CustomerReference".
-     * @param integer|string $orderId  The order id in the store used to match the invoice data with store order.
-     * @param string         $price    The order price in the store used to match the invoice data with store order.
-     * @param string         $currency The order currency in the store used to match the invoice data with store order.
+     * @param int|string $keyId    MyFatoorah InvoiceId, PaymentId, or CustomerReference value.
+     * @param string     $KeyType  The supported key types are "InvoiceId", "PaymentId", or "CustomerReference".
+     * @param int|string $orderId  The order id in the store used to match the invoice data with store order.
+     * @param string     $price    The order price in the store used to match the invoice data with store order.
+     * @param string     $currency The order currency in the store used to match the invoice data with store order.
      *
      * @return object
      *
@@ -63,10 +63,10 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
     /**
      * Validate the invoice data with store order data
      *
-     * @param object         $data     The MyFatoorah invoice data
-     * @param integer|string $orderId  The order id in the store used to match the invoice data with store order.
-     * @param string         $price    The order price in the store used to match the invoice data with store order.
-     * @param string         $currency The order currency in the store used to match the invoice data with store order.
+     * @param object     $data     The MyFatoorah invoice data
+     * @param int|string $orderId  The order id in the store used to match the invoice data with store order.
+     * @param string     $price    The order price in the store used to match the invoice data with store order.
+     * @param string     $currency The order currency in the store used to match the invoice data with store order.
      *
      * @return boolean
      */
@@ -118,9 +118,9 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
     /**
      * Search for the failed transaction and return it in the focusTransaction object
      *
-     * @param object $data    The payment data object
-     * @param string $keyId   MyFatoorah InvoiceId, PaymentId, or CustomerReference value.
-     * @param string $KeyType The supported key types are "InvoiceId", "PaymentId", or "CustomerReference".
+     * @param object     $data    The payment data object
+     * @param int|string $keyId   MyFatoorah InvoiceId, PaymentId, or CustomerReference value.
+     * @param string     $KeyType The supported key types are "InvoiceId", "PaymentId", or "CustomerReference".
      *
      * @return object
      */
@@ -167,8 +167,8 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
     /**
      * Search for the failed transaction by the payment Id
      *
-     * @param array          $transactions The transactions array
-     * @param integer|string $paymentId    the failed payment Id
+     * @param array      $transactions The transactions array
+     * @param int|string $paymentId    the failed payment Id
      *
      * @return object|null
      */

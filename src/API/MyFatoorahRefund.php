@@ -19,12 +19,12 @@ class MyFatoorahRefund extends MyFatoorah
      * (deprecated function) use makeRefund instead
      * Refund a given PaymentId or InvoiceId
      *
-     * @param integer|string        $keyId        payment id that will be refunded
-     * @param double|integer|string $amount       the refund amount
-     * @param string                $currencyCode the amount currency
-     * @param string                $comment      reason of the refund
-     * @param integer|string        $orderId      used in log file (default value: null)
-     * @param string                $keyType      supported keys are (InvoiceId, PaymentId)
+     * @param int|string        $keyId        payment id that will be refunded
+     * @param double|int|string $amount       the refund amount
+     * @param string            $currencyCode the amount currency
+     * @param string            $comment      reason of the refund
+     * @param int|string        $orderId      used in log file (default value: null)
+     * @param string            $keyType      supported keys are (InvoiceId, PaymentId)
      *
      * @return object
      */
@@ -48,8 +48,8 @@ class MyFatoorahRefund extends MyFatoorah
     /**
      * Call makeRefund API (POST API)
      *
-     * @param array          $curlData Refund information
-     * @param integer|string $orderId  Used in log file (default value: null)
+     * @param array      $curlData Refund information
+     * @param int|string $orderId  Used in log file (default value: null)
      *
      * @return object
      */

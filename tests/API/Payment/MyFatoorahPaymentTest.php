@@ -8,14 +8,14 @@ class MyFatoorahPaymentTest extends \PHPUnit\Framework\TestCase
 {
     private $keys;
 
-//-----------------------------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------
     public function __construct()
     {
         parent::__construct();
         $this->keys = include(__DIR__ . '/../../apiKeys.php');
     }
 
-//-----------------------------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------
     public function testInitiatePayment()
     {
 
@@ -31,20 +31,20 @@ class MyFatoorahPaymentTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-//-----------------------------------------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * change the accessibility of a function
      * usage $method->invokeArgs($mfObj, [$ua]);
      *
-     * @param type $name
+     * @param  type $name
      * @return type
      */
-//    protected static function getMethod($name) {
-//        $class  = new \ReflectionClass('\MyFatoorah\Library\MyfatoorahPayment');
-//        $method = $class->getMethod($name);
-//        $method->setAccessible(true);
-//        return $method;
-//    }
-//-----------------------------------------------------------------------------------------------------------------------------------------
+    //    protected static function getMethod($name) {
+    //        $class  = new \ReflectionClass('\MyFatoorah\Library\MyfatoorahPayment');
+    //        $method = $class->getMethod($name);
+    //        $method->setAccessible(true);
+    //        return $method;
+    //    }
+    //-----------------------------------------------------------------------------------------------------------------------------------------
 }

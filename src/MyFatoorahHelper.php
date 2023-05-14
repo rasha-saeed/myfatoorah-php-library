@@ -111,7 +111,7 @@ class MyFatoorahHelper
      *
      * @param string $unit It is the weight unit used.
      *
-     * @return double|integer The conversion rate that will convert the given unit into the kg.
+     * @return double|int The conversion rate that will convert the given unit into the kg.
      *
      * @throws Exception Throw exception if the input unit is not support.
      */
@@ -144,7 +144,7 @@ class MyFatoorahHelper
      *
      * @param string $unit It is the dimension unit used in width, hight, or depth.
      *
-     * @return double|integer   The conversion rate that will convert the given unit into the cm.
+     * @return double|int   The conversion rate that will convert the given unit into the cm.
      *
      * @throws Exception        Throw exception if the input unit is not support.
      */
