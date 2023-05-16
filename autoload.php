@@ -70,19 +70,19 @@ function mfPutFileContent($mfLibFolder, $mfResponse)
     file_put_contents($mfLibFolder . 'MyFatoorahHelper.php', $mfNamespace . $useExClass . $mfClass . $mfSplitFile[2]);
 
     //namespace MyFatoorah\Library\API
-    $mfLibFolder    .= 'API/';
-    $mfApiNamespace = '<?php namespace MyFatoorah\Library\API; ';
+    $mfLibFolder .= 'API/';
 
+    $mfApiNamespace = '<?php namespace MyFatoorah\Library\API; ';
     file_put_contents($mfLibFolder . 'MyFatoorahList.php', $mfApiNamespace . $useMfClass . $useExClass . $mfClass . $mfSplitFile[3]);
     file_put_contents($mfLibFolder . 'MyFatoorahRefund.php', $mfApiNamespace . $useMfClass . $mfClass . $mfSplitFile[4]);
     file_put_contents($mfLibFolder . 'MyFatoorahShipping.php', $mfApiNamespace . $useMfClass . $mfClass . $mfSplitFile[5]);
     file_put_contents($mfLibFolder . 'MyFatoorahSupplier.php', $mfApiNamespace . $useMfClass . $mfClass . $mfSplitFile[6]);
 
     //namespace MyFatoorah\Library\API\Payment
-    $mfLibFolder           .= 'Payment/';
+    $mfLibFolder .= 'Payment/';
+
     $mfApiPaymentNamespace = '<?php namespace MyFatoorah\Library\API\Payment; ';
     $useMfListClass        = 'use MyFatoorah\Library\API\MyFatoorahList; ';
-
     file_put_contents($mfLibFolder . 'MyFatoorahPayment.php', $mfApiPaymentNamespace . $useMfClass . $useExClass . $mfClass . $mfSplitFile[7]);
     file_put_contents($mfLibFolder . 'MyFatoorahPaymentEmbedded.php', $mfApiPaymentNamespace . $useMfListClass . $mfClass . $mfSplitFile[8]);
     file_put_contents($mfLibFolder . 'MyFatoorahPaymentStatus.php', $mfApiPaymentNamespace . $useExClass . $mfClass . $mfSplitFile[9]);
