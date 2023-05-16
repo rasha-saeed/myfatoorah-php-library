@@ -27,7 +27,7 @@ if (!in_array('curl', get_loaded_extensions())) {
 
 $mfLibFolder = __DIR__ . '/src/';
 $mfLibFile   = $mfLibFolder . 'MyFatoorah.php';
-if (!is_writable($mfLibFile) || (time() - filemtime($mfLibFile) < 86400)) {
+if (!is_writable($mfLibFile) || ((time() - filemtime($mfLibFile)) < 86400)) {
     return;
 }
 
@@ -57,28 +57,32 @@ try {
 
 function mfPutFileContent($mfLibFolder, $mfResponse)
 {
-    $mfNamespace           = '<?php namespace MyFatoorah\Library; ';
-    $mfApiNamespace        = '<?php namespace MyFatoorah\Library\API; ';
-    $mfApiPaymentNamespace = '<?php namespace MyFatoorah\Library\API\Payment; ';
-
-    $useMfClass     = 'use MyFatoorah\Library\MyFatoorah; ';
-    $useMfListClass = 'use MyFatoorah\Library\API\MyFatoorahList; ';
-    $useExClass     = 'use Exception; ';
-
-    $mfClass = 'class ';
-
     $mfSplitFile = explode('class', $mfResponse);
 
+    $mfNamespace = '<?php namespace MyFatoorah\Library; ';
+    $mfClass     = 'class ';
+
+    $useExClass = 'use Exception; ';
+    $useMfClass = 'use MyFatoorah\Library\MyFatoorah; ';
+
+    //namespace MyFatoorah\Library
     file_put_contents($mfLibFolder . 'MyFatoorah.php', $mfNamespace . $useExClass . $mfClass . $mfSplitFile[1]);
     file_put_contents($mfLibFolder . 'MyFatoorahHelper.php', $mfNamespace . $useExClass . $mfClass . $mfSplitFile[2]);
 
-    $mfLibFolder .= 'API/';
+    //namespace MyFatoorah\Library\API
+    $mfLibFolder    .= 'API/';
+    $mfApiNamespace = '<?php namespace MyFatoorah\Library\API; ';
+
     file_put_contents($mfLibFolder . 'MyFatoorahList.php', $mfApiNamespace . $useMfClass . $useExClass . $mfClass . $mfSplitFile[3]);
     file_put_contents($mfLibFolder . 'MyFatoorahRefund.php', $mfApiNamespace . $useMfClass . $mfClass . $mfSplitFile[4]);
     file_put_contents($mfLibFolder . 'MyFatoorahShipping.php', $mfApiNamespace . $useMfClass . $mfClass . $mfSplitFile[5]);
     file_put_contents($mfLibFolder . 'MyFatoorahSupplier.php', $mfApiNamespace . $useMfClass . $mfClass . $mfSplitFile[6]);
 
-    $mfLibFolder .= 'Payment/';
+    //namespace MyFatoorah\Library\API\Payment
+    $mfLibFolder           .= 'Payment/';
+    $mfApiPaymentNamespace = '<?php namespace MyFatoorah\Library\API\Payment; ';
+    $useMfListClass        = 'use MyFatoorah\Library\API\MyFatoorahList; ';
+
     file_put_contents($mfLibFolder . 'MyFatoorahPayment.php', $mfApiPaymentNamespace . $useMfClass . $useExClass . $mfClass . $mfSplitFile[7]);
     file_put_contents($mfLibFolder . 'MyFatoorahPaymentEmbedded.php', $mfApiPaymentNamespace . $useMfListClass . $mfClass . $mfSplitFile[8]);
     file_put_contents($mfLibFolder . 'MyFatoorahPaymentStatus.php', $mfApiPaymentNamespace . $useExClass . $mfClass . $mfSplitFile[9]);
