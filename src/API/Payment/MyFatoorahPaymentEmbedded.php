@@ -83,8 +83,9 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
         if (isset($baseCurrencyRate) && isset($gatewayCurrencyRate)) {
             $baseAmount = ceil(((int) ($totalAmount * 1000)) / $baseCurrencyRate / 10) / 100;
 
+            $number = ceil(($baseAmount * $gatewayCurrencyRate * 100)) / 100;
             return [
-                'GatewayTotalAmount' => round(($baseAmount * $gatewayCurrencyRate), 3),
+                'GatewayTotalAmount' => number_format($number, 2, '.', ''),
                 'GatewayCurrency'    => $paymentCurrencyIso
             ];
         } else {

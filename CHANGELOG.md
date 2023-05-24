@@ -4,12 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ------------------------------
+## [2.2.3] - 2023-05-24
+### Changed
+- Fix display price value in calc Gateway Data
+
+------------------------------
 ## [2.2.2] - 2023-05-02
 ### Changed
 - Add makeRefund API function
 - Add more test files
 - Fix autoload file
 
+------------------------------
+## [2.1.3] - 2023-05-24
+### Changed
+- Fix display price value in calc Gateway Data
 ------------------------------
 ## [2.1.2] - 2023-05-02
 ### Changed
@@ -48,9 +57,11 @@ Fix many requests in the MyFatoorah autoloader
 The first version of the library
 
 ------------------------------
+[2.2.3]: https://dev.azure.com/myfatoorahsc/Public-Repo/_git/Library?version=GT2.2.3
 [2.2.2]: https://dev.azure.com/myfatoorahsc/Public-Repo/_git/Library?version=GT2.2.2
 [2.2.1]: https://dev.azure.com/myfatoorahsc/Public-Repo/_git/Library?version=GT2.2.1
 [2.2.0]: https://dev.azure.com/myfatoorahsc/Public-Repo/_git/Library?version=GT2.2.0
+[2.1.3]: https://dev.azure.com/myfatoorahsc/Public-Repo/_git/Library?version=GT2.1.3
 [2.1.2]: https://dev.azure.com/myfatoorahsc/Public-Repo/_git/Library?version=GT2.1.2
 [2.1.1]: https://dev.azure.com/myfatoorahsc/Public-Repo/_git/Library?version=GT2.1.1
 [2.1.0]: https://dev.azure.com/myfatoorahsc/Public-Repo/_git/Library?version=GT2.1.0

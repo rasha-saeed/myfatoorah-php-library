@@ -21,7 +21,7 @@ class MyFatoorahList extends MyFatoorah
      *
      * @param string $currency The currency that will be converted into the currency of MyFatoorah portal account.
      *
-     * @return string       The conversion rate converts a given currency to the MyFatoorah account default currency.
+     * @return number       The conversion rate converts a given currency to the MyFatoorah account default currency.
      *
      * @throws Exception    Throw exception if the input currency is not support by MyFatoorah portal account.
      */
