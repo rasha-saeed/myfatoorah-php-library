@@ -1,7 +1,7 @@
 # MyFatoorah - Library
 
 ##Disclaimer
-The source code and copyright belong to MyFatoorah Company. I uploaded it here for sanitizer testing purposes.
+The source code and copyright belong to MyFatoorah Company. I uploaded it here for scrutinizer testing purposes.
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Build Status](https://scrutinizer-ci.com/g/rasha-saeed/myfatoorah-php-library/badges/build.png?b=main)](https://scrutinizer-ci.com/g/rasha-saeed/myfatoorah-php-library/build-status/main)
