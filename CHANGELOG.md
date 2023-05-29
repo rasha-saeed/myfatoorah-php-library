@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [2.1.3] - 2023-05-24
 ### Changed
 - Fix display price value in calc Gateway Data
+- Modify refund
 ------------------------------
 ## [2.1.2] - 2023-05-02
 ### Changed

@@ -71,7 +71,7 @@ function mfPutFileContent($mfLibFolder, $mfResponse)
 
     //namespace MyFatoorah\Library\API
     $mfLibFolder .= 'API/';
-
+    
     $mfApiNamespace = '<?php namespace MyFatoorah\Library\API; ';
     file_put_contents($mfLibFolder . 'MyFatoorahList.php', $mfApiNamespace . $useMfClass . $useExClass . $mfClass . $mfSplitFile[3]);
     file_put_contents($mfLibFolder . 'MyFatoorahRefund.php', $mfApiNamespace . $useMfClass . $mfClass . $mfSplitFile[4]);
@@ -80,7 +80,7 @@ function mfPutFileContent($mfLibFolder, $mfResponse)
 
     //namespace MyFatoorah\Library\API\Payment
     $mfLibFolder .= 'Payment/';
-
+    
     $mfApiPaymentNamespace = '<?php namespace MyFatoorah\Library\API\Payment; ';
     $useMfListClass        = 'use MyFatoorah\Library\API\MyFatoorahList; ';
     file_put_contents($mfLibFolder . 'MyFatoorahPayment.php', $mfApiPaymentNamespace . $useMfClass . $useExClass . $mfClass . $mfSplitFile[7]);
