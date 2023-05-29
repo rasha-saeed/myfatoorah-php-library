@@ -24,7 +24,7 @@ class MyFatoorahPaymentTest extends \PHPUnit\Framework\TestCase
                 $mfObj = new MyFatoorahPayment($config);
                 $json  = $mfObj->initiatePayment();
 
-                $this->assertObjectHasAttribute('PaymentMethodId', $json[0]);
+                $this->assertArrayHasKey('PaymentMethodId', (array) $json[0]);
             } catch (\Exception $ex) {
                 $this->assertEquals($config['exception'], $ex->getMessage(), $config['message']);
             }

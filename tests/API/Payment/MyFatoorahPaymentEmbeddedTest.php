@@ -24,7 +24,7 @@ class MyFatoorahPaymentEmbeddedTest extends TestCase
                 $mfObj = new MyFatoorahPaymentEmbedded($config);
                 $data  = $mfObj->getCheckoutGateways(10, 'KWD', false);
 
-                $this->assertObjectHasAttribute('PaymentMethodId', $data['all'][0]);
+                $this->assertArrayHasKey('PaymentMethodId', (array) $data['all'][0]);
             } catch (\Exception $ex) {
                 $this->assertEquals($config['exception'], $ex->getMessage(), $config['message']);
             }

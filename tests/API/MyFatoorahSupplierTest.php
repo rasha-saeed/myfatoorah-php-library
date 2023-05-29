@@ -24,7 +24,7 @@ class MyFatoorahSupplierTest extends TestCase
                 $mfObj = new MyFatoorahSupplier($config);
                 $data  = $mfObj->getSupplierDashboard(1);
 
-                $this->assertObjectHasAttribute('TotalAwaitingBalance', $data);
+                $this->assertArrayHasKey('TotalAwaitingBalance', (array) $data);
             } catch (\Exception $ex) {
                 $exception = $config['supplierException'] ?? $config['exception'];
                 $this->assertEquals($exception, $ex->getMessage(), $config['message']);

@@ -81,7 +81,7 @@ class MyFatoorah extends MyFatoorahHelper
         }
 
         $config['apiKey'] = trim($config['apiKey']);
-        if (empty($config['apiKey']) || !is_string($config['apiKey'])) {
+        if (empty($config['apiKey'])) {
             throw new Exception('The "apiKey" key is required and must be a string.');
         }
 
