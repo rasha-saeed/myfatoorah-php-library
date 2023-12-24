@@ -18,18 +18,19 @@ class MyFatoorahList extends MyFatoorah
 
     /**
      * Gets the rate of a given currency according to the default currency of the MyFatoorah portal account.
-     *
+     * 
      * @param string $currency The currency that will be converted into the currency of MyFatoorah portal account.
-     *
-     * @return number       The conversion rate converts a given currency to the MyFatoorah account default currency.
-     *
-     * @throws Exception    Throw exception if the input currency is not support by MyFatoorah portal account.
+     * @param array  $allRates An array of the currency rate objects obtained from the GetCurrenciesExchangeList endpoint
+     * 
+     * @return float|string               The conversion rate converts a given currency to the MyFatoorah account default currency.
+     * 
+     * @throws Exception            Throw exception if the input currency is not support by MyFatoorah portal account.
      */
-    public function getCurrencyRate($currency)
+    public function getCurrencyRate($currency, $allRates = null)
     {
 
-        $json = $this->getCurrencyRates();
-        foreach ($json as $value) {
+        $rates = $allRates ?: $this->getCurrencyRates();
+        foreach ($rates as $value) {
             if ($value->Text == $currency) {
                 return $value->Value;
             }
