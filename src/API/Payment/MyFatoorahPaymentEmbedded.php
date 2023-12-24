@@ -72,9 +72,9 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
      * 
      * @param object       $paymentMethod The payment method object obtained from the initiate payment endpoint
      * @param array        $allRates      The MyFatoorah currency rate array of all gateways.
-     * @param float|string $currencyRate  The currency rate of the invoice.
+     * @param double       $currencyRate  The currency rate of the invoice.
      * 
-     * @return float|string
+     * @return double
      */
     private function getPaymentTotalAmount($paymentMethod, $allRates, $currencyRate)
     {
