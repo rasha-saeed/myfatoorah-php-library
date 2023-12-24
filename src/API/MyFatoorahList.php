@@ -21,9 +21,9 @@ class MyFatoorahList extends MyFatoorah
      * 
      * @param string $currency The currency that will be converted into the currency of MyFatoorah portal account.
      * @param array  $allRates An array of the currency rate objects obtained from the GetCurrenciesExchangeList endpoint
-     
+     *
      * @return double
-     
+     *
      * @throws Exception Throw exception if the input currency is not support by MyFatoorah portal account.
      */
     public function getCurrencyRate($currency, $allRates = null)
