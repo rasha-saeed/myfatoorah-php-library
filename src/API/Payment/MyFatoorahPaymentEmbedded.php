@@ -70,9 +70,9 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
     /**
      * Calculate the amount value that will be paid in each payment method
      * 
-     * @param object       $paymentMethod The payment method object obtained from the initiate payment endpoint
-     * @param array        $allRates      The MyFatoorah currency rate array of all gateways.
-     * @param double       $currencyRate  The currency rate of the invoice.
+     * @param object $paymentMethod The payment method object obtained from the initiate payment endpoint
+     * @param array  $allRates      The MyFatoorah currency rate array of all gateways.
+     * @param double $currencyRate  The currency rate of the invoice.
      * 
      * @return double
      */
