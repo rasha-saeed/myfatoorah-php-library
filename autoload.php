@@ -19,7 +19,7 @@
  * @license   GNU General Public License v3.0
  */
 $mfVersion = '2.2';
-return;
+
 if (!in_array('curl', get_loaded_extensions())) {
     trigger_error('Kindly install and enable PHP cURL extension in your server.', E_USER_WARNING);
     return;

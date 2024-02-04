@@ -144,7 +144,7 @@ class MyFatoorah extends MyFatoorahHelper
      */
     protected function setVcCode($config)
     {
-        $config['vcCode'] = $config['vcCode'] ?? $config['countryCode'] ?? null;
+        $config['vcCode'] = $config['vcCode'] ?? $config['countryCode'] ?? '';
         if (empty($config['vcCode'])) {
             throw new Exception('Config array must have the "vcCode" key.');
         }

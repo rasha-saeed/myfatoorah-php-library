@@ -80,7 +80,7 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
 
         //check for the order price and currency
         list($valStr, $mfCurrency) = explode(' ', $data->InvoiceDisplayValue);
-        $mfPrice = (double)(preg_replace('/[^\d.]/', '', $valStr));
+        $mfPrice = (double) (preg_replace('/[^\d.]/', '', $valStr));
 
         if ($price && $price != $mfPrice) {
             return false;
