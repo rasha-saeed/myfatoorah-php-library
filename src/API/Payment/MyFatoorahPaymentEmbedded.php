@@ -43,15 +43,16 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
 
         $mfListObj    = new MyFatoorahList($this->config);
         $allRates     = $mfListObj->getCurrencyRates();
-        $currencyRate = $mfListObj->getCurrencyRate($displayCurrencyIso, $allRates);
+        $currencyRate = MyFatoorahList::getOneCurrencyRate($displayCurrencyIso, $allRates);
 
         self::$checkoutGateways = ['all' => [], 'cards' => [], 'form' => [], 'ap' => [], 'gp' => []];
         foreach ($gateways as $gateway) {
             $gateway->PaymentTotalAmount = $this->getPaymentTotalAmount($gateway, $allRates, $currencyRate);
 
             $gateway->GatewayData = [
-                'GatewayTotalAmount' => number_format($gateway->PaymentTotalAmount, 2),
-                'GatewayCurrency'    => $gateway->PaymentCurrencyIso
+                'GatewayTotalAmount'   => number_format($gateway->PaymentTotalAmount, 2),
+                'GatewayCurrency'      => $gateway->PaymentCurrencyIso,
+                'GatewayTransCurrency' => self::getTranslatedCurrency($gateway->PaymentCurrencyIso),
             ];
 
             self::$checkoutGateways = $this->addGatewayToCheckoutGateways($gateway, self::$checkoutGateways, $isAppleRegistered);
@@ -87,8 +88,7 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
         $baseTotalAmount = ceil(((int) ($paymentMethod->TotalAmount * 100)) / $currencyRate) / 100;
 
         //gateway currency is not the portal currency
-        $mfListObj           = new MyFatoorahList($this->config);
-        $paymentCurrencyRate = $mfListObj->getCurrencyRate($paymentMethod->PaymentCurrencyIso, $allRates);
+        $paymentCurrencyRate = MyFatoorahList::getOneCurrencyRate($paymentMethod->PaymentCurrencyIso, $allRates);
         if ($paymentCurrencyRate != 1) {
             return ceil($baseTotalAmount * $paymentCurrencyRate * 100) / 100;
         }
@@ -129,6 +129,34 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
         }
 
         return [];
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Returns the translation of the currency ISO code
+     *
+     * @param string $currency currency ISO code
+     *
+     * @return array
+     */
+    public static function getTranslatedCurrency($currency)
+    {
+
+        $currencies = [
+            'KWD' => ['en' => 'KD', 'ar' => 'د.ك'],
+            'SAR' => ['en' => 'SR', 'ar' => 'ريال'],
+            'BHD' => ['en' => 'BD', 'ar' => 'د.ب'],
+            'EGP' => ['en' => 'LE', 'ar' => 'ج.م'],
+            'QAR' => ['en' => 'QR', 'ar' => 'ر.ق'],
+            'OMR' => ['en' => 'OR', 'ar' => 'ر.ع'],
+            'JOD' => ['en' => 'JD', 'ar' => 'د.أ'],
+            'AED' => ['en' => 'AED', 'ar' => 'د'],
+            'USD' => ['en' => 'USD', 'ar' => 'دولار'],
+            'EUR' => ['en' => 'EUR', 'ar' => 'يورو']
+        ];
+
+        return $currencies[$currency] ?? ['en' => '', 'ar' => ''];
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------

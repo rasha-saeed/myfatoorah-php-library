@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ------------------------------
+## [2.2.6] - 2023-02-04
+### Added
+- Add the getPaymentStatusLink static funcion
+- Add the getOneCurrencyRate static funcion
+- Add the getTranslatedCurrency static funcion to translate the currency
+
+### Changed
+- Change the config array to accept the vcCode and countryCode
+-
+
+------------------------------
 ## [2.2.5] - 2023-12-05
 ### Changed
 - Some changes to the library to be compatible with other API rather than plugins
@@ -68,6 +79,7 @@ Fix many requests in the MyFatoorah autoloader
 The first version of the library
 
 ------------------------------
+[2.2.6]: https://dev.azure.com/myfatoorahsc/Public-Repo/_git/Library?version=GT2.2.6
 [2.2.5]: https://dev.azure.com/myfatoorahsc/Public-Repo/_git/Library?version=GT2.2.5
 [2.2.4]: https://dev.azure.com/myfatoorahsc/Public-Repo/_git/Library?version=GT2.2.4
 [2.2.3]: https://dev.azure.com/myfatoorahsc/Public-Repo/_git/Library?version=GT2.2.3

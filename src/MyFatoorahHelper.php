@@ -131,7 +131,7 @@ class MyFatoorahHelper
 
         foreach ($rateUnits as $rate => $unitArr) {
             if (array_search($lUnit, $unitArr) !== false) {
-                return (float) $rate;
+                return (double) $rate;
             }
         }
         throw new Exception('Weight units must be in kg, g, lbs, or oz. Default is kg');
@@ -165,7 +165,7 @@ class MyFatoorahHelper
 
         foreach ($rateUnits as $rate => $unitArr) {
             if (array_search($lUnit, $unitArr) !== false) {
-                return (float) $rate;
+                return (double) $rate;
             }
         }
         throw new Exception('Dimension units must be in cm, m, mm, in, or yd. Default is cm');
@@ -285,6 +285,23 @@ class MyFatoorahHelper
             return htmlspecialchars($GLOBALS["_$type"][$name]);
         }
         return null;
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Get the payment status link
+     *
+     * @param string $url       The payment URL link
+     * @param string $paymentId The payment Id
+     *
+     * @return string
+     */
+    public static function getPaymentStatusLink($url, $paymentId)
+    {
+        //to overcome session urls
+        $pattern = '/MpgsAuthentication.*|ApplePayComplete.*|GooglePayComplete.*/i';
+        return preg_replace($pattern, "Result?paymentId=$paymentId", $url);
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------

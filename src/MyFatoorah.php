@@ -52,7 +52,7 @@ class MyFatoorah extends MyFatoorahHelper
     /**
      * Constructor that initiates a new MyFatoorah API process
      *
-     * @param array $config It has the required keys (apiKey, isTest, and countryCode) to process a MyFatoorah API request.
+     * @param array $config It has the required keys (apiKey, isTest, and vcCode) to process a MyFatoorah API request.
      */
     public function __construct($config)
     {
@@ -61,12 +61,12 @@ class MyFatoorah extends MyFatoorahHelper
 
         $this->setApiKey($config);
         $this->setIsTest($config);
-        $this->setCountryCode($config);
+        $this->setVcCode($config);
 
         self::$loggerObj            = $this->config['loggerObj']  = empty($config['loggerObj']) ? null : $config['loggerObj'];
         self::$loggerFunc           = $this->config['loggerFunc'] = empty($config['loggerFunc']) ? null : $config['loggerFunc'];
 
-        $code         = $this->config['countryCode'];
+        $code         = $this->config['vcCode'];
         $this->apiURL = $this->config['isTest'] ? $mfCountries[$code]['testv2'] : $mfCountries[$code]['v2'];
     }
 
@@ -87,7 +87,7 @@ class MyFatoorah extends MyFatoorahHelper
      * Set the API token Key
      * The API Token Key is the authentication which identify a user that is using the app. To generate one follow instruction here https://myfatoorah.readme.io/docs/live-token
      *
-     * @param array $config It has the required keys (apiKey, isTest, and countryCode) to process a MyFatoorah API request.
+     * @param array $config It has the required keys (apiKey, isTest, and vcCode) to process a MyFatoorah API request.
      *
      * @return void
      *
@@ -112,7 +112,7 @@ class MyFatoorah extends MyFatoorahHelper
     /**
      * Set the test mode. Set it to false for live mode
      *
-     * @param array $config It has the required keys (apiKey, isTest, and countryCode) to process a MyFatoorah API request.
+     * @param array $config It has the required keys (apiKey, isTest, and vcCode) to process a MyFatoorah API request.
      *
      * @return void
      *
@@ -134,29 +134,30 @@ class MyFatoorah extends MyFatoorahHelper
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Set the country code of the used MyFatoorah account
+     * Set the vendor country code of the MyFatoorah account
      *
-     * @param array $config It has the required keys (apiKey, isTest, and countryCode) to process a MyFatoorah API request.
+     * @param array $config It has the required keys (apiKey, isTest, and vcCode) to process a MyFatoorah API request.
      *
      * @return void
      *
      * @throws Exception
      */
-    protected function setCountryCode($config)
+    protected function setVcCode($config)
     {
-        if (empty($config['countryCode'])) {
-            throw new Exception('Config array must have the "countryCode" key.');
+        $config['vcCode'] = $config['vcCode'] ?? $config['countryCode'] ?? null;
+        if (empty($config['vcCode'])) {
+            throw new Exception('Config array must have the "vcCode" key.');
         }
 
         $mfCountries    = self::getMFCountries();
         $countriesCodes = array_keys($mfCountries);
 
-        $config['countryCode'] = strtoupper($config['countryCode']);
-        if (!in_array($config['countryCode'], $countriesCodes)) {
-            throw new Exception('The "countryCode" key must be one of (' . implode(', ', $countriesCodes) . ').');
+        $config['vcCode'] = strtoupper($config['vcCode']);
+        if (!in_array($config['vcCode'], $countriesCodes)) {
+            throw new Exception('The "vcCode" key must be one of (' . implode(', ', $countriesCodes) . ').');
         }
 
-        $this->config['countryCode'] = $config['countryCode'];
+        $this->config['vcCode'] = $config['vcCode'];
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
