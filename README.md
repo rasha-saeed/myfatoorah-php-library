@@ -78,7 +78,7 @@ phpunit
 
 ## Credits
 
-- [MyFatoorah Plugin Team](https://github.com/rasha-saeed)
+- [MyFatoorah Plugin Team](https://github.com/my-fatoorah)
 - [Nermeen Shoman](https://github.com/nermeenshoman)
 - [Rasha Saeed](https://github.com/rasha-saeed)
 
