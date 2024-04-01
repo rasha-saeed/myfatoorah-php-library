@@ -1,4 +1,4 @@
-[![Latest Stable Version](https://poser.pugx.org/myfatoorah/library/v)](https://dev.azure.com/myfatoorahsc/Public-Repo/_git/Library/releases)
+[![Latest Stable Version](https://poser.pugx.org/myfatoorah/library/v)](https://dev.azure.com/myfatoorahsc/Public-Repo/_git/Library/tags)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Build Status](https://scrutinizer-ci.com/g/rasha-saeed/myfatoorah-php-library/badges/build.png?b=main)](https://scrutinizer-ci.com/g/rasha-saeed/myfatoorah-php-library/build-status/main)
 [![Code Intelligence Status](https://scrutinizer-ci.com/g/rasha-saeed/myfatoorah-php-library/badges/code-intelligence.svg?b=main)](https://scrutinizer-ci.com/code-intelligence)
@@ -78,7 +78,7 @@ phpunit
 
 ## Credits
 
-- [MyFatoorah Plugin Team](https://github.com/my-fatoorah)
+- [MyFatoorah Plugin Team](https://github.com/rasha-saeed)
 - [Nermeen Shoman](https://github.com/nermeenshoman)
 - [Rasha Saeed](https://github.com/rasha-saeed)
 

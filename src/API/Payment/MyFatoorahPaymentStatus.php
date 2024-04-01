@@ -8,7 +8,7 @@ use Exception;
  *  MyFatoorahPaymentStatus handles the payment status of MyFatoorah API endpoints
  *
  * @author    MyFatoorah <tech@myfatoorah.com>
- * @copyright 2021 MyFatoorah, All rights reserved
+ * @copyright MyFatoorah, All rights reserved
  * @license   GNU General Public License v3.0
  */
 class MyFatoorahPaymentStatus extends MyFatoorahPayment

@@ -257,8 +257,9 @@ class MyFatoorahHelper
         curl_close($curl);
 
         if ($http_code == 200 && is_string($response)) {
-            file_put_contents($cachedFile, $response);
-            return json_decode($response, true);
+            $responseText = trim($response, '﻿'); //remove the hidden character between the single quotes
+            file_put_contents($cachedFile, $responseText);
+            return json_decode($responseText, true);
         } elseif ($http_code == 403) {
             touch($cachedFile);
             $fileContent = file_get_contents($cachedFile);
