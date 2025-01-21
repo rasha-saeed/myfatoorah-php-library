@@ -31,7 +31,7 @@ return [
         'isTest'                    => true,
         'message'                   => 'Not Authorized',
         'exception'                 => 'Exception: You are not Authorized to use API.',
-        'getCurrencyRatesException' => 'You are not Authorized to use API.',
+        //'getCurrencyRatesException' => 'You are not Authorized to use API.',
         //'exception'                 => 'Invalid Account Information!, Please check the Dhl account information and try again.',
         //'refundException'           => 'Key: No transaction exist matching this Key!',
         //'supplierException'         => 'Not Found',

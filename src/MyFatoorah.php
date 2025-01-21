@@ -188,10 +188,13 @@ class MyFatoorah extends MyFatoorahHelper
         ini_set('serialize_precision', '-1');
 
         $request = isset($postFields) ? 'POST' : 'GET';
-        $fields  = empty($postFields) ? json_encode($postFields, JSON_FORCE_OBJECT) : json_encode($postFields);
+        $fields  = empty($postFields) ? json_encode($postFields, JSON_FORCE_OBJECT) : json_encode($postFields, JSON_UNESCAPED_UNICODE);
 
         $msgLog = "Order #$orderId ----- $function";
-        $this->log("$msgLog - Request: $fields");
+        
+        if($function != 'Initiate Payment' && $function != 'Get Currencies Exchange List'){
+            $this->log("$msgLog - Request: $fields");
+        }
 
         //***************************************
         //call url
@@ -218,7 +221,9 @@ class MyFatoorah extends MyFatoorahHelper
             throw new Exception($err);
         }
 
-        $this->log("$msgLog - Response: $res");
+        if($function != 'Initiate Payment' && $function != 'Get Currencies Exchange List'){
+            $this->log("$msgLog - Response: $res");
+        }
 
         $json = json_decode((string) $res);
 
