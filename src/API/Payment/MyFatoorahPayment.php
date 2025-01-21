@@ -41,7 +41,7 @@ class MyFatoorahPayment extends MyFatoorah
             'CurrencyIso'   => $currencyIso,
         ];
 
-        $json = $this->callAPI("$this->apiURL/v2/InitiatePayment", $postFields, $log, 'Initiate Payment');
+        $json = $this->callAPI("$this->apiURL/v2/InitiatePayment", $postFields, null, 'Initiate Payment');
 
         $paymentMethods = ($json->Data->PaymentMethods) ?? [];
 
