@@ -182,7 +182,6 @@ class MyFatoorah extends MyFatoorahHelper
      */
     public function callAPI($url, $postFields = null, $orderId = null, $function = null)
     {
-
         // Prevent json_encode from adding lots of decimal digits
         ini_set('precision', '14');
         ini_set('serialize_precision', '-1');
