@@ -41,7 +41,6 @@ class MyFatoorahPayment extends MyFatoorah
             'CurrencyIso'   => $currencyIso,
         ];
 
-        $log  = $invoiceAmount ? null : 'admin'; //used to log the admin initiatePayment
         $json = $this->callAPI("$this->apiURL/v2/InitiatePayment", $postFields, $log, 'Initiate Payment');
 
         $paymentMethods = ($json->Data->PaymentMethods) ?? [];
