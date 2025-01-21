@@ -191,9 +191,7 @@ class MyFatoorah extends MyFatoorahHelper
 
         $msgLog = "Order #$orderId ----- $function";
 
-        if (!in_array($function, ['Initiate Payment', 'Get Currencies Exchange List'])) {
-            $this->log("$msgLog - Request: $fields");
-        }
+        $this->log("$msgLog - Request: $fields");
 
         //***************************************
         //call url
@@ -220,7 +218,7 @@ class MyFatoorah extends MyFatoorahHelper
             throw new Exception($err);
         }
 
-        if (!in_array($function, ['Initiate Payment', 'Get Currencies Exchange List'])) {
+        if (!empty($orderId) || !in_array($function, ['Initiate Payment', 'Get Currencies Exchange List'])) {
             $this->log("$msgLog - Response: $res");
         }
 
