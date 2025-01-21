@@ -190,7 +190,6 @@ class MyFatoorah extends MyFatoorahHelper
         $fields  = empty($postFields) ? json_encode($postFields, JSON_FORCE_OBJECT) : json_encode($postFields, JSON_UNESCAPED_UNICODE);
 
         $msgLog = "Order #$orderId ----- $function";
-
         $this->log("$msgLog - Request: $fields");
 
         //***************************************
@@ -218,7 +217,7 @@ class MyFatoorah extends MyFatoorahHelper
             throw new Exception($err);
         }
 
-        if (!empty($orderId) || !in_array($function, ['Initiate Payment', 'Get Currencies Exchange List'])) {
+        if (!empty($orderId)) {
             $this->log("$msgLog - Response: $res");
         }
 
