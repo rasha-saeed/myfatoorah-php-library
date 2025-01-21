@@ -62,10 +62,10 @@ class MyFatoorahShipping extends MyFatoorah
     {
         if (!empty($curlData['Items'])) {
             foreach ($curlData['Items'] as &$item) {
-                 $item['ProductName'] = strip_tags($item['ProductName']);
+                $item['ProductName'] = strip_tags($item['ProductName']);
             }
         }
-        
+
         $url  = "$this->apiURL/v2/CalculateShippingCharge";
         $json = $this->callAPI($url, $curlData, null, 'Calculate Shipping Charge');
         return $json->Data;

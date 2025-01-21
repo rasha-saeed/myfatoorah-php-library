@@ -262,7 +262,7 @@ class MyFatoorahPayment extends MyFatoorah
 
         if (!empty($curlData['InvoiceItems'])) {
             foreach ($curlData['InvoiceItems'] as &$item) {
-                 $item['ItemName'] = strip_tags($item['ItemName']);
+                $item['ItemName'] = strip_tags($item['ItemName']);
             }
         }
 
