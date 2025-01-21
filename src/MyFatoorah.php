@@ -191,8 +191,7 @@ class MyFatoorah extends MyFatoorahHelper
 
         $msgLog = "Order #$orderId ----- $function";
 
-        $excludeCondition = !in_array($function, ['Initiate Payment', 'Get Currencies Exchange List']);
-        if ($excludeCondition) {
+        if (!in_array($function, ['Initiate Payment', 'Get Currencies Exchange List'])) {
             $this->log("$msgLog - Request: $fields");
         }
 
@@ -221,7 +220,7 @@ class MyFatoorah extends MyFatoorahHelper
             throw new Exception($err);
         }
 
-        if ($excludeCondition) {
+        if (!in_array($function, ['Initiate Payment', 'Get Currencies Exchange List'])) {
             $this->log("$msgLog - Response: $res");
         }
 
