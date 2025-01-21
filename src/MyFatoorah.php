@@ -183,7 +183,7 @@ class MyFatoorah extends MyFatoorahHelper
     public function callAPI($url, $postFields = null, $orderId = null, $function = null)
     {
 
-        //to prevent json_encode adding lots of decimal digits
+        // Prevent json_encode from adding lots of decimal digits
         ini_set('precision', '14');
         ini_set('serialize_precision', '-1');
 
@@ -192,7 +192,7 @@ class MyFatoorah extends MyFatoorahHelper
 
         $msgLog = "Order #$orderId ----- $function";
 
-        $excludeCondition = $function != 'Initiate Payment' && $function != 'Get Currencies Exchange List';
+        $excludeCondition = !in_array($function, ['Initiate Payment', 'Get Currencies Exchange List']);
         if ($excludeCondition) {
             $this->log("$msgLog - Request: $fields");
         }

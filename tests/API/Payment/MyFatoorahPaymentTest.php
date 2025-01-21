@@ -31,6 +31,7 @@ class MyFatoorahPaymentTest extends \PHPUnit\Framework\TestCase
         }
     }
 
+    //-----------------------------------------------------------------------------------------------------------------------------------------
     public function testSendPayment()
     {
         foreach ($this->keys as $config) {
