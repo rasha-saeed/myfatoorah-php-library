@@ -186,8 +186,7 @@ class MyFatoorah extends MyFatoorahHelper
         ini_set('precision', '14');
         ini_set('serialize_precision', '-1');
 
-        $request = isset($postFields) ? 'POST' : 'GET';
-        $fields  = empty($postFields) ? json_encode($postFields, JSON_FORCE_OBJECT) : json_encode($postFields, JSON_UNESCAPED_UNICODE);
+        $fields = empty($postFields) ? json_encode($postFields, JSON_FORCE_OBJECT) : json_encode($postFields, JSON_UNESCAPED_UNICODE);
 
         $msgLog = "Order #$orderId ----- $function";
         $this->log("$msgLog - Request: $fields");
@@ -198,7 +197,7 @@ class MyFatoorah extends MyFatoorahHelper
         $curl = curl_init($url);
 
         $option = [
-            CURLOPT_CUSTOMREQUEST  => $request,
+            CURLOPT_CUSTOMREQUEST  => isset($postFields) ? 'POST' : 'GET',
             CURLOPT_POSTFIELDS     => $fields,
             CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . $this->config['apiKey'], 'Content-Type: application/json'],
             CURLOPT_RETURNTRANSFER => true
@@ -217,7 +216,9 @@ class MyFatoorah extends MyFatoorahHelper
             throw new Exception($err);
         }
 
-        $this->log("$msgLog - Response: $res");
+        if (!empty($orderId)) {
+            $this->log("$msgLog - Response: $res");
+        }
 
         $json = json_decode((string) $res);
 
