@@ -214,7 +214,7 @@ class MyFatoorah extends MyFatoorahHelper
         //example set a local ip to host apitest.myfatoorah.com
         if ($err) {
             $this->log("$msgLog - cURL Error: $err");
-            throw new Exception($err);
+            throw new Exception('cURL Error: ' . $err);
         }
 
         $this->log("$msgLog - Response: $res");
