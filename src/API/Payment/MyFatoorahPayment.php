@@ -109,30 +109,25 @@ class MyFatoorahPayment extends MyFatoorah
      */
     protected function addGatewayToCheckout($gateway, $checkoutGateways, $isApRegistered)
     {
-
-        if ($gateway->PaymentMethodCode == 'gp') {
-            $checkoutGateways['gp']    = $gateway;
-            $checkoutGateways['all'][] = $gateway;
-        } elseif ($gateway->PaymentMethodCode == 'ap') {
+        if ($gateway->PaymentMethodCode == 'ap') {
             if ($isApRegistered) {
                 $checkoutGateways['ap'][] = $gateway;
             } else {
                 $checkoutGateways['cards'][] = $gateway;
             }
-            $checkoutGateways['all'][] = $gateway;
+        } elseif ($gateway->PaymentMethodCode == 'gp') {
+            $checkoutGateways['gp'] = $gateway;
         } elseif ($gateway->PaymentMethodCode == 'stc') {
             $checkoutGateways['cards'][] = $gateway;
-            $checkoutGateways['all'][]   = $gateway;
+        } elseif ($gateway->IsEmbeddedSupported) {
+            $checkoutGateways['form'][] = $gateway;
+        } elseif (!$gateway->IsDirectPayment) {
+            $checkoutGateways['cards'][] = $gateway;
         } else {
-            if ($gateway->IsEmbeddedSupported) {
-                $checkoutGateways['form'][] = $gateway;
-                $checkoutGateways['all'][]  = $gateway;
-            } elseif (!$gateway->IsDirectPayment) {
-                $checkoutGateways['cards'][] = $gateway;
-                $checkoutGateways['all'][]   = $gateway;
-            }
+            //don't add the $gateway if $gateway->IsEmbeddedSupported = false and $gateway->IsDirectPayment = true
+            return $checkoutGateways;
         }
-
+        $checkoutGateways['all'][] = $gateway;
         return $checkoutGateways;
     }
 
