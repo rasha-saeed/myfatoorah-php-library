@@ -109,24 +109,35 @@ class MyFatoorahPayment extends MyFatoorah
      */
     protected function addGatewayToCheckout($gateway, $checkoutGateways, $isApRegistered)
     {
-        if ($gateway->PaymentMethodCode == 'ap') {
-            if ($isApRegistered) {
-                $checkoutGateways['ap'][] = $gateway;
-            } else {
+        switch ($gateway->PaymentMethodCode) {
+            case 'gp':
+                $checkoutGateways['gp'] = $gateway;
+                break;
+
+            case 'stc':
                 $checkoutGateways['cards'][] = $gateway;
-            }
-        } elseif ($gateway->PaymentMethodCode == 'gp') {
-            $checkoutGateways['gp'] = $gateway;
-        } elseif ($gateway->PaymentMethodCode == 'stc') {
-            $checkoutGateways['cards'][] = $gateway;
-        } elseif ($gateway->IsEmbeddedSupported) {
-            $checkoutGateways['form'][] = $gateway;
-        } elseif (!$gateway->IsDirectPayment) {
-            $checkoutGateways['cards'][] = $gateway;
-        } else {
-            //don't add the $gateway if $gateway->IsEmbeddedSupported = false and $gateway->IsDirectPayment = true
-            return $checkoutGateways;
+                break;
+
+            case 'ap':
+                if ($isApRegistered) {
+                    $checkoutGateways['ap'][] = $gateway;
+                } else {
+                    $checkoutGateways['cards'][] = $gateway;
+                }
+                break;
+
+            default:
+                if ($gateway->IsEmbeddedSupported) {
+                    $checkoutGateways['form'][] = $gateway;
+                } elseif (!$gateway->IsDirectPayment) {
+                    $checkoutGateways['cards'][] = $gateway;
+                } else {
+                    // Don't add the $gateway if $gateway->IsEmbeddedSupported = false and $gateway->IsDirectPayment = true
+                    return $checkoutGateways;
+                }
+                break;
         }
+
         $checkoutGateways['all'][] = $gateway;
         return $checkoutGateways;
     }
