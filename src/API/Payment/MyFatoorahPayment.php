@@ -109,33 +109,26 @@ class MyFatoorahPayment extends MyFatoorah
      */
     protected function addGatewayToCheckout($gateway, $checkoutGateways, $isApRegistered)
     {
-        switch ($gateway->PaymentMethodCode) {
-            case 'gp':
-                $checkoutGateways['gp'] = $gateway;
-                break;
 
-            case 'stc':
-                $checkoutGateways['cards'][] = $gateway;
-                break;
+        if ($gateway->PaymentMethodCode == 'gp') {
+            $checkoutGateways['gp']    = $gateway;
+            $checkoutGateways['all'][] = $gateway;
+        } elseif ($gateway->PaymentMethodCode == 'ap') {
+            $index = ($isApRegistered) ? 'ap' : 'cards';
 
-            case 'ap':
-                $index = ($isApRegistered)? 'ap' : 'cards';
-                $checkoutGateways[$index][] = $gateway;
-                break;
-
-            default:
-                if ($gateway->IsEmbeddedSupported) {
-                    $checkoutGateways['form'][] = $gateway;
-                } elseif (!$gateway->IsDirectPayment) {
-                    $checkoutGateways['cards'][] = $gateway;
-                } else {
-                    // Don't add the $gateway if $gateway->IsEmbeddedSupported = false and $gateway->IsDirectPayment = true
-                    return $checkoutGateways;
-                }
-                break;
+            $checkoutGateways[$index][] = $gateway;
+            $checkoutGateways['all'][]  = $gateway;
+        } elseif ($gateway->PaymentMethodCode == 'stc') {
+            $checkoutGateways['cards'][] = $gateway;
+            $checkoutGateways['all'][]   = $gateway;
+        } elseif ($gateway->IsEmbeddedSupported) {
+            $checkoutGateways['form'][] = $gateway;
+            $checkoutGateways['all'][]  = $gateway;
+        } elseif (!$gateway->IsDirectPayment) {
+            $checkoutGateways['cards'][] = $gateway;
+            $checkoutGateways['all'][]   = $gateway;
         }
 
-        $checkoutGateways['all'][] = $gateway;
         return $checkoutGateways;
     }
 
