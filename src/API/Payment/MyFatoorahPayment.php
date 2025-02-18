@@ -119,11 +119,8 @@ class MyFatoorahPayment extends MyFatoorah
                 break;
 
             case 'ap':
-                if ($isApRegistered) {
-                    $checkoutGateways['ap'][] = $gateway;
-                } else {
-                    $checkoutGateways['cards'][] = $gateway;
-                }
+                $index = ($isApRegistered)? 'ap' : 'cards';
+                $checkoutGateways[$index][] = $gateway;
                 break;
 
             default:
