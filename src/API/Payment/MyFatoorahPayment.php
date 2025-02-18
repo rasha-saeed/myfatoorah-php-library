@@ -111,11 +111,20 @@ class MyFatoorahPayment extends MyFatoorah
     protected function addGatewayToCheckout($gateway, $checkoutGateways, $isApRegistered)
     {
         $code  = $gateway->PaymentMethodCode;
-        $index = 'cards';
+        $index = 'form';
         if ($gateway->IsEmbeddedSupported) {
-            $index = ($code == 'stc') ? 'card' : (($code == 'gp') ? 'gp' : (($code == 'ap') ? (($isApRegistered) ? 'ap' : 'cards') : 'form'));
+            switch ($code) {
+                case 'stc': $index = 'cards';
+                    break;
+                case 'gp': $index = 'gp';
+                    break;
+                case 'ap': $index = ($isApRegistered) ? 'ap' : 'cards';
+                    break;
+            }
         } elseif ($gateway->IsDirectPayment) {
             return $checkoutGateways; //don't add the $gateway if $gateway->IsEmbeddedSupported = false and $gateway->IsDirectPayment = true
+        }else{
+            $index = 'cards';
         }
 
         $checkoutGateways[$index][] = $gateway;
