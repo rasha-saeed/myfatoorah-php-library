@@ -58,8 +58,9 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
             self::$checkoutGateways = $this->addGatewayToCheckout($gateway, self::$checkoutGateways, $isApRegistered);
         }
 
+        //add only one ap/gp gateway
+        self::$checkoutGateways['gp'] = $this->getOneEmbeddedGateway(self::$checkoutGateways['gp'], $currencyIso, $allRates);
         if ($isApRegistered) {
-            //add only one ap gateway
             self::$checkoutGateways['ap'] = $this->getOneEmbeddedGateway(self::$checkoutGateways['ap'], $currencyIso, $allRates);
         }
 

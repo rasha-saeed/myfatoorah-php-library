@@ -88,8 +88,9 @@ class MyFatoorahPayment extends MyFatoorah
             $cachedGateways = $this->addGatewayToCheckout($gateway, $cachedGateways, $isApRegistered);
         }
 
+        //add only one ap/gp gateway
+        $cachedGateways['gp'] = $cachedGateways['gp'][0] ?? [];
         if ($isApRegistered) {
-            //add only one ap gateway
             $cachedGateways['ap'] = $cachedGateways['ap'][0] ?? [];
         }
 
@@ -109,22 +110,12 @@ class MyFatoorahPayment extends MyFatoorah
      */
     protected function addGatewayToCheckout($gateway, $checkoutGateways, $isApRegistered)
     {
-        $code = $gateway->PaymentMethodCode;
+        $code  = $gateway->PaymentMethodCode;
+        $index = 'cards';
         if ($gateway->IsEmbeddedSupported) {
-            switch ($code) {
-                case 'stc': $index = 'card';
-                    break;
-                case 'gp': $index = 'gp';
-                    break;
-                case 'ap': $index = ($isApRegistered) ? 'ap' : 'cards';
-                    break;
-                default : $index = 'form';
-                    break;
-            }
+            $index = ($code == 'stc') ? 'card' : (($code == 'gp') ? 'gp' : (($code == 'ap') ? (($isApRegistered) ? 'ap' : 'cards') : 'form'));
         } elseif ($gateway->IsDirectPayment) {
             return $checkoutGateways; //don't add the $gateway if $gateway->IsEmbeddedSupported = false and $gateway->IsDirectPayment = true
-        } else {
-            $index = 'cards';
         }
 
         $checkoutGateways[$index][] = $gateway;
