@@ -111,13 +111,22 @@ class MyFatoorahPayment extends MyFatoorah
     {
         $code = $gateway->PaymentMethodCode;
         if ($gateway->IsEmbeddedSupported) {
-            $index = ($code == 'stc') ? 'card' : (($code == 'gp') ? 'gp' : (($code == 'ap') ? (($isApRegistered) ? 'ap' : 'cards') : 'form'));
+            switch ($code) {
+                case 'stc': $index = 'card';
+                    break;
+                case 'gp': $index = 'gp';
+                    break;
+                case 'ap': $index = ($isApRegistered) ? 'ap' : 'cards';
+                    break;
+                default : $index = 'form';
+                    break;
+            }
         } elseif ($gateway->IsDirectPayment) {
             return $checkoutGateways; //don't add the $gateway if $gateway->IsEmbeddedSupported = false and $gateway->IsDirectPayment = true
         } else {
             $index = 'cards';
         }
-        
+
         $checkoutGateways[$index][] = $gateway;
         $checkoutGateways['all'][]  = $gateway;
         return $checkoutGateways;
