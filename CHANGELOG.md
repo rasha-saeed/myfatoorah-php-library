@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ------------------------------
+## [2.2.10] - 2025-03-18
+### Changed
+- Optimize the add Gateway To Checkout function
+- Add only one embedded AP/GP gateway
+
+------------------------------
 ## [2.2.9] - 2025-01-22
 ### Changed
 - Add STC to be displayed in the card section (redirection)
@@ -96,6 +102,7 @@ Fix many requests in the MyFatoorah autoloader
 The first version of the library
 
 ------------------------------
+[2.2.10]: https://dev.azure.com/myfatoorahsc/Public-Repo/_git/Library?version=GT2.2.10
 [2.2.9]: https://dev.azure.com/myfatoorahsc/Public-Repo/_git/Library?version=GT2.2.9
 [2.2.8]: https://dev.azure.com/myfatoorahsc/Public-Repo/_git/Library?version=GT2.2.8
 [2.2.7]: https://dev.azure.com/myfatoorahsc/Public-Repo/_git/Library?version=GT2.2.7

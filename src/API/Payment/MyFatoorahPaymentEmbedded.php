@@ -130,6 +130,9 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
      */
     private function getOneEmbeddedGateway($gateways, $displayCurrency, $allRates)
     {
+        if(count($gateways) == 1){
+            return $gateways[0];
+        }
 
         $displayCurrencyIndex = array_search($displayCurrency, array_column($gateways, 'PaymentCurrencyIso'));
         if ($displayCurrencyIndex) {

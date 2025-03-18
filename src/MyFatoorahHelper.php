@@ -171,19 +171,71 @@ class MyFatoorahHelper
         throw new Exception('Dimension units must be in cm, m, mm, in, or yd. Default is cm');
     }
 
+    //-----------------------------------------------------------------------------------------------------------------------------
+    public static function processWebhookRequest($secretKey, $logger = __DIR__ . '/myfatoorah_webhook.log')
+    {
+        MyFatoorah::$loggerObj = $logger;
+        MyFatoorah::log('MyFatoorah WebHook New Request');
+
+        if (!$secretKey) {
+            die('Store needs to be configured.');
+        }
+
+        $apache    = apache_request_headers();
+        $headers   = array_change_key_case($apache);
+        $signature = empty($headers['myfatoorah-signature']) ? die('Wrong request 1.') : $headers['myfatoorah-signature'];
+        $mfVersion = empty($headers['myfatoorah-webhook-version']) ? die('Wrong request 2.') : strtoupper($headers['myfatoorah-webhook-version']);
+        if ($mfVersion != 'V1' && $mfVersion != 'V2') {
+            die('Wrong request 3.');
+        }
+
+        $body = file_get_contents('php://input');
+        MyFatoorah::log('MyFatoorah WebHook Body: ' . $body);
+
+        $request = json_decode($body, true);
+        if (empty($request['Data'])) {
+            die('Wrong data.');
+        }
+
+        if (self::{"checkSignatureValidation$mfVersion"}($request, $secretKey, $signature)) {
+            return $request;
+        }
+        die('Validation error.');
+    }
+
+    static function checkSignatureValidationV1($request, $secretKey, $signature)
+    {
+        if (!isset($request['EventType']) || !isset($request['Event'])) {
+            die('Worng event.');
+        }
+
+        return MyFatoorah::isSignatureValid($request['Data'], $secretKey, $signature, $request['EventType']);
+    }
+
+    static function checkSignatureValidationV2($request, $secretKey, $signature)
+    {
+        if (!isset($request['Event']['Code']) || !isset($request['Event']['Name'])) {
+            die('Worng event.');
+        }
+
+        $dataArray = self::{"getV2DataModel{$request['Event']['Code']}"}($request['Data']);
+        return self::checkSignatureValidation($dataArray, $secretKey, $signature);
+    }
+
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * Validate webhook signature function
+     * keep it for the old system
      *
-     * @param array  $dataArray webhook request array
-     * @param string $secret    webhook secret key
+     * @param array  $dataArray Webhook request array
+     * @param string $secretKey Webhook secret key
      * @param string $signature MyFatoorah signature
      * @param int    $eventType MyFatoorah Event type Number (1, 2, 3 , 4)
      *
      * @return boolean
      */
-    public static function isSignatureValid($dataArray, $secret, $signature, $eventType = 0)
+    public static function isSignatureValid($dataArray, $secretKey, $signature, $eventType = 1)
     {
 
         if ($eventType == 2) {
@@ -192,6 +244,11 @@ class MyFatoorahHelper
 
         uksort($dataArray, 'strcasecmp');
 
+        return self::checkSignatureValidation($dataArray, $secretKey, $signature);
+    }
+
+    private static function checkSignatureValidation($dataArray, $secretKey, $signature)
+    {
         $mapFun = function ($v, $k) {
             return sprintf("%s=%s", $k, $v);
         };
@@ -199,9 +256,61 @@ class MyFatoorahHelper
         $output    = implode(',', $outputArr);
 
         // generate hash of $field string
-        $hash = base64_encode(hash_hmac('sha256', $output, $secret, true));
+        $hash = base64_encode(hash_hmac('sha256', $output, $secretKey, true));
 
         return $signature === $hash;
+    }
+
+    static function getV2DataModel1($data)
+    {
+        //"Invoice.Id=5219930,Invoice.Status=PENDING,Transaction.Status=FAILED,Transaction.PaymentId=07075219930251268773,Customer.Reference=501";
+        return [
+            'Invoice.Id'            => $data['Invoice']['Id'],
+            'Invoice.Status'        => $data['Invoice']['Status'],
+            'Transaction.Status'    => $data['Transaction']['Status'],
+            'Transaction.PaymentId' => $data['Transaction']['PaymentId'],
+            'Customer.Reference'    => $data['Customer']['Reference'],
+        ];
+    }
+
+    static function getV2DataModel2($data)
+    {
+        //"Refund.Id=19,Refund.Status=DRAFT,Amount.ValueInBaseCurrency=5,ReferencedInvoice.Id=2474";
+        return [
+            'Refund.Id'                  => $data['Refund']['Id'],
+            'Refund.Status'              => $data['Refund']['Status'],
+            'Amount.ValueInBaseCurrency' => $data['Amount']['ValueInBaseCurrency'],
+            'ReferencedInvoice.Id'       => $data['ReferencedInvoice']['Id'],
+        ];
+    }
+
+    static function getV2DataModel3($data)
+    {
+        //"Deposit.Reference=2018000001,Deposit.ValueInBaseCurrency=78.2,Deposit.NumberOfTransactions=2";
+        return [
+            'Deposit.Reference'            => $data['Deposit']['Reference'],
+            'Deposit.ValueInBaseCurrency'  => $data['Deposit']['ValueInBaseCurrency'],
+            'Deposit.NumberOfTransactions' => $data['Deposit']['NumberOfTransactions'],
+        ];
+    }
+
+    static function getV2DataModel4($data)
+    {
+        //"Supplier.Code=2,KycDecision.Status=APPROVED";
+        return [
+            'Supplier.Code'      => $data['Supplier']['Code'],
+            'KycDecision.Status' => $data['KycDecision']['Status'],
+        ];
+    }
+
+    static function getV2DataModel5($data)
+    {
+        //"Recurring.Id=RECUR1037225,Recurring.Status=UNCOMPLETED,Recurring.InitialInvoiceId=322242";
+        return [
+            'Recurring.Id'               => $data['Recurring']['Id'],
+            'Recurring.Status'           => $data['Recurring']['Status'],
+            'Recurring.InitialInvoiceId' => $data['Recurring']['InitialInvoiceId'],
+        ];
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------

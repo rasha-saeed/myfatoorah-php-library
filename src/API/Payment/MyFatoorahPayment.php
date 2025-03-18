@@ -115,7 +115,7 @@ class MyFatoorahPayment extends MyFatoorah
             $map   = [
                 'stc' => 'cards',
                 'gp'  => 'gp',
-                'ap'  => ($isApRegistered) ? 'ap' : 'cards',
+                'ap'  => ($isApRegistered) ? 'ap' : 'cards'
             ];
             $index = $map[$code] ?? 'form';
         } elseif ($gateway->IsDirectPayment) {
