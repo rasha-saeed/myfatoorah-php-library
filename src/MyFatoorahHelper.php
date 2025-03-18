@@ -181,8 +181,7 @@ class MyFatoorahHelper
             die('Store needs to be configured.');
         }
 
-        $apache    = apache_request_headers();
-        $headers   = array_change_key_case($apache);
+        $headers   = array_change_key_case(getallheaders());
         $signature = empty($headers['myfatoorah-signature']) ? die('Wrong request 1.') : $headers['myfatoorah-signature'];
         $mfVersion = empty($headers['myfatoorah-webhook-version']) ? die('Wrong request 2.') : strtoupper($headers['myfatoorah-webhook-version']);
         if ($mfVersion != 'V1' && $mfVersion != 'V2') {
@@ -203,7 +202,7 @@ class MyFatoorahHelper
         die('Validation error.');
     }
 
-    static function checkSignatureValidationV1($request, $secretKey, $signature)
+    protected static function checkSignatureValidationV1($request, $secretKey, $signature)
     {
         if (!isset($request['EventType']) || !isset($request['Event'])) {
             die('Worng event.');
@@ -212,7 +211,7 @@ class MyFatoorahHelper
         return MyFatoorah::isSignatureValid($request['Data'], $secretKey, $signature, $request['EventType']);
     }
 
-    static function checkSignatureValidationV2($request, $secretKey, $signature)
+    protected static function checkSignatureValidationV2($request, $secretKey, $signature)
     {
         if (!isset($request['Event']['Code']) || !isset($request['Event']['Name'])) {
             die('Worng event.');
@@ -261,7 +260,7 @@ class MyFatoorahHelper
         return $signature === $hash;
     }
 
-    static function getV2DataModel1($data)
+    protected static function getV2DataModel1($data)
     {
         //"Invoice.Id=5219930,Invoice.Status=PENDING,Transaction.Status=FAILED,Transaction.PaymentId=07075219930251268773,Customer.Reference=501";
         return [
@@ -273,7 +272,7 @@ class MyFatoorahHelper
         ];
     }
 
-    static function getV2DataModel2($data)
+    protected static function getV2DataModel2($data)
     {
         //"Refund.Id=19,Refund.Status=DRAFT,Amount.ValueInBaseCurrency=5,ReferencedInvoice.Id=2474";
         return [
@@ -284,7 +283,7 @@ class MyFatoorahHelper
         ];
     }
 
-    static function getV2DataModel3($data)
+    protected static function getV2DataModel3($data)
     {
         //"Deposit.Reference=2018000001,Deposit.ValueInBaseCurrency=78.2,Deposit.NumberOfTransactions=2";
         return [
@@ -294,7 +293,7 @@ class MyFatoorahHelper
         ];
     }
 
-    static function getV2DataModel4($data)
+    protected static function getV2DataModel4($data)
     {
         //"Supplier.Code=2,KycDecision.Status=APPROVED";
         return [
@@ -303,7 +302,7 @@ class MyFatoorahHelper
         ];
     }
 
-    static function getV2DataModel5($data)
+    protected static function getV2DataModel5($data)
     {
         //"Recurring.Id=RECUR1037225,Recurring.Status=UNCOMPLETED,Recurring.InitialInvoiceId=322242";
         return [
