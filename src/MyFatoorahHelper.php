@@ -181,7 +181,8 @@ class MyFatoorahHelper
             die('Store needs to be configured.');
         }
 
-        $headers   = array_change_key_case(getallheaders());
+        $apache    = (array) apache_request_headers();
+        $headers   = array_change_key_case($apache);
         $signature = empty($headers['myfatoorah-signature']) ? die('Wrong request 1.') : $headers['myfatoorah-signature'];
         $mfVersion = empty($headers['myfatoorah-webhook-version']) ? die('Wrong request 2.') : strtoupper($headers['myfatoorah-webhook-version']);
         if ($mfVersion != 'V1' && $mfVersion != 'V2') {
