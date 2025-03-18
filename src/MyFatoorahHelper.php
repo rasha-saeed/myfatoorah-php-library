@@ -172,32 +172,34 @@ class MyFatoorahHelper
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------
-    public static function processWebhookRequest($secretKey, $logger = __DIR__ . '/myfatoorah_webhook.log')
+    public static function processWebhookRequest($secretKey, $request = null)
     {
-        MyFatoorah::$loggerObj = $logger;
-        MyFatoorah::log('MyFatoorah WebHook New Request');
-
         if (!$secretKey) {
             throw new Exception('Store needs to be configured.');
         }
 
         $apache    = (array) apache_request_headers();
         $headers   = array_change_key_case($apache);
-        $signature = empty($headers['myfatoorah-signature']) ? die('Wrong request 1.') : $headers['myfatoorah-signature'];
-        $mfVersion = empty($headers['myfatoorah-webhook-version']) ? die('Wrong request 2.') : strtoupper($headers['myfatoorah-webhook-version']);
+        
+        if (empty($headers['myfatoorah-signature']) || empty($headers['myfatoorah-webhook-version'])){
+            throw new Exception('Wrong request.');
+        }
+        
+        $mfVersion = strtoupper($headers['myfatoorah-webhook-version']);
         if ($mfVersion != 'V1' && $mfVersion != 'V2') {
-            throw new Exception('Wrong request 3.');
+            throw new Exception('Wrong version.');
         }
 
-        $body = file_get_contents('php://input');
-        MyFatoorah::log('MyFatoorah WebHook Body: ' . $body);
-
-        $request = json_decode($body, true);
+        if(!$request){
+            $body = file_get_contents('php://input');
+            $request = json_decode($body, true);
+        }
+        
         if (empty($request['Data'])) {
             throw new Exception('Wrong data.');
         }
 
-        if (self::{"checkSignatureValidation$mfVersion"}($request, $secretKey, $signature)) {
+        if (self::{"checkSignatureValidation$mfVersion"}($request, $secretKey, $headers['myfatoorah-signature'])) {
             return $request;
         }
         throw new Exception('Validation error.');
