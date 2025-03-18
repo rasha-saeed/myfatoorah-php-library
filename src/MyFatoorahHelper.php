@@ -178,7 +178,7 @@ class MyFatoorahHelper
         MyFatoorah::log('MyFatoorah WebHook New Request');
 
         if (!$secretKey) {
-            die('Store needs to be configured.');
+            throw new Exception('Store needs to be configured.');
         }
 
         $apache    = (array) apache_request_headers();
@@ -186,7 +186,7 @@ class MyFatoorahHelper
         $signature = empty($headers['myfatoorah-signature']) ? die('Wrong request 1.') : $headers['myfatoorah-signature'];
         $mfVersion = empty($headers['myfatoorah-webhook-version']) ? die('Wrong request 2.') : strtoupper($headers['myfatoorah-webhook-version']);
         if ($mfVersion != 'V1' && $mfVersion != 'V2') {
-            die('Wrong request 3.');
+            throw new Exception('Wrong request 3.');
         }
 
         $body = file_get_contents('php://input');
@@ -194,19 +194,19 @@ class MyFatoorahHelper
 
         $request = json_decode($body, true);
         if (empty($request['Data'])) {
-            die('Wrong data.');
+            throw new Exception('Wrong data.');
         }
 
         if (self::{"checkSignatureValidation$mfVersion"}($request, $secretKey, $signature)) {
             return $request;
         }
-        die('Validation error.');
+        throw new Exception('Validation error.');
     }
 
     protected static function checkSignatureValidationV1($request, $secretKey, $signature)
     {
         if (!isset($request['EventType']) || !isset($request['Event'])) {
-            die('Worng event.');
+            throw new Exception('Worng event.');
         }
 
         return MyFatoorah::isSignatureValid($request['Data'], $secretKey, $signature, $request['EventType']);
@@ -215,7 +215,7 @@ class MyFatoorahHelper
     protected static function checkSignatureValidationV2($request, $secretKey, $signature)
     {
         if (!isset($request['Event']['Code']) || !isset($request['Event']['Name'])) {
-            die('Worng event.');
+            throw new Exception('Worng event.');
         }
 
         $dataArray = self::{"getV2DataModel{$request['Event']['Code']}"}($request['Data']);
