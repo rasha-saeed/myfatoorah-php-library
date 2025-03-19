@@ -272,40 +272,40 @@ class MyFatoorahHelper
     private static function getV2DataModel($code, $data)
     {
         switch ($code) {
-        case 1:
-            return [
+            case 1:
+                return [
                     'Invoice.Id'            => $data['Invoice']['Id'],
                     'Invoice.Status'        => $data['Invoice']['Status'],
                     'Transaction.Status'    => $data['Transaction']['Status'],
                     'Transaction.PaymentId' => $data['Transaction']['PaymentId'],
                     'Customer.Reference'    => $data['Customer']['Reference'],
                 ];
-        case 2 :
-            return [
+            case 2 :
+                return [
                     'Refund.Id'                  => $data['Refund']['Id'],
                     'Refund.Status'              => $data['Refund']['Status'],
                     'Amount.ValueInBaseCurrency' => $data['Amount']['ValueInBaseCurrency'],
                     'ReferencedInvoice.Id'       => $data['ReferencedInvoice']['Id'],
                 ];
-        case 3 :
-            return [
+            case 3 :
+                return [
                     'Deposit.Reference'            => $data['Deposit']['Reference'],
                     'Deposit.ValueInBaseCurrency'  => $data['Deposit']['ValueInBaseCurrency'],
                     'Deposit.NumberOfTransactions' => $data['Deposit']['NumberOfTransactions'],
                 ];
-        case 4:
-            return [
+            case 4:
+                return [
                     'Supplier.Code'      => $data['Supplier']['Code'],
                     'KycDecision.Status' => $data['KycDecision']['Status'],
                 ];
-        case 5 :
-            return [
+            case 5 :
+                return [
                     'Recurring.Id'               => $data['Recurring']['Id'],
                     'Recurring.Status'           => $data['Recurring']['Status'],
                     'Recurring.InitialInvoiceId' => $data['Recurring']['InitialInvoiceId'],
                 ];
-        default :
-            return null;
+            default :
+                return null;
         }
     }
 
