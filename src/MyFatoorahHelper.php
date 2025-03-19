@@ -194,7 +194,7 @@ class MyFatoorahHelper
         }
         throw new Exception('Validation error.');
     }
-    
+
     private static function getMfHeaders()
     {
         $apache  = (array) apache_request_headers();
@@ -226,14 +226,14 @@ class MyFatoorahHelper
             throw new Exception('Worng event.');
         }
 
-        $dataArray = self::{"getV2DataModel{$request['Event']['Code']}"}($request['Data']);
+        $dataArray = self::getV2DataModel($request['Event']['Code'], $request['Data']);
         return self::checkSignatureValidation($dataArray, $secretKey, $signature);
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Validate webhook signature function
+     * Validate webhook version 1 signature function
      * keep it for the old system
      *
      * @param array  $dataArray Webhook request array
@@ -269,56 +269,44 @@ class MyFatoorahHelper
         return $signature === $hash;
     }
 
-    protected static function getV2DataModel1($data)
+    private static function getV2DataModel($code, $data)
     {
-        //"Invoice.Id=5219930,Invoice.Status=PENDING,Transaction.Status=FAILED,Transaction.PaymentId=07075219930251268773,Customer.Reference=501";
-        return [
-            'Invoice.Id'            => $data['Invoice']['Id'],
-            'Invoice.Status'        => $data['Invoice']['Status'],
-            'Transaction.Status'    => $data['Transaction']['Status'],
-            'Transaction.PaymentId' => $data['Transaction']['PaymentId'],
-            'Customer.Reference'    => $data['Customer']['Reference'],
-        ];
-    }
-
-    protected static function getV2DataModel2($data)
-    {
-        //"Refund.Id=19,Refund.Status=DRAFT,Amount.ValueInBaseCurrency=5,ReferencedInvoice.Id=2474";
-        return [
-            'Refund.Id'                  => $data['Refund']['Id'],
-            'Refund.Status'              => $data['Refund']['Status'],
-            'Amount.ValueInBaseCurrency' => $data['Amount']['ValueInBaseCurrency'],
-            'ReferencedInvoice.Id'       => $data['ReferencedInvoice']['Id'],
-        ];
-    }
-
-    protected static function getV2DataModel3($data)
-    {
-        //"Deposit.Reference=2018000001,Deposit.ValueInBaseCurrency=78.2,Deposit.NumberOfTransactions=2";
-        return [
-            'Deposit.Reference'            => $data['Deposit']['Reference'],
-            'Deposit.ValueInBaseCurrency'  => $data['Deposit']['ValueInBaseCurrency'],
-            'Deposit.NumberOfTransactions' => $data['Deposit']['NumberOfTransactions'],
-        ];
-    }
-
-    protected static function getV2DataModel4($data)
-    {
-        //"Supplier.Code=2,KycDecision.Status=APPROVED";
-        return [
-            'Supplier.Code'      => $data['Supplier']['Code'],
-            'KycDecision.Status' => $data['KycDecision']['Status'],
-        ];
-    }
-
-    protected static function getV2DataModel5($data)
-    {
-        //"Recurring.Id=RECUR1037225,Recurring.Status=UNCOMPLETED,Recurring.InitialInvoiceId=322242";
-        return [
-            'Recurring.Id'               => $data['Recurring']['Id'],
-            'Recurring.Status'           => $data['Recurring']['Status'],
-            'Recurring.InitialInvoiceId' => $data['Recurring']['InitialInvoiceId'],
-        ];
+        switch ($code) {
+        case 1:
+            return [
+                    'Invoice.Id'            => $data['Invoice']['Id'],
+                    'Invoice.Status'        => $data['Invoice']['Status'],
+                    'Transaction.Status'    => $data['Transaction']['Status'],
+                    'Transaction.PaymentId' => $data['Transaction']['PaymentId'],
+                    'Customer.Reference'    => $data['Customer']['Reference'],
+                ];
+        case 2 :
+            return [
+                    'Refund.Id'                  => $data['Refund']['Id'],
+                    'Refund.Status'              => $data['Refund']['Status'],
+                    'Amount.ValueInBaseCurrency' => $data['Amount']['ValueInBaseCurrency'],
+                    'ReferencedInvoice.Id'       => $data['ReferencedInvoice']['Id'],
+                ];
+        case 3 :
+            return [
+                    'Deposit.Reference'            => $data['Deposit']['Reference'],
+                    'Deposit.ValueInBaseCurrency'  => $data['Deposit']['ValueInBaseCurrency'],
+                    'Deposit.NumberOfTransactions' => $data['Deposit']['NumberOfTransactions'],
+                ];
+        case 4:
+            return [
+                    'Supplier.Code'      => $data['Supplier']['Code'],
+                    'KycDecision.Status' => $data['KycDecision']['Status'],
+                ];
+        case 5 :
+            return [
+                    'Recurring.Id'               => $data['Recurring']['Id'],
+                    'Recurring.Status'           => $data['Recurring']['Status'],
+                    'Recurring.InitialInvoiceId' => $data['Recurring']['InitialInvoiceId'],
+                ];
+        default :
+            return null;
+        }
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
