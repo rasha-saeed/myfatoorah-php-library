@@ -226,8 +226,8 @@ class MyFatoorahHelper
             throw new Exception('Worng event.');
         }
 
-        $dataArray = self::getV2DataModel($request['Event']['Code'], $request['Data']);
-        return self::checkSignatureValidation($dataArray, $secretKey, $signature);
+        $dataModel = self::getV2DataModel($request['Event']['Code'], $request['Data']);
+        return self::checkSignatureValidation($dataModel, $secretKey, $signature);
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -236,31 +236,31 @@ class MyFatoorahHelper
      * Validate webhook version 1 signature function
      * keep it for the old system
      *
-     * @param array  $dataArray Webhook request array
+     * @param array  $dataModel Webhook request array
      * @param string $secretKey Webhook secret key
      * @param string $signature MyFatoorah signature
      * @param int    $eventType MyFatoorah Event type Number (1, 2, 3 , 4)
      *
      * @return boolean
      */
-    public static function isSignatureValid($dataArray, $secretKey, $signature, $eventType = 1)
+    public static function isSignatureValid($dataModel, $secretKey, $signature, $eventType = 1)
     {
 
         if ($eventType == 2) {
-            unset($dataArray['GatewayReference']);
+            unset($dataModel['GatewayReference']);
         }
 
-        uksort($dataArray, 'strcasecmp');
+        uksort($dataModel, 'strcasecmp');
 
-        return self::checkSignatureValidation($dataArray, $secretKey, $signature);
+        return self::checkSignatureValidation($dataModel, $secretKey, $signature);
     }
 
-    private static function checkSignatureValidation($dataArray, $secretKey, $signature)
+    private static function checkSignatureValidation($dataModel, $secretKey, $signature)
     {
         $mapFun = function ($v, $k) {
             return sprintf("%s=%s", $k, $v);
         };
-        $outputArr = array_map($mapFun, $dataArray, array_keys($dataArray));
+        $outputArr = array_map($mapFun, $dataModel, array_keys($dataModel));
         $output    = implode(',', $outputArr);
 
         // generate hash of $field string
@@ -271,42 +271,40 @@ class MyFatoorahHelper
 
     private static function getV2DataModel($code, $data)
     {
-        switch ($code) {
-            case 1:
-                return [
-                    'Invoice.Id'            => $data['Invoice']['Id'],
-                    'Invoice.Status'        => $data['Invoice']['Status'],
-                    'Transaction.Status'    => $data['Transaction']['Status'],
-                    'Transaction.PaymentId' => $data['Transaction']['PaymentId'],
-                    'Customer.Reference'    => $data['Customer']['Reference'],
-                ];
-            case 2 :
-                return [
-                    'Refund.Id'                  => $data['Refund']['Id'],
-                    'Refund.Status'              => $data['Refund']['Status'],
-                    'Amount.ValueInBaseCurrency' => $data['Amount']['ValueInBaseCurrency'],
-                    'ReferencedInvoice.Id'       => $data['ReferencedInvoice']['Id'],
-                ];
-            case 3 :
-                return [
-                    'Deposit.Reference'            => $data['Deposit']['Reference'],
-                    'Deposit.ValueInBaseCurrency'  => $data['Deposit']['ValueInBaseCurrency'],
-                    'Deposit.NumberOfTransactions' => $data['Deposit']['NumberOfTransactions'],
-                ];
-            case 4:
-                return [
-                    'Supplier.Code'      => $data['Supplier']['Code'],
-                    'KycDecision.Status' => $data['KycDecision']['Status'],
-                ];
-            case 5 :
-                return [
-                    'Recurring.Id'               => $data['Recurring']['Id'],
-                    'Recurring.Status'           => $data['Recurring']['Status'],
-                    'Recurring.InitialInvoiceId' => $data['Recurring']['InitialInvoiceId'],
-                ];
-            default :
-                return null;
-        }
+        $dataModels = [
+            1 => [
+                'Invoice.Id'            => $data['Invoice']['Id'],
+                'Invoice.Status'        => $data['Invoice']['Status'],
+                'Transaction.Status'    => $data['Transaction']['Status'],
+                'Transaction.PaymentId' => $data['Transaction']['PaymentId'],
+                'Customer.Reference'    => $data['Customer']['Reference'],
+            ],
+            2 => [
+                'Refund.Id'                  => $data['Refund']['Id'],
+                'Refund.Status'              => $data['Refund']['Status'],
+                'Amount.ValueInBaseCurrency' => $data['Amount']['ValueInBaseCurrency'],
+                'ReferencedInvoice.Id'       => $data['ReferencedInvoice']['Id'],
+            ],
+            3 =>
+            [
+                'Deposit.Reference'            => $data['Deposit']['Reference'],
+                'Deposit.ValueInBaseCurrency'  => $data['Deposit']['ValueInBaseCurrency'],
+                'Deposit.NumberOfTransactions' => $data['Deposit']['NumberOfTransactions'],
+            ],
+            4 =>
+            [
+                'Supplier.Code'      => $data['Supplier']['Code'],
+                'KycDecision.Status' => $data['KycDecision']['Status'],
+            ],
+            5 =>
+            [
+                'Recurring.Id'               => $data['Recurring']['Id'],
+                'Recurring.Status'           => $data['Recurring']['Status'],
+                'Recurring.InitialInvoiceId' => $data['Recurring']['InitialInvoiceId'],
+            ]
+        ];
+
+        return $dataModels[$code] ?? null;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
