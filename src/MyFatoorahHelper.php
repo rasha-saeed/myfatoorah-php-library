@@ -230,6 +230,30 @@ class MyFatoorahHelper
         return self::checkSignatureValidation($dataModel, $secretKey, $signature);
     }
 
+    public static function checkforWebHook2ProcessMessage($webhook, $order)
+    {
+
+        if (!str_contains($order['orderPM'], 'myfatoorah')) {
+            return('Wrong Payment Method.');
+        }
+
+        if ($order['invoiceId'] != $webhook['Invoice']['Id']) {
+            return('Wrong invoice.');
+        }
+
+        //don't process because the Paid is a final status
+        if ($order['mfStatus'] == 'Paid') {
+            return('Order already Paid');
+        }
+
+        //don't process for the same payment id and the status is not SUCCESS
+        if ($order['paymentId'] == $webhook['Transaction']['PaymentId']) {
+            return "Transaction already {$webhook['Transaction']['Status']}.";
+        }
+
+        return null;
+    }
+
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
@@ -272,6 +296,7 @@ class MyFatoorahHelper
     private static function getV2DataModel($code, $data)
     {
         $dataModels = [
+            //https://docs.myfatoorah.com/docs/webhook-v2-payment-status-data-model
             1 => [
                 'Invoice.Id'            => $data['Invoice']['Id'],
                 'Invoice.Status'        => $data['Invoice']['Status'],
@@ -279,25 +304,26 @@ class MyFatoorahHelper
                 'Transaction.PaymentId' => $data['Transaction']['PaymentId'],
                 'Customer.Reference'    => $data['Customer']['Reference'],
             ],
+            //https://docs.myfatoorah.com/docs/webhook-v2-refund-data-model
             2 => [
-                'Refund.Id'                  => $data['Refund']['Id'],
+                'Refund.Id'                  => $data['Refund']['Id'] ?? null,
                 'Refund.Status'              => $data['Refund']['Status'],
                 'Amount.ValueInBaseCurrency' => $data['Amount']['ValueInBaseCurrency'],
                 'ReferencedInvoice.Id'       => $data['ReferencedInvoice']['Id'],
             ],
-            3 =>
-            [
+            //https://docs.myfatoorah.com/docs/webhook-v2-balance-transferred-data-model
+            3 => [
                 'Deposit.Reference'            => $data['Deposit']['Reference'],
                 'Deposit.ValueInBaseCurrency'  => $data['Deposit']['ValueInBaseCurrency'],
                 'Deposit.NumberOfTransactions' => $data['Deposit']['NumberOfTransactions'],
             ],
-            4 =>
-            [
+            //https://docs.myfatoorah.com/docs/webhook-v2-supplier-data-model
+            4 => [
                 'Supplier.Code'      => $data['Supplier']['Code'],
                 'KycDecision.Status' => $data['KycDecision']['Status'],
             ],
-            5 =>
-            [
+            //https://docs.myfatoorah.com/docs/webhook-v2-recurring-data-model
+            5 => [
                 'Recurring.Id'               => $data['Recurring']['Id'],
                 'Recurring.Status'           => $data['Recurring']['Status'],
                 'Recurring.InitialInvoiceId' => $data['Recurring']['InitialInvoiceId'],

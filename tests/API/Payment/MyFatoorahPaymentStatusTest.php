@@ -27,8 +27,7 @@ class MyFatoorahPaymentStatusTest extends TestCase
 
                 $this->assertEquals('Paid', $data->InvoiceStatus);
             } catch (\Exception $ex) {
-                $exception = $config['getPaymentStatusException'] ?? $config['exception'];
-                $this->assertEquals($exception, $ex->getMessage(), $config['message']);
+                $this->assertEquals( $config['exception'], $ex->getMessage(), $config['message']);
             }
         }
     }

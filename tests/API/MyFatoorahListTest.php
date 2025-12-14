@@ -27,8 +27,7 @@ class MyFatoorahListTest extends \PHPUnit\Framework\TestCase
                 $this->assertEquals('1.00000000', $json[0]->Value);
                 $this->assertEquals('KWD', $json[0]->Text, $config['message']);
             } catch (\Exception $ex) {
-                $exception = $config['getCurrencyRatesException'] ?? $config['exception'];
-                $this->assertEquals($exception, $ex->getMessage(), $config['message']);
+                $this->assertEquals($config['exception'], $ex->getMessage(), $config['message']);
             }
         }
     }
