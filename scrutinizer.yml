@@ -14,7 +14,7 @@ build:
 
       tests:
         override:
-          - php composer.phar exec phpunit --testdox
+          - php composer.phar exec phpunit
 
 checks:
   php:
