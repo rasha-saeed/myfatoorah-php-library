@@ -5,15 +5,12 @@ build:
         php:
           version: "8.1"
       dependencies:
-        before:
-          # Force Composer 2 (FIX for Packagist issue)
-          - composer self-update --2
         override:
-          # Install dependencies including require-dev
-          - composer install --no-interaction --prefer-dist --optimize-autoloader
+          - composer self-update --2
+          - composer install --prefer-dist --no-interaction
+
       tests:
         override:
-          # Run PHPUnit
           - vendor/bin/phpunit --testdox
 
 checks:
@@ -35,4 +32,3 @@ filter:
   excluded_paths:
     - vendor/*
     - tests/*
-
