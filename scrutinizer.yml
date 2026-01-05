@@ -18,16 +18,6 @@ checks:
     code_rating: true
     duplication: true
 
-tools:
-  php_analyzer: true
-  php_cpd: true
-  php_pdepend: true
-  php_sim: true
-  php_changetracking: true
-
-coding_style:
-  php: {  }
-
 filter:
   excluded_paths:
     - vendor/*
