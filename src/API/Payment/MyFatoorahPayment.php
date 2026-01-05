@@ -112,11 +112,12 @@ class MyFatoorahPayment extends MyFatoorah
     {
         $code = $gateway->PaymentMethodCode;
         if ($gateway->IsEmbeddedSupported) {
-            $map   = [
+            $map = [
                 'stc' => 'cards',
                 'gp'  => 'gp',
                 'ap'  => ($isApRegistered) ? 'ap' : 'cards'
             ];
+
             $index = $map[$code] ?? 'form';
         } elseif ($gateway->IsDirectPayment) {
             //don't add the $gateway if $gateway->IsEmbeddedSupported = false and $gateway->IsDirectPayment = true

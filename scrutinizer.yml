@@ -4,14 +4,17 @@ build:
       environment:
         php:
           version: "8.1"
+
       dependencies:
         override:
-          - composer self-update --2
-          - composer install --prefer-dist --no-interaction
+          # 🔑 force Composer 2 BEFORE anything
+          - curl -sS https://getcomposer.org/installer | php -- --2
+          - php composer.phar --version
+          - php composer.phar install --prefer-dist --no-interaction
 
       tests:
         override:
-          - vendor/bin/phpunit --testdox
+          - php composer.phar exec phpunit --testdox
 
 checks:
   php:
@@ -21,4 +24,3 @@ checks:
 filter:
   excluded_paths:
     - vendor/*
-    - tests/*
