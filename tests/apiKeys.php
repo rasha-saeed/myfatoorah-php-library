@@ -8,6 +8,7 @@ return [
         'message'           => 'Valid',
         'exception'         => '',
         'refundException'   => 'Key: The transaction is already under processing!',
+        'refundException2'  => 'Amount: Insufficient balance for vendor',
         'supplierException' => 'Not Found',
     ],
     'noContent'     => [
