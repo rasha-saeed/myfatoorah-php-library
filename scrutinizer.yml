@@ -1,0 +1,38 @@
+build:
+  nodes:
+    analysis:
+      environment:
+        php:
+          version: "8.1"
+      dependencies:
+        before:
+          # Force Composer 2 (FIX for Packagist issue)
+          - composer self-update --2
+        override:
+          # Install dependencies including require-dev
+          - composer install --no-interaction --prefer-dist --optimize-autoloader
+      tests:
+        override:
+          # Run PHPUnit
+          - vendor/bin/phpunit --testdox
+
+checks:
+  php:
+    code_rating: true
+    duplication: true
+
+tools:
+  php_analyzer: true
+  php_cpd: true
+  php_pdepend: true
+  php_sim: true
+  php_changetracking: true
+
+coding_style:
+  php: {  }
+
+filter:
+  excluded_paths:
+    - vendor/*
+    - tests/*
+
