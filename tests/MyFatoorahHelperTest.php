@@ -38,14 +38,14 @@ class MyFatoorahHelperTest extends \PHPUnit\Framework\TestCase
     public function testGetPhoneException1()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Phone Number lenght must be between 3 to 14 digits');
+        $this->expectExceptionMessage('Phone Number length must be between 3 to 14 digits');
         MyFatoorah::getPhone('12');
     }
 
     public function testGetPhoneException2()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Phone Number lenght must be between 3 to 14 digits');
+        $this->expectExceptionMessage('Phone Number length must be between 3 to 14 digits');
         MyFatoorah::getPhone('12345678910123456');
     }
 

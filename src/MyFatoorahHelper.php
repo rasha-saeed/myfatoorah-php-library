@@ -61,7 +61,7 @@ class MyFatoorahHelper
         //check for the allowed length
         $len = strlen($string4);
         if ($len < 3 || $len > 14) {
-            throw new Exception('Phone Number lenght must be between 3 to 14 digits');
+            throw new Exception('Phone Number length must be between 3 to 14 digits');
         }
 
         //get the phone arr
@@ -233,7 +233,7 @@ class MyFatoorahHelper
     public static function checkforWebHook2ProcessMessage($webhook, $order)
     {
 
-        if (!str_contains($order['orderPM'], 'myfatoorah')) {
+        if (strpos($order['orderPM'], 'myfatoorah') === false) {
             return('Wrong Payment Method.');
         }
 
@@ -251,7 +251,7 @@ class MyFatoorahHelper
             return "Transaction already {$webhook['Transaction']['Status']}.";
         }
 
-        return null;
+        return false;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -290,7 +290,8 @@ class MyFatoorahHelper
         // generate hash of $field string
         $hash = base64_encode(hash_hmac('sha256', $output, $secretKey, true));
 
-        return $signature === $hash;
+        return hash_equals ($hash, $signature);
+        //return $signature === $hash;
     }
 
     private static function getV2DataModel($code, $data)
@@ -330,7 +331,7 @@ class MyFatoorahHelper
             ]
         ];
 
-        return $dataModels[$code] ?? null;
+        return $dataModels[$code] ?? throw new Exception('Worng event.');
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
