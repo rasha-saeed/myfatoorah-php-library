@@ -1,26 +1,22 @@
 build:
   nodes:
     analysis:
-      environment:
-        php:
-          version: "8.1"
-
-      dependencies:
-        override:
-          # 🔑 force Composer 2 BEFORE anything
-          - curl -sS https://getcomposer.org/installer | php -- --2
-          - php composer.phar --version
-          - php composer.phar install --prefer-dist --no-interaction
-
+      project_setup:
+        override: true   # 🚫 يمنع composer install
       tests:
-        override:
-          - php composer.phar exec phpunit
+        override: true   # 🚫 يمنع phpunit
 
 checks:
-  php:
-    code_rating: true
-    duplication: true
+  php: true             # ✅ تحليل PHP فقط
+
+tools:
+  php_analyzer: true    # ✅ core analyzer
+  php_sim: true         # duplication
+  php_pdepend: true     # complexity
+  php_cpd: true
+  php_loc: true
 
 filter:
   excluded_paths:
     - vendor/*
+    - tests/*

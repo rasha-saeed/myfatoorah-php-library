@@ -290,7 +290,7 @@ class MyFatoorahHelper
         // generate hash of $field string
         $hash = base64_encode(hash_hmac('sha256', $output, $secretKey, true));
 
-        return hash_equals ($hash, $signature);
+        return hash_equals($hash, $signature);
         //return $signature === $hash;
     }
 
