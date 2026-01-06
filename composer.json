@@ -12,10 +12,6 @@
         "ext-json": "*"
     },
     "prefer-stable": true,
-    "scripts": {
-        "post-install-cmd": "\"vendor/bin/phpcs\" --config-set installed_paths vendor/phpcompatibility/php-compatibility",
-        "post-update-cmd": "\"vendor/bin/phpcs\" --config-set installed_paths vendor/phpcompatibility/php-compatibility"
-    },
     "autoload": {
         "files": ["autoload.php"],
         "psr-4": {
