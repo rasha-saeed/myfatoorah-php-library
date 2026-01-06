@@ -1,22 +1,27 @@
 build:
-  nodes:
-    analysis:
-      project_setup:
-        override: true   # 🚫 يمنع composer install
-      tests:
-        override: true   # 🚫 يمنع phpunit
+    nodes:
+        analysis:
+            dependencies:
+                # 🔥 ده السطر المهم جدًا
+                override: true
 
-checks:
-  php: true             # ✅ تحليل PHP فقط
+            project_setup:
+                override: true
 
-tools:
-  php_analyzer: true    # ✅ core analyzer
-  php_sim: true         # duplication
-  php_pdepend: true     # complexity
-  php_cpd: true
-  php_loc: true
+            tests:
+                override: true
 
 filter:
-  excluded_paths:
-    - vendor/*
-    - tests/*
+    excluded_paths:
+        - 'tests/*'
+        - 'vendor/*'
+
+checks:
+    php: true
+
+tools:
+    php_analyzer: true
+    php_sim: true
+    php_pdepend: true
+    php_mess_detector: true
+
