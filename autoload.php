@@ -18,6 +18,7 @@
  * @copyright MyFatoorah, All rights reserved
  * @license   GNU General Public License v3.0
  */
+
 $mfVersion = '2.2';
 return;
 if (!in_array('curl', get_loaded_extensions())) {
@@ -34,9 +35,7 @@ if (!is_writable($mfLibFile) || ((time() - filemtime($mfLibFile)) < 86400)) {
 touch($mfLibFile);
 try {
     $mfCurl = curl_init("https://portal.myfatoorah.com/Files/API/php/library/$mfVersion/MyfatoorahLibrary.txt");
-    curl_setopt_array(
-        $mfCurl, array(CURLOPT_RETURNTRANSFER => true)
-    );
+    curl_setopt_array($mfCurl, [CURLOPT_RETURNTRANSFER => true]);
 
     $mfResponse = curl_exec($mfCurl);
     $mfHttpCode = curl_getinfo($mfCurl, CURLINFO_HTTP_CODE);

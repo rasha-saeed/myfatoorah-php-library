@@ -13,6 +13,7 @@ use MyFatoorah\Library\API\MyFatoorahList;
  */
 class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
 {
+    //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * The checkoutGateways array is used to display the payment in the checkout page.
@@ -71,11 +72,11 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
 
     /**
      * Calculate the amount value that will be paid in each payment method
-     * 
+     *
      * @param object $paymentMethod The payment method object obtained from the initiate payment endpoint
      * @param array  $allRates      The MyFatoorah currency rate array of all gateways.
      * @param double $currencyRate  The currency rate of the invoice.
-     * 
+     *
      * @return double
      */
     private function getPaymentTotalAmount($paymentMethod, $allRates, $currencyRate)
@@ -104,10 +105,10 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
 
     /**
      * Returns the next highest float value by rounding up to a certain decimal
-     * 
+     *
      * @param mixed $number
      * @param mixed $decimalPlaces
-     * 
+     *
      * @return float
      */
     private function roundUp($number, $decimalPlaces)

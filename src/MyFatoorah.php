@@ -26,6 +26,7 @@ use Exception;
  */
 class MyFatoorah extends MyFatoorahHelper
 {
+    //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * The configuration used to connect to MyFatoorah test/live API server
@@ -339,7 +340,7 @@ class MyFatoorah extends MyFatoorahHelper
         //"Message":
         //"No HTTP resource was found that matches the request URI 'https://apitest.myfatoorah.com/v2/SendPayment222'.",
         //"MessageDetail":
-        //"No route providing a controller name was found to match request URI 
+        //"No route providing a controller name was found to match request URI
         //'https://apitest.myfatoorah.com/v2/SendPayment222'"
         //}
 
@@ -368,6 +369,57 @@ class MyFatoorah extends MyFatoorahHelper
         } elseif (method_exists($loggerObj, $loggerFunc)) {
             $loggerObj->{$loggerFunc}($msg);
         }
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+    public static function processWebhookRequest($secretKey, $request = null)
+    {
+
+        if (!$secretKey) {
+            throw new Exception('Store needs to be configured.');
+        }
+
+        list($mfVersion, $signature) = self::getMfHeaders();
+
+        if (!$request) {
+            $body    = file_get_contents('php://input');
+            $request = json_decode($body, true);
+        }
+
+        if (empty($request['Data'])) {
+            throw new Exception('Wrong data.');
+        }
+
+        if (self::{"checkSignatureValidation$mfVersion"}($request, $secretKey, $signature)) {
+            return $request;
+        }
+        throw new Exception('Validation error.');
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    public static function checkforWebHook2ProcessMessage($webhook, $order)
+    {
+
+        if (strpos($order['orderPM'], 'myfatoorah') === false) {
+            return('Wrong Payment Method.');
+        }
+
+        if ($order['invoiceId'] != $webhook['Invoice']['Id']) {
+            return('Wrong invoice.');
+        }
+
+        //don't process because the Paid is a final status
+        if ($order['mfStatus'] == 'Paid') {
+            return('Order already Paid');
+        }
+
+        //don't process for the same payment id and the status is not SUCCESS
+        if ($order['paymentId'] == $webhook['Transaction']['PaymentId']) {
+            return "Transaction already {$webhook['Transaction']['Status']}.";
+        }
+
+        return false;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------

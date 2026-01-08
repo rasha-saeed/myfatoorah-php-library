@@ -6,7 +6,6 @@ use MyFatoorah\Library\API\MyFatoorahShipping;
 
 class MyFatoorahShippingTest extends \PHPUnit\Framework\TestCase
 {
-
     private $keys;
 
     //-----------------------------------------------------------------------------------------------------------------------------------------

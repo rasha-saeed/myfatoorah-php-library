@@ -9,6 +9,7 @@ use Exception;
  */
 class MyFatoorahHelper
 {
+    //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
      * The file name or the logger object
@@ -171,31 +172,9 @@ class MyFatoorahHelper
         throw new Exception('Dimension units must be in cm, m, mm, in, or yd. Default is cm');
     }
 
-    //-----------------------------------------------------------------------------------------------------------------------------
-    public static function processWebhookRequest($secretKey, $request = null)
-    {
-        if (!$secretKey) {
-            throw new Exception('Store needs to be configured.');
-        }
+    //-----------------------------------------------------------------------------------------------------------------------------------------
 
-        list($mfVersion, $signature) = self::getMfHeaders();
-
-        if (!$request) {
-            $body    = file_get_contents('php://input');
-            $request = json_decode($body, true);
-        }
-
-        if (empty($request['Data'])) {
-            throw new Exception('Wrong data.');
-        }
-
-        if (self::{"checkSignatureValidation$mfVersion"}($request, $secretKey, $signature)) {
-            return $request;
-        }
-        throw new Exception('Validation error.');
-    }
-
-    private static function getMfHeaders()
+    protected static function getMfHeaders()
     {
         $apache  = (array) apache_request_headers();
         $headers = array_change_key_case($apache);
@@ -228,30 +207,6 @@ class MyFatoorahHelper
 
         $dataModel = self::getV2DataModel($request['Event']['Code'], $request['Data']);
         return self::checkSignatureValidation($dataModel, $secretKey, $signature);
-    }
-
-    public static function checkforWebHook2ProcessMessage($webhook, $order)
-    {
-
-        if (strpos($order['orderPM'], 'myfatoorah') === false) {
-            return('Wrong Payment Method.');
-        }
-
-        if ($order['invoiceId'] != $webhook['Invoice']['Id']) {
-            return('Wrong invoice.');
-        }
-
-        //don't process because the Paid is a final status
-        if ($order['mfStatus'] == 'Paid') {
-            return('Order already Paid');
-        }
-
-        //don't process for the same payment id and the status is not SUCCESS
-        if ($order['paymentId'] == $webhook['Transaction']['PaymentId']) {
-            return "Transaction already {$webhook['Transaction']['Status']}.";
-        }
-
-        return false;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -331,7 +286,11 @@ class MyFatoorahHelper
             ]
         ];
 
-        return $dataModels[$code] ?? throw new Exception('Worng event.');
+        if (!isset($dataModels[$code])) {
+            throw new Exception('Worng event.');
+        }
+
+        return $dataModels[$code];
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------

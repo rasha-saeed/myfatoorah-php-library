@@ -6,7 +6,6 @@ use MyFatoorah\Library\API\MyFatoorahList;
 
 class MyFatoorahListTest extends \PHPUnit\Framework\TestCase
 {
-
     private $keys;
 
     //-----------------------------------------------------------------------------------------------------------------------------------------

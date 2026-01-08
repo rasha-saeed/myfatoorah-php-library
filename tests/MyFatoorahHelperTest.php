@@ -6,7 +6,6 @@ use MyFatoorah\Library\MyFatoorah;
 
 class MyFatoorahHelperTest extends \PHPUnit\Framework\TestCase
 {
-
     //-----------------------------------------------------------------------------------------------------------------------------------------
     public function testGetPhone()
     {
@@ -35,6 +34,7 @@ class MyFatoorahHelperTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('234567890', $expected5[1]);
     }
 
+    //-----------------------------------------------------------------------------------------------------------------------------------------
     public function testGetPhoneException1()
     {
         $this->expectException(\Exception::class);
@@ -42,6 +42,7 @@ class MyFatoorahHelperTest extends \PHPUnit\Framework\TestCase
         MyFatoorah::getPhone('12');
     }
 
+    //-----------------------------------------------------------------------------------------------------------------------------------------
     public function testGetPhoneException2()
     {
         $this->expectException(\Exception::class);
