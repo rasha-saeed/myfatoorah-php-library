@@ -54,6 +54,14 @@ try {
     trigger_error('Exception: ' . $ex->getMessage(), E_USER_WARNING);
 }
 
+/**
+ * Dynamically generates and saves MyFatoorah library classes from a combined response.
+ *
+ * @param string $mfLibFolder Library folder
+ * @param string $mfResponse  Library text
+ *
+ * @return void
+ */
 function mfPutFileContent($mfLibFolder, $mfResponse)
 {
     $mfSplitFile = explode('class', $mfResponse);

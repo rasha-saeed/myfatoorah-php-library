@@ -174,43 +174,6 @@ class MyFatoorahHelper
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
-    protected static function getMfHeaders()
-    {
-        $apache  = (array) apache_request_headers();
-        $headers = array_change_key_case($apache);
-
-        if (empty($headers['myfatoorah-signature']) || empty($headers['myfatoorah-webhook-version'])) {
-            throw new Exception('Wrong request.');
-        }
-
-        $mfVersion = strtoupper($headers['myfatoorah-webhook-version']);
-        if ($mfVersion != 'V1' && $mfVersion != 'V2') {
-            throw new Exception('Wrong version.');
-        }
-        return [$mfVersion, $headers['myfatoorah-signature']];
-    }
-
-    protected static function checkSignatureValidationV1($request, $secretKey, $signature)
-    {
-        if (!isset($request['EventType']) || !isset($request['Event'])) {
-            throw new Exception('Worng event.');
-        }
-
-        return MyFatoorah::isSignatureValid($request['Data'], $secretKey, $signature, $request['EventType']);
-    }
-
-    protected static function checkSignatureValidationV2($request, $secretKey, $signature)
-    {
-        if (!isset($request['Event']['Code']) || !isset($request['Event']['Name'])) {
-            throw new Exception('Worng event.');
-        }
-
-        $dataModel = self::getV2DataModel($request['Event']['Code'], $request['Data']);
-        return self::checkSignatureValidation($dataModel, $secretKey, $signature);
-    }
-
-    //-----------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * Validate webhook version 1 signature function
      * keep it for the old system
@@ -234,7 +197,16 @@ class MyFatoorahHelper
         return self::checkSignatureValidation($dataModel, $secretKey, $signature);
     }
 
-    private static function checkSignatureValidation($dataModel, $secretKey, $signature)
+    /**
+     * Checks whether the provided signature is correct or not for MyFatoorah Webhook
+     *
+     * @param array  $dataModel
+     * @param string $secretKey
+     * @param string $signature
+     *
+     * @return boolean
+     */
+    protected static function checkSignatureValidation($dataModel, $secretKey, $signature)
     {
         $mapFun = function ($v, $k) {
             return sprintf("%s=%s", $k, $v);
@@ -247,50 +219,6 @@ class MyFatoorahHelper
 
         return hash_equals($hash, $signature);
         //return $signature === $hash;
-    }
-
-    private static function getV2DataModel($code, $data)
-    {
-        $dataModels = [
-            //https://docs.myfatoorah.com/docs/webhook-v2-payment-status-data-model
-            1 => [
-                'Invoice.Id'            => $data['Invoice']['Id'],
-                'Invoice.Status'        => $data['Invoice']['Status'],
-                'Transaction.Status'    => $data['Transaction']['Status'],
-                'Transaction.PaymentId' => $data['Transaction']['PaymentId'],
-                'Customer.Reference'    => $data['Customer']['Reference'],
-            ],
-            //https://docs.myfatoorah.com/docs/webhook-v2-refund-data-model
-            2 => [
-                'Refund.Id'                  => $data['Refund']['Id'] ?? null,
-                'Refund.Status'              => $data['Refund']['Status'],
-                'Amount.ValueInBaseCurrency' => $data['Amount']['ValueInBaseCurrency'],
-                'ReferencedInvoice.Id'       => $data['ReferencedInvoice']['Id'],
-            ],
-            //https://docs.myfatoorah.com/docs/webhook-v2-balance-transferred-data-model
-            3 => [
-                'Deposit.Reference'            => $data['Deposit']['Reference'],
-                'Deposit.ValueInBaseCurrency'  => $data['Deposit']['ValueInBaseCurrency'],
-                'Deposit.NumberOfTransactions' => $data['Deposit']['NumberOfTransactions'],
-            ],
-            //https://docs.myfatoorah.com/docs/webhook-v2-supplier-data-model
-            4 => [
-                'Supplier.Code'      => $data['Supplier']['Code'],
-                'KycDecision.Status' => $data['KycDecision']['Status'],
-            ],
-            //https://docs.myfatoorah.com/docs/webhook-v2-recurring-data-model
-            5 => [
-                'Recurring.Id'               => $data['Recurring']['Id'],
-                'Recurring.Status'           => $data['Recurring']['Status'],
-                'Recurring.InitialInvoiceId' => $data['Recurring']['InitialInvoiceId'],
-            ]
-        ];
-
-        if (!isset($dataModels[$code])) {
-            throw new Exception('Worng event.');
-        }
-
-        return $dataModels[$code];
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
