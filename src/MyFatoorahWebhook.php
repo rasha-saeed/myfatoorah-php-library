@@ -132,39 +132,39 @@ class MyFatoorahWebhook extends MyFatoorah
             //https://docs.myfatoorah.com/docs/webhook-v2-payment-status-data-model
             //Invoice.Id=6409988,Invoice.Status=PAID,Transaction.Status=SUCCESS,Transaction.PaymentId=07076409988323998875,Invoice.ExternalIdentifier=asdqwd-f13sdf-fasjkz
             return [
-                'Invoice.Id'                 => $data['Invoice']['Id'] ?? null,
-                'Invoice.Status'             => $data['Invoice']['Status'] ?? null,
-                'Transaction.Status'         => $data['Transaction']['Status'] ?? null,
-                'Transaction.PaymentId'      => $data['Transaction']['PaymentId'] ?? null,
-                'Invoice.ExternalIdentifier' => $data['Invoice']['ExternalIdentifier'] ?? null,
+                'Invoice.Id'                 => $data['Invoice']['Id'],
+                'Invoice.Status'             => $data['Invoice']['Status'],
+                'Transaction.Status'         => $data['Transaction']['Status'],
+                'Transaction.PaymentId'      => $data['Transaction']['PaymentId'],
+                'Invoice.ExternalIdentifier' => $data['Invoice']['ExternalIdentifier'],
             ];
         } else if ($code === 2) {
             //https://docs.myfatoorah.com/docs/webhook-v2-refund-data-model
             return [
-                'Refund.Id'                  => $data['Refund']['Id'] ?? null,
-                'Refund.Status'              => $data['Refund']['Status'] ?? null,
-                'Amount.ValueInBaseCurrency' => $data['Amount']['ValueInBaseCurrency'] ?? null,
-                'ReferencedInvoice.Id'       => $data['ReferencedInvoice']['Id'] ?? null,
+                'Refund.Id'                  => $data['Refund']['Id'],
+                'Refund.Status'              => $data['Refund']['Status'],
+                'Amount.ValueInBaseCurrency' => $data['Amount']['ValueInBaseCurrency'],
+                'ReferencedInvoice.Id'       => $data['ReferencedInvoice']['Id'],
             ];
         } else if ($code === 3) {
             //https://docs.myfatoorah.com/docs/webhook-v2-balance-transferred-data-model
             return [
-                'Deposit.Reference'            => $data['Deposit']['Reference'] ?? null,
-                'Deposit.ValueInBaseCurrency'  => $data['Deposit']['ValueInBaseCurrency'] ?? null,
-                'Deposit.NumberOfTransactions' => $data['Deposit']['NumberOfTransactions'] ?? null,
+                'Deposit.Reference'            => $data['Deposit']['Reference'],
+                'Deposit.ValueInBaseCurrency'  => $data['Deposit']['ValueInBaseCurrency'],
+                'Deposit.NumberOfTransactions' => $data['Deposit']['NumberOfTransactions'],
             ];
         } else if ($code === 4) {
             //https://docs.myfatoorah.com/docs/webhook-v2-supplier-data-model
             return [
-                'Supplier.Code'      => $data['Supplier']['Code'] ?? null,
-                'KycDecision.Status' => $data['KycDecision']['Status'] ?? null,
+                'Supplier.Code'      => $data['Supplier']['Code'],
+                'KycDecision.Status' => $data['KycDecision']['Status'],
             ];
         } else if ($code === 5) {
             //https://docs.myfatoorah.com/docs/webhook-v2-recurring-data-model
             return [
-                'Recurring.Id'               => $data['Recurring']['Id'] ?? null,
-                'Recurring.Status'           => $data['Recurring']['Status'] ?? null,
-                'Recurring.InitialInvoiceId' => $data['Recurring']['InitialInvoiceId'] ?? null,
+                'Recurring.Id'               => $data['Recurring']['Id'],
+                'Recurring.Status'           => $data['Recurring']['Status'],
+                'Recurring.InitialInvoiceId' => $data['Recurring']['InitialInvoiceId'],
             ];
         }
 
