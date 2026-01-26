@@ -128,47 +128,47 @@ class MyFatoorahWebhook extends MyFatoorah
      */
     private static function getV2DataModel($code, $data)
     {
-        if ($code === 1) {
+        $dataModels = [
             //https://docs.myfatoorah.com/docs/webhook-v2-payment-status-data-model
             //Invoice.Id=6409988,Invoice.Status=PAID,Transaction.Status=SUCCESS,Transaction.PaymentId=07076409988323998875,Invoice.ExternalIdentifier=asdqwd-f13sdf-fasjkz
-            return [
+            1 => fn() => [
                 'Invoice.Id'                 => $data['Invoice']['Id'],
                 'Invoice.Status'             => $data['Invoice']['Status'],
                 'Transaction.Status'         => $data['Transaction']['Status'],
                 'Transaction.PaymentId'      => $data['Transaction']['PaymentId'],
                 'Invoice.ExternalIdentifier' => $data['Invoice']['ExternalIdentifier'],
-            ];
-        } else if ($code === 2) {
+            ],
             //https://docs.myfatoorah.com/docs/webhook-v2-refund-data-model
-            return [
+            2 => fn() => [
                 'Refund.Id'                  => $data['Refund']['Id'],
                 'Refund.Status'              => $data['Refund']['Status'],
                 'Amount.ValueInBaseCurrency' => $data['Amount']['ValueInBaseCurrency'],
                 'ReferencedInvoice.Id'       => $data['ReferencedInvoice']['Id'],
-            ];
-        } else if ($code === 3) {
+            ],
             //https://docs.myfatoorah.com/docs/webhook-v2-balance-transferred-data-model
-            return [
+            3 => fn() => [
                 'Deposit.Reference'            => $data['Deposit']['Reference'],
                 'Deposit.ValueInBaseCurrency'  => $data['Deposit']['ValueInBaseCurrency'],
                 'Deposit.NumberOfTransactions' => $data['Deposit']['NumberOfTransactions'],
-            ];
-        } else if ($code === 4) {
+            ],
             //https://docs.myfatoorah.com/docs/webhook-v2-supplier-data-model
-            return [
+            4 => fn() => [
                 'Supplier.Code'      => $data['Supplier']['Code'],
                 'KycDecision.Status' => $data['KycDecision']['Status'],
-            ];
-        } else if ($code === 5) {
+            ],
             //https://docs.myfatoorah.com/docs/webhook-v2-recurring-data-model
-            return [
+            5 => fn() =>[
                 'Recurring.Id'               => $data['Recurring']['Id'],
                 'Recurring.Status'           => $data['Recurring']['Status'],
                 'Recurring.InitialInvoiceId' => $data['Recurring']['InitialInvoiceId'],
+            ]
             ];
+
+        if (!isset($dataModels[$code])) {
+            throw new Exception('Worng event.');
         }
 
-        throw new Exception('Worng event.');
+        return $dataModels[$code]();
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
