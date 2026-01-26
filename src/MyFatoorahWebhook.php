@@ -23,12 +23,12 @@ class MyFatoorahWebhook extends MyFatoorah
 
         list($mfVersion, $signature) = self::getMfHeaders();
 
-//        if (!$request) {
+        //        if (!$request) {
             $body = file_get_contents('php://input');
             MyFatoorah::log('MyFatoorah WebHook Body: ' . $body);
 
             $request = json_decode($body, true);
-//        }
+        //        }
 
         if (empty($request['Data'])) {
             $msg = 'Wrong data.';
@@ -128,56 +128,56 @@ class MyFatoorahWebhook extends MyFatoorah
      */
     private static function getV2DataModel($code, $data)
     {
-        $dataModels = [
+        if ($code === 1) {
             //https://docs.myfatoorah.com/docs/webhook-v2-payment-status-data-model
             //Invoice.Id=6409988,Invoice.Status=PAID,Transaction.Status=SUCCESS,Transaction.PaymentId=07076409988323998875,Invoice.ExternalIdentifier=asdqwd-f13sdf-fasjkz
-            1 => [
+            return [
                 'Invoice.Id'                 => $data['Invoice']['Id'] ?? null,
                 'Invoice.Status'             => $data['Invoice']['Status'] ?? null,
                 'Transaction.Status'         => $data['Transaction']['Status'] ?? null,
                 'Transaction.PaymentId'      => $data['Transaction']['PaymentId'] ?? null,
                 'Invoice.ExternalIdentifier' => $data['Invoice']['ExternalIdentifier'] ?? null,
-            ],
+            ];
+        } else if ($code === 2) {
             //https://docs.myfatoorah.com/docs/webhook-v2-refund-data-model
-            2 => [
+            return [
                 'Refund.Id'                  => $data['Refund']['Id'] ?? null,
                 'Refund.Status'              => $data['Refund']['Status'] ?? null,
                 'Amount.ValueInBaseCurrency' => $data['Amount']['ValueInBaseCurrency'] ?? null,
                 'ReferencedInvoice.Id'       => $data['ReferencedInvoice']['Id'] ?? null,
-            ],
+            ];
+        } else if ($code === 3) {
             //https://docs.myfatoorah.com/docs/webhook-v2-balance-transferred-data-model
-            3 => [
+            return [
                 'Deposit.Reference'            => $data['Deposit']['Reference'] ?? null,
                 'Deposit.ValueInBaseCurrency'  => $data['Deposit']['ValueInBaseCurrency'] ?? null,
                 'Deposit.NumberOfTransactions' => $data['Deposit']['NumberOfTransactions'] ?? null,
-            ],
+            ];
+        } else if ($code === 4) {
             //https://docs.myfatoorah.com/docs/webhook-v2-supplier-data-model
-            4 => [
+            return [
                 'Supplier.Code'      => $data['Supplier']['Code'] ?? null,
                 'KycDecision.Status' => $data['KycDecision']['Status'] ?? null,
-            ],
+            ];
+        } else if ($code === 5) {
             //https://docs.myfatoorah.com/docs/webhook-v2-recurring-data-model
-            5 => [
+            return [
                 'Recurring.Id'               => $data['Recurring']['Id'] ?? null,
                 'Recurring.Status'           => $data['Recurring']['Status'] ?? null,
                 'Recurring.InitialInvoiceId' => $data['Recurring']['InitialInvoiceId'] ?? null,
-            ]
-        ];
-
-        if (!isset($dataModels[$code])) {
-            throw new Exception('Worng event.');
+            ];
         }
 
-        return $dataModels[$code];
+        throw new Exception('Worng event.');
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     public static function checkforWebHook2ProcessMessage($webhook, $order)
     {
-//        if (strpos($order['myfatoorah_orderPM'], 'myfatoorah') === false) {
-//            return('Wrong Payment Method.');
-//        }
+        //        if (strpos($order['myfatoorah_orderPM'], 'myfatoorah') === false) {
+        //            return('Wrong Payment Method.');
+        //        }
 
         if ($order['myfatoorah_invoiceId'] != $webhook['Invoice']['Id']) {
             return('Wrong invoice.');
