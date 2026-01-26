@@ -4,10 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ------------------------------
-## [2.2.10] - 2025-03-18
-### Changed
-- Optimize the add Gateway To Checkout function
-- Add only one embedded AP/GP gateway
+## [2.2.10] - 2026-01-11
+- Introduced support for Webhook v2
+- Optimize the "add Gateway To Checkout" function
+- Limited embedded Apple Pay / Google Pay to a single gateway
 
 ------------------------------
 ## [2.2.9] - 2025-01-22

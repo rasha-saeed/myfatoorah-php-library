@@ -175,7 +175,7 @@ class MyFatoorahHelper
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Validate webhook version 1 signature function
+     * Validate Webhook version 1 signature function
      * keep it for the old system
      *
      * @param array  $dataModel Webhook request array
