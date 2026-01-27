@@ -10,7 +10,7 @@ use Exception;
 class MyFatoorahWebhook extends MyFatoorah
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------
-    public static function processWebhookRequest($secretKey, $logger = __DIR__ . '/myfatoorah_webhook.log'/*, $request = null*/)
+    public static function processWebhookRequest($secretKey, $logger = __DIR__ . '/myfatoorah_webhook.log'/* , $request = null */)
     {
         MyFatoorah::$loggerObj = $logger;
         MyFatoorah::log('MyFatoorah WebHook New Request');
@@ -24,10 +24,10 @@ class MyFatoorahWebhook extends MyFatoorah
         list($mfVersion, $signature) = self::getMfHeaders();
 
         //        if (!$request) {
-            $body = file_get_contents('php://input');
-            MyFatoorah::log('MyFatoorah WebHook Body: ' . $body);
+        $body = file_get_contents('php://input');
+        MyFatoorah::log('MyFatoorah WebHook Body: ' . $body);
 
-            $request = json_decode($body, true);
+        $request = json_decode($body, true);
         //        }
 
         if (empty($request['Data'])) {
@@ -39,7 +39,7 @@ class MyFatoorahWebhook extends MyFatoorah
         if (self::{"checkSignatureValidation$mfVersion"}($request, $secretKey, $signature)) {
             return $request;
         }
-        
+
         $msg = 'Validation error.';
         MyFatoorah::log($msg);
         throw new Exception($msg);
@@ -132,37 +132,37 @@ class MyFatoorahWebhook extends MyFatoorah
             //https://docs.myfatoorah.com/docs/webhook-v2-payment-status-data-model
             //Invoice.Id=6409988,Invoice.Status=PAID,Transaction.Status=SUCCESS,Transaction.PaymentId=07076409988323998875,Invoice.ExternalIdentifier=asdqwd-f13sdf-fasjkz
             1 => fn() => [
-                'Invoice.Id'                 => $data['Invoice']['Id'],
-                'Invoice.Status'             => $data['Invoice']['Status'],
-                'Transaction.Status'         => $data['Transaction']['Status'],
-                'Transaction.PaymentId'      => $data['Transaction']['PaymentId'],
-                'Invoice.ExternalIdentifier' => $data['Invoice']['ExternalIdentifier'],
+        'Invoice.Id'                 => $data['Invoice']['Id'],
+        'Invoice.Status'             => $data['Invoice']['Status'],
+        'Transaction.Status'         => $data['Transaction']['Status'],
+        'Transaction.PaymentId'      => $data['Transaction']['PaymentId'],
+        'Invoice.ExternalIdentifier' => $data['Invoice']['ExternalIdentifier'],
             ],
             //https://docs.myfatoorah.com/docs/webhook-v2-refund-data-model
             2 => fn() => [
-                'Refund.Id'                  => $data['Refund']['Id'],
-                'Refund.Status'              => $data['Refund']['Status'],
-                'Amount.ValueInBaseCurrency' => $data['Amount']['ValueInBaseCurrency'],
-                'ReferencedInvoice.Id'       => $data['ReferencedInvoice']['Id'],
+        'Refund.Id'                  => $data['Refund']['Id'],
+        'Refund.Status'              => $data['Refund']['Status'],
+        'Amount.ValueInBaseCurrency' => $data['Amount']['ValueInBaseCurrency'],
+        'ReferencedInvoice.Id'       => $data['ReferencedInvoice']['Id'],
             ],
             //https://docs.myfatoorah.com/docs/webhook-v2-balance-transferred-data-model
             3 => fn() => [
-                'Deposit.Reference'            => $data['Deposit']['Reference'],
-                'Deposit.ValueInBaseCurrency'  => $data['Deposit']['ValueInBaseCurrency'],
-                'Deposit.NumberOfTransactions' => $data['Deposit']['NumberOfTransactions'],
+        'Deposit.Reference'            => $data['Deposit']['Reference'],
+        'Deposit.ValueInBaseCurrency'  => $data['Deposit']['ValueInBaseCurrency'],
+        'Deposit.NumberOfTransactions' => $data['Deposit']['NumberOfTransactions'],
             ],
             //https://docs.myfatoorah.com/docs/webhook-v2-supplier-data-model
             4 => fn() => [
-                'Supplier.Code'      => $data['Supplier']['Code'],
-                'KycDecision.Status' => $data['KycDecision']['Status'],
+        'Supplier.Code'      => $data['Supplier']['Code'],
+        'KycDecision.Status' => $data['KycDecision']['Status'],
             ],
             //https://docs.myfatoorah.com/docs/webhook-v2-recurring-data-model
-            5 => fn() =>[
-                'Recurring.Id'               => $data['Recurring']['Id'],
-                'Recurring.Status'           => $data['Recurring']['Status'],
-                'Recurring.InitialInvoiceId' => $data['Recurring']['InitialInvoiceId'],
+            5 => fn() => [
+        'Recurring.Id'               => $data['Recurring']['Id'],
+        'Recurring.Status'           => $data['Recurring']['Status'],
+        'Recurring.InitialInvoiceId' => $data['Recurring']['InitialInvoiceId'],
             ]
-            ];
+        ];
 
         if (!isset($dataModels[$code])) {
             throw new Exception('Worng event.');

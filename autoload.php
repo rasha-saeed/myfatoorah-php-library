@@ -75,6 +75,7 @@ function mfPutFileContent($mfLibFolder, $mfResponse)
     //namespace MyFatoorah\Library
     file_put_contents($mfLibFolder . 'MyFatoorah.php', $mfNamespace . $useExClass . $mfClass . $mfSplitFile[1]);
     file_put_contents($mfLibFolder . 'MyFatoorahHelper.php', $mfNamespace . $useExClass . $mfClass . $mfSplitFile[2]);
+    file_put_contents($mfLibFolder . 'MyFatoorahWebhook.php', $mfNamespace . $useExClass . $mfClass . $mfSplitFile[10]);
 
     //namespace MyFatoorah\Library\API
     $mfLibFolder .= 'API/';
