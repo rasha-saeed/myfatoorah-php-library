@@ -252,8 +252,9 @@ class MyFatoorahPayment extends MyFatoorah
     private function preparePayment(&$curlData)
     {
 
-        $curlData['CustomerReference'] = $curlData['CustomerReference'] ?? null;
-        $curlData['SourceInfo']        = $curlData['SourceInfo'] ?? 'MyFatoorah PHP Library ' . $this->version;
+        $curlData['CustomerReference'] ??= null;
+
+        $curlData['SourceInfo'] ??= 'MyFatoorah PHP Library ' . $this->version;
 
         if (!empty($curlData['CustomerName'])) {
             $curlData['CustomerName'] = preg_replace('/[^\p{L}\p{N}\s]/u', '', $curlData['CustomerName']);
