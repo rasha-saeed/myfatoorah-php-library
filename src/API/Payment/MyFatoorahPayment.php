@@ -268,6 +268,10 @@ class MyFatoorahPayment extends MyFatoorah
         if (empty($curlData['CustomerEmail'])) {
             $curlData['CustomerEmail'] = null;
         }
+
+        if (empty($curlData['ExpiryDate']) && !empty($curlData['ExpiryMinutes'])) {
+            $curlData['ExpiryDate'] = $this->getExpiryDate($curlData['ExpiryMinutes']);
+        }
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
