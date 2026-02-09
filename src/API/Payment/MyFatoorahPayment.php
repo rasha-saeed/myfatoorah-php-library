@@ -289,7 +289,7 @@ class MyFatoorahPayment extends MyFatoorah
 
         $curlData = ['CustomerIdentifier' => $userDefinedField];
 
-        return $this->InitiateSession($curlData, $logId);
+        return $this->initiateSession($curlData, $logId);
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -302,7 +302,7 @@ class MyFatoorahPayment extends MyFatoorah
      *
      * @return object
      */
-    public function InitiateSession($curlData, $logId = null)
+    public function initiateSession($curlData, $logId = null)
     {
 
         $json = $this->callAPI("$this->apiURL/v2/InitiateSession", $curlData, $logId, 'Initiate Session');

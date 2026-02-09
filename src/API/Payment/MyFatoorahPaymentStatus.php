@@ -143,7 +143,7 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
         //case 2: payment is Expired
         //all myfatoorah gateway is set to Asia/Kuwait
         $timeZone = $this->getVendorTimeZone();
-        
+
         $ExpiryDateTime = $data->ExpiryDate . ' ' . $data->ExpiryTime;
         $ExpiryDate     = new \DateTime($ExpiryDateTime, new \DateTimeZone($timeZone));
         $currentDate    = new \DateTime('now', new \DateTimeZone($timeZone));

@@ -372,4 +372,47 @@ class MyFatoorah extends MyFatoorahHelper
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Get the vendor time zone based on the configured vendor country code.
+     *
+     * In test mode, the Kuwait time zone is always used.
+     * In live mode, the time zone is resolved from the vendor country configuration.
+     *
+     * @return string The vendor time zone.
+     */
+    protected function getVendorTimeZone()
+    {
+        $countries = self::getMFCountries();
+
+        $vcCode = $this->config['vcCode'];
+        $isTest = $this->config['isTest'];
+
+        return ($isTest) ? $countries['KWT']['timeZone'] : $countries[$vcCode]['timeZone'];
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Get the localized ExpiryDate based on the vendor’s country using ExpiryMinutes.
+     *
+     * @param int|string $expiryMinutes The number of minutes after which the invoice expires.
+     *
+     * @return string
+     */
+    public function getExpiryDate($expiryMinutes)
+    {
+        if (!ctype_digit((string) $expiryMinutes) || (int) $expiryMinutes <= 0) {
+            return '';
+        }
+
+        $timeZone = $this->getVendorTimeZone();
+
+        $nowDate = new \DateTime('now', new \DateTimeZone($timeZone));
+        $nowDate->modify("+$expiryMinutes minutes");
+
+        return $nowDate->format('Y-m-d\TH:i:s');
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
 }
