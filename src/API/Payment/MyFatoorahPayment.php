@@ -252,9 +252,10 @@ class MyFatoorahPayment extends MyFatoorah
     private function preparePayment(&$curlData)
     {
 
+        $curlData['SourceInfo']        ??= 'MyFatoorah PHP Library ' . $this->version;
         $curlData['CustomerReference'] ??= null;
 
-        $curlData['SourceInfo'] ??= 'MyFatoorah PHP Library ' . $this->version;
+        $curlData['CustomerEmail'] = empty($curlData['CustomerEmail']) ? null : $curlData['CustomerEmail'];
 
         if (!empty($curlData['CustomerName'])) {
             $curlData['CustomerName'] = preg_replace('/[^\p{L}\p{N}\s]/u', '', $curlData['CustomerName']);
@@ -264,10 +265,6 @@ class MyFatoorahPayment extends MyFatoorah
             foreach ($curlData['InvoiceItems'] as &$item) {
                 $item['ItemName'] = strip_tags($item['ItemName']);
             }
-        }
-
-        if (empty($curlData['CustomerEmail'])) {
-            $curlData['CustomerEmail'] = null;
         }
 
         if (empty($curlData['ExpiryDate']) && !empty($curlData['ExpiryMinutes'])) {
