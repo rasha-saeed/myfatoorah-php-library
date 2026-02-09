@@ -252,24 +252,31 @@ class MyFatoorahPayment extends MyFatoorah
     private function preparePayment(&$curlData)
     {
 
-        $curlData['SourceInfo']        ??= 'MyFatoorah PHP Library ' . $this->version;
-        $curlData['CustomerReference'] ??= null;
-
-        $curlData['CustomerEmail'] = empty($curlData['CustomerEmail']) ? null : $curlData['CustomerEmail'];
+        $curlData['CustomerReference'] = $curlData['CustomerReference'] ?? null;
+        $curlData['SourceInfo']        = $curlData['SourceInfo'] ?? 'MyFatoorah PHP Library ' . $this->version;
 
         if (!empty($curlData['CustomerName'])) {
             $curlData['CustomerName'] = preg_replace('/[^\p{L}\p{N}\s]/u', '', $curlData['CustomerName']);
         }
 
-        if (!empty($curlData['InvoiceItems'])) {
-            foreach ($curlData['InvoiceItems'] as &$item) {
-                $item['ItemName'] = strip_tags($item['ItemName']);
-            }
+        unset($curlData['InvoiceItems']);
+        $curlData['InvoiceItems'] = array_map(
+                fn($item) => [
+            ...$item,
+            'ItemName' => strip_tags($item['ItemName'] ?? '')
+                ],
+                $curlData['InvoiceItems'] ?? []
+        );
+
+//        error_log(print_r($curlData, 1));
+        if (empty($curlData['CustomerEmail'])) {
+            $curlData['CustomerEmail'] = null;
         }
 
         if (empty($curlData['ExpiryDate']) && !empty($curlData['ExpiryMinutes'])) {
             $curlData['ExpiryDate'] = $this->getExpiryDate($curlData['ExpiryMinutes']);
         }
+//        return $curlData;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
