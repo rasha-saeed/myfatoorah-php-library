@@ -259,16 +259,15 @@ class MyFatoorahPayment extends MyFatoorah
             $curlData['CustomerName'] = preg_replace('/[^\p{L}\p{N}\s]/u', '', $curlData['CustomerName']);
         }
 
-        unset($curlData['InvoiceItems']);
-        $curlData['InvoiceItems'] = array_map(
-                fn($item) => [
-            ...$item,
-            'ItemName' => strip_tags($item['ItemName'] ?? '')
-                ],
-                $curlData['InvoiceItems'] ?? []
-        );
+        $items = $curlData['InvoiceItems'] ?? [];
+        foreach ($items as $item) {
+            if (isset($item['ItemName'])) {
+                $item['ItemName'] = strip_tags($item['ItemName']);
+            }
+        }
 
-//        error_log(print_r($curlData, 1));
+        $curlData['InvoiceItems'] = $items;
+
         if (empty($curlData['CustomerEmail'])) {
             $curlData['CustomerEmail'] = null;
         }
@@ -276,7 +275,6 @@ class MyFatoorahPayment extends MyFatoorah
         if (empty($curlData['ExpiryDate']) && !empty($curlData['ExpiryMinutes'])) {
             $curlData['ExpiryDate'] = $this->getExpiryDate($curlData['ExpiryMinutes']);
         }
-//        return $curlData;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
