@@ -217,7 +217,6 @@ class MyFatoorahPayment extends MyFatoorah
      */
     public function sendPayment($curlData)
     {
-
         $this->preparePayment($curlData);
 
         $json = $this->callAPI("$this->apiURL/v2/SendPayment", $curlData, $curlData['CustomerReference'], 'Send Payment');
@@ -235,7 +234,6 @@ class MyFatoorahPayment extends MyFatoorah
      */
     public function executePayment($curlData)
     {
-
         $this->preparePayment($curlData);
 
         $json = $this->callAPI("$this->apiURL/v2/ExecutePayment", $curlData, $curlData['CustomerReference'], 'Execute Payment');
@@ -251,26 +249,46 @@ class MyFatoorahPayment extends MyFatoorah
      */
     private function preparePayment(&$curlData)
     {
-
-        $curlData['CustomerReference'] = $curlData['CustomerReference'] ?? null;
+        $curlData['CustomerReference'] = $curlData['CustomerReference'] ?? null; //important to be set even with null and here
         $curlData['SourceInfo']        = $curlData['SourceInfo'] ?? 'MyFatoorah PHP Library ' . $this->version;
 
+        $this->prepareInvoiceInfo($curlData);
+        $this->prepareCustomerInfo($curlData);
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Prepare Customer Info for SendPayment and ExecutePayment
+     *
+     * @param array $curlData Invoice information
+     */
+    private function prepareCustomerInfo(&$curlData)
+    {
         if (!empty($curlData['CustomerName'])) {
             $curlData['CustomerName'] = preg_replace('/[^\p{L}\p{N}\s]/u', '', $curlData['CustomerName']);
         }
 
-        $items = $curlData['InvoiceItems'] ?? [];
-        foreach ($items as $item) {
-            if (isset($item['ItemName'])) {
-                $item['ItemName'] = strip_tags($item['ItemName']);
-            }
-        }
-
-        $curlData['InvoiceItems'] = $items;
-
         if (empty($curlData['CustomerEmail'])) {
             $curlData['CustomerEmail'] = null;
         }
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Prepare Invoice Info for SendPayment and ExecutePayment
+     *
+     * @param array $curlData Invoice information
+     */
+    private function prepareInvoiceInfo(&$curlData)
+    {
+        if (!empty($curlData['InvoiceItems'])) {
+            foreach ($curlData['InvoiceItems'] as &$item) {
+                $item['ItemName'] = strip_tags($item['ItemName']);
+            }
+        }
+        unset($item); //important to clear the ref
 
         if (empty($curlData['ExpiryDate']) && !empty($curlData['ExpiryMinutes'])) {
             $curlData['ExpiryDate'] = $this->getExpiryDate($curlData['ExpiryMinutes']);
