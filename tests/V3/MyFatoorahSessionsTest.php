@@ -28,8 +28,8 @@ class MyFatoorahSessionsTest extends TestCase
 
         foreach ($this->keys as $config) {
             try {
-                $mfObj  = new MyFatoorahSessions($config);
-                $data = $mfObj->createSession($curlData);
+                $mfObj = new MyFatoorahSessions($config);
+                $data  = $mfObj->createSession($curlData);
 
                 $this->assertIsObject($data);
                 $this->assertObjectHasProperty('SessionId', $data);

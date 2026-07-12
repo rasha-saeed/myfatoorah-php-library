@@ -211,7 +211,7 @@ class MyFatoorahHelper
         $mapFun = function ($v, $k) {
             return sprintf("%s=%s", $k, $v);
         };
-        
+
         $outputArr = array_map($mapFun, $dataModel, array_keys($dataModel));
         $output    = implode(',', $outputArr);
 

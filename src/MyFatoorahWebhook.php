@@ -131,37 +131,47 @@ class MyFatoorahWebhook extends MyFatoorah
         $dataModels = [
             //https://docs.myfatoorah.com/docs/webhook-v2-payment-status-data-model
             //Invoice.Id=6409988,Invoice.Status=PAID,Transaction.Status=SUCCESS,Transaction.PaymentId=07076409988323998875,Invoice.ExternalIdentifier=asdqwd-f13sdf-fasjkz
-            1 => fn() => [
-        'Invoice.Id'                 => $data['Invoice']['Id'],
-        'Invoice.Status'             => $data['Invoice']['Status'],
-        'Transaction.Status'         => $data['Transaction']['Status'],
-        'Transaction.PaymentId'      => $data['Transaction']['PaymentId'],
-        'Invoice.ExternalIdentifier' => $data['Invoice']['ExternalIdentifier'],
-            ],
+            1 => function () use ($data) {
+                return [
+                    'Invoice.Id'                 => $data['Invoice']['Id'],
+                    'Invoice.Status'             => $data['Invoice']['Status'],
+                    'Transaction.Status'         => $data['Transaction']['Status'],
+                    'Transaction.PaymentId'      => $data['Transaction']['PaymentId'],
+                    'Invoice.ExternalIdentifier' => $data['Invoice']['ExternalIdentifier'],
+                ];
+            },
             //https://docs.myfatoorah.com/docs/webhook-v2-refund-data-model
-            2 => fn() => [
-        'Refund.Id'                  => $data['Refund']['Id'],
-        'Refund.Status'              => $data['Refund']['Status'],
-        'Amount.ValueInBaseCurrency' => $data['Amount']['ValueInBaseCurrency'],
-        'ReferencedInvoice.Id'       => $data['ReferencedInvoice']['Id'],
-            ],
+            2 => function () use ($data) {
+                return [
+                    'Refund.Id'                  => $data['Refund']['Id'],
+                    'Refund.Status'              => $data['Refund']['Status'],
+                    'Amount.ValueInBaseCurrency' => $data['Amount']['ValueInBaseCurrency'],
+                    'ReferencedInvoice.Id'       => $data['ReferencedInvoice']['Id'],
+                ];
+            },
             //https://docs.myfatoorah.com/docs/webhook-v2-balance-transferred-data-model
-            3 => fn() => [
-        'Deposit.Reference'            => $data['Deposit']['Reference'],
-        'Deposit.ValueInBaseCurrency'  => $data['Deposit']['ValueInBaseCurrency'],
-        'Deposit.NumberOfTransactions' => $data['Deposit']['NumberOfTransactions'],
-            ],
+            3 => function () use ($data) {
+                return [
+                    'Deposit.Reference'            => $data['Deposit']['Reference'],
+                    'Deposit.ValueInBaseCurrency'  => $data['Deposit']['ValueInBaseCurrency'],
+                    'Deposit.NumberOfTransactions' => $data['Deposit']['NumberOfTransactions'],
+                ];
+            },
             //https://docs.myfatoorah.com/docs/webhook-v2-supplier-data-model
-            4 => fn() => [
-        'Supplier.Code'      => $data['Supplier']['Code'],
-        'KycDecision.Status' => $data['KycDecision']['Status'],
-            ],
+            4 => function () use ($data) {
+                return [
+                    'Supplier.Code'      => $data['Supplier']['Code'],
+                    'KycDecision.Status' => $data['KycDecision']['Status'],
+                ];
+            },
             //https://docs.myfatoorah.com/docs/webhook-v2-recurring-data-model
-            5 => fn() => [
-        'Recurring.Id'               => $data['Recurring']['Id'],
-        'Recurring.Status'           => $data['Recurring']['Status'],
-        'Recurring.InitialInvoiceId' => $data['Recurring']['InitialInvoiceId'],
-            ]
+            5 => function () use ($data) {
+                return [
+                    'Recurring.Id'               => $data['Recurring']['Id'],
+                    'Recurring.Status'           => $data['Recurring']['Status'],
+                    'Recurring.InitialInvoiceId' => $data['Recurring']['InitialInvoiceId'],
+                ];
+            }
         ];
 
         if (!isset($dataModels[$code])) {
