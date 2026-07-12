@@ -41,7 +41,7 @@ class MyFatoorahSessions extends MyFatoorah
      */
     public function getSessionDetails($sessionId)
     {
-        $json = $this->callAPI($this->apiURL . '/v3/sessions/' . $sessionId, null, $sessionId, 'getSessionDetails');
+        $json = $this->callAPI($this->apiURL . '/v3/sessions/' . $sessionId, null, $sessionId, 'GetSessionDetails');
         return $json->Data;
     }
 
