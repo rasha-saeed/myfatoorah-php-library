@@ -22,7 +22,7 @@ class MyFatoorahList extends MyFatoorah
      * @param string $currency The currency that will be converted into the currency of MyFatoorah portal account.
      * @param array  $allRates An array of MyFatoorah currencies and rates
      *
-     * @return double
+     * @return float
      *
      * @throws Exception        Throw exception if the input currency is not support by MyFatoorah portal account.
      */
@@ -31,7 +31,7 @@ class MyFatoorahList extends MyFatoorah
 
         foreach ($allRates as $value) {
             if ($value->Text == $currency) {
-                return (double) $value->Value;
+                return (float) $value->Value;
             }
         }
         throw new Exception('The selected currency is not supported by MyFatoorah');
@@ -44,7 +44,7 @@ class MyFatoorahList extends MyFatoorah
      *
      * @param string $currency The currency that will be converted into the currency of MyFatoorah portal account.
      *
-     * @return double
+     * @return float
      */
     public function getCurrencyRate($currency)
     {

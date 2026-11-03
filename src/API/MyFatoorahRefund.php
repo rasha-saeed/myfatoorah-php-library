@@ -21,12 +21,12 @@ class MyFatoorahRefund extends MyFatoorah
      *
      * @deprecated
      *
-     * @param int|string        $keyId    payment id that will be refunded
-     * @param double|int|string $amount   the refund amount
-     * @param string            $currency the amount currency
-     * @param string            $comment  reason of the refund
-     * @param int|string        $orderId  used in log file (default value: null)
-     * @param string            $keyType  supported keys are (InvoiceId, PaymentId)
+     * @param int|string       $keyId    payment id that will be refunded
+     * @param float|int|string $amount   the refund amount
+     * @param string           $currency the amount currency
+     * @param string           $comment  reason of the refund
+     * @param int|string       $orderId  used in log file (default value: null)
+     * @param string           $keyType  supported keys are (InvoiceId, PaymentId)
      *
      * @return object
      */
