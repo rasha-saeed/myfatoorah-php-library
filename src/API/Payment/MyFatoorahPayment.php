@@ -28,9 +28,9 @@ class MyFatoorahPayment extends MyFatoorah
     /**
      * List available Payment Methods (POST API)
      *
-     * @param double|int $invoiceAmount The display invoice total amount.
-     * @param string     $currencyIso   The display invoice currency ISO.
-     * @param boolean    $isCached      It used to cache the gateways.
+     * @param float|int $invoiceAmount The display invoice total amount.
+     * @param string    $currencyIso   The display invoice currency ISO.
+     * @param boolean   $isCached      It used to cache the gateways.
      *
      * @return array
      */
@@ -137,10 +137,10 @@ class MyFatoorahPayment extends MyFatoorah
     /**
      * Get Payment Method Object
      *
-     * @param string     $gateway       MyFatoorah gateway object.
-     * @param string     $searchKey     The Search key ['PaymentMethodId', 'PaymentMethodCode'].
-     * @param double|int $invoiceAmount The display invoice total amount.
-     * @param string     $currencyIso   The display invoice currency ISO.
+     * @param string    $gateway       MyFatoorah gateway object.
+     * @param string    $searchKey     The Search key ['PaymentMethodId', 'PaymentMethodCode'].
+     * @param float|int $invoiceAmount The display invoice total amount.
+     * @param string    $currencyIso   The display invoice currency ISO.
      *
      * @return object
      *

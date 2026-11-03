@@ -210,7 +210,7 @@ class MyFatoorah extends MyFatoorahHelper
         $res = curl_exec($curl);
         $err = curl_error($curl);
 
-        curl_close($curl);
+        $curl = null; //release the handle; curl_close() is a no-op since PHP 8.0 and deprecated since 8.5
 
         //Check for cURL errors
         if ($err) {

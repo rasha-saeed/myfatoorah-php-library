@@ -27,9 +27,9 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
     /**
      * List available Payment Methods
      *
-     * @param double|int $invoiceAmount  The display invoice total amount.
-     * @param string     $currencyIso    The display invoice currency ISO.
-     * @param bool       $isApRegistered Is site domain is registered with ApplePay and MyFatoorah or not.
+     * @param float|int $invoiceAmount  The display invoice total amount.
+     * @param string    $currencyIso    The display invoice currency ISO.
+     * @param bool      $isApRegistered Is site domain is registered with ApplePay and MyFatoorah or not.
      *
      * @return array
      */
@@ -75,9 +75,9 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
      *
      * @param object $paymentMethod The payment method object obtained from the initiate payment endpoint
      * @param array  $allRates      The MyFatoorah currency rate array of all gateways.
-     * @param double $currencyRate  The currency rate of the invoice.
+     * @param float  $currencyRate  The currency rate of the invoice.
      *
-     * @return double
+     * @return float
      */
     private function getPaymentTotalAmount($paymentMethod, $allRates, $currencyRate)
     {

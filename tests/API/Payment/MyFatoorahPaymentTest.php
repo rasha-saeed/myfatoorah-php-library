@@ -9,9 +9,8 @@ class MyFatoorahPaymentTest extends \PHPUnit\Framework\TestCase
     private $keys;
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function __construct()
+    protected function setUp(): void
     {
-        parent::__construct();
         $this->keys = include __DIR__ . '/../../apiKeys.php';
     }
 

@@ -47,7 +47,7 @@ try {
     $mfHttpCode = curl_getinfo($mfCurl, CURLINFO_HTTP_CODE);
     $mfCurlErr  = curl_error($mfCurl);
 
-    curl_close($mfCurl);
+    $mfCurl = null;
 
     if ($mfCurlErr) {
         trigger_error('MyFatoorah Library: cURL Error: ' . $mfCurlErr, E_USER_WARNING);

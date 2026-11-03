@@ -91,7 +91,7 @@ class MyFatoorahHelper
     protected static function convertArabicDigitstoEnglish($inputString)
     {
 
-        $newNumbers = range(0, 9);
+        $newNumbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
         $persianDecimal = ['&#1776;', '&#1777;', '&#1778;', '&#1779;', '&#1780;', '&#1781;', '&#1782;', '&#1783;', '&#1784;', '&#1785;']; // 1. Persian HTML decimal
         $arabicDecimal  = ['&#1632;', '&#1633;', '&#1634;', '&#1635;', '&#1636;', '&#1637;', '&#1638;', '&#1639;', '&#1640;', '&#1641;']; // 2. Arabic HTML decimal
@@ -113,7 +113,7 @@ class MyFatoorahHelper
      *
      * @param string $unit It is the weight unit used.
      *
-     * @return double|int The conversion rate that will convert the given unit into the kg.
+     * @return float|int The conversion rate that will convert the given unit into the kg.
      *
      * @throws Exception Throw exception if the input unit is not support.
      */
@@ -132,7 +132,7 @@ class MyFatoorahHelper
 
         foreach ($rateUnits as $rate => $unitArr) {
             if (array_search($lUnit, $unitArr) !== false) {
-                return (double) $rate;
+                return (float) $rate;
             }
         }
         throw new Exception('Weight units must be in kg, g, lbs, or oz. Default is kg');
@@ -146,7 +146,7 @@ class MyFatoorahHelper
      *
      * @param string $unit It is the dimension unit used in width, hight, or depth.
      *
-     * @return double|int   The conversion rate that will convert the given unit into the cm.
+     * @return float|int   The conversion rate that will convert the given unit into the cm.
      *
      * @throws Exception        Throw exception if the input unit is not support.
      */
@@ -166,7 +166,7 @@ class MyFatoorahHelper
 
         foreach ($rateUnits as $rate => $unitArr) {
             if (array_search($lUnit, $unitArr) !== false) {
-                return (double) $rate;
+                return (float) $rate;
             }
         }
         throw new Exception('Dimension units must be in cm, m, mm, in, or yd. Default is cm');
@@ -272,7 +272,7 @@ class MyFatoorahHelper
 
         $response  = curl_exec($curl);
         $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        curl_close($curl);
+        $curl = null;
 
         if ($http_code == 200 && is_string($response)) {
             $responseText = trim($response, '﻿'); //remove the hidden character between the single quotes
@@ -301,7 +301,7 @@ class MyFatoorahHelper
     public static function filterInputField($name, $type = 'GET')
     {
         if (isset($GLOBALS["_$type"][$name])) {
-            return htmlspecialchars($GLOBALS["_$type"][$name]);
+            return htmlspecialchars($GLOBALS["_$type"][$name], ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
         }
         return null;
     }
