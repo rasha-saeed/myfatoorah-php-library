@@ -8,7 +8,7 @@ use MyFatoorah\Library\API\MyFatoorahShipping;
 class MyFatoorahShippingTest extends MyFatoorahTestCase
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testGetShippingCountries()
+    public function testGetShippingCountries(): void
     {
         foreach ($this->keys as $config) {
             try {
@@ -24,7 +24,7 @@ class MyFatoorahShippingTest extends MyFatoorahTestCase
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testGetShippingCities()
+    public function testGetShippingCities(): void
     {
         foreach ($this->keys as $config) {
             try {
@@ -40,7 +40,7 @@ class MyFatoorahShippingTest extends MyFatoorahTestCase
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testCalculateShippingCharge()
+    public function testCalculateShippingCharge(): void
     {
         $mfObj = new MyFatoorahShipping($this->keys['valid']);
 
@@ -68,7 +68,7 @@ class MyFatoorahShippingTest extends MyFatoorahTestCase
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testCalculateShippingChargeExceptionEmptyProductName()
+    public function testCalculateShippingChargeExceptionEmptyProductName(): void
     {
         $mfObj = new MyFatoorahShipping($this->keys['valid']);
 

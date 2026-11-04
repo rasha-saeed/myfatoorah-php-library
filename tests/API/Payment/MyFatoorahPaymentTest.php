@@ -8,7 +8,7 @@ use MyFatoorah\Library\API\Payment\MyFatoorahPayment;
 class MyFatoorahPaymentTest extends MyFatoorahTestCase
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testInitiatePayment()
+    public function testInitiatePayment(): void
     {
         foreach ($this->keys as $config) {
             try {
@@ -23,7 +23,7 @@ class MyFatoorahPaymentTest extends MyFatoorahTestCase
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testSendPayment()
+    public function testSendPayment(): void
     {
         foreach ($this->keys as $config) {
             try {

@@ -8,7 +8,7 @@ use MyFatoorah\Library\API\MyFatoorahSupplier;
 class MyFatoorahSupplierTest extends MyFatoorahTestCase
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testGetSupplierDashboard()
+    public function testGetSupplierDashboard(): void
     {
         foreach ($this->keys as $config) {
             try {
@@ -24,7 +24,7 @@ class MyFatoorahSupplierTest extends MyFatoorahTestCase
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testIsSupplierApproved()
+    public function testIsSupplierApproved(): void
     {
         foreach ($this->keys as $config) {
             try {
@@ -40,7 +40,7 @@ class MyFatoorahSupplierTest extends MyFatoorahTestCase
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testIsSupplierApprovedNotCreated()
+    public function testIsSupplierApprovedNotCreated(): void
     {
         foreach ($this->keys as $config) {
             try {

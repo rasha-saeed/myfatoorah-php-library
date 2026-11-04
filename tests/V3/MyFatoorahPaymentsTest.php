@@ -8,7 +8,7 @@ use MyFatoorah\Library\V3\MyFatoorahPayments;
 class MyFatoorahPaymentsTest extends MyFatoorahTestCase
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testCreatePayment()
+    public function testCreatePayment(): void
     {
         $curlData = [
             'SessionId' => 'test-session-id-001',
@@ -33,7 +33,7 @@ class MyFatoorahPaymentsTest extends MyFatoorahTestCase
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testGetPaymentDetails()
+    public function testGetPaymentDetails(): void
     {
         $paymentId = '07076945628364902373';
 

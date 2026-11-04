@@ -8,7 +8,7 @@ use MyFatoorah\Library\API\Payment\MyFatoorahPaymentEmbedded;
 class MyFatoorahPaymentEmbeddedTest extends MyFatoorahTestCase
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testGetCheckoutGateways()
+    public function testGetCheckoutGateways(): void
     {
         foreach ($this->keys as $config) {
             try {

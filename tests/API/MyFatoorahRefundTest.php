@@ -8,7 +8,7 @@ use MyFatoorah\Library\API\MyFatoorahRefund;
 class MyFatoorahRefundTest extends MyFatoorahTestCase
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testRefund()
+    public function testRefund(): void
     {
         try {
             $mfObj = new MyFatoorahRefund($this->keys['valid']);
@@ -30,7 +30,7 @@ class MyFatoorahRefundTest extends MyFatoorahTestCase
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testMakeRefund()
+    public function testMakeRefund(): void
     {
         $postFields = [
             'Key'                     => 100202312116138082,

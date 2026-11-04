@@ -10,6 +10,7 @@ use Exception;
 class MyFatoorahWebhook extends MyFatoorah
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------
+
     /**
      * Validates an incoming MyFatoorah webhook request and returns its payload
      *
@@ -225,6 +226,7 @@ class MyFatoorahWebhook extends MyFatoorah
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
+
     /**
      * Maps a webhook transaction status onto the matching MyFatoorah invoice status
      *

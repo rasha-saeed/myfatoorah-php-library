@@ -8,7 +8,7 @@ use MyFatoorah\Library\V3\MyFatoorahSessions;
 class MyFatoorahSessionsTest extends MyFatoorahTestCase
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testCreateAndGetSessionDetails()
+    public function testCreateAndGetSessionDetails(): void
     {
         $curlData = [
             'Order' => [
