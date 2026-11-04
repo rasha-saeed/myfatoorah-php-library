@@ -4,13 +4,6 @@ namespace MyFatoorah\Library\API\Payment;
 
 use MyFatoorah\Library\API\MyFatoorahList;
 
-/**
- *  MyFatoorahPaymentForm handles the form process of MyFatoorah API endpoints
- *
- * @author    MyFatoorah <tech@myfatoorah.com>
- * @copyright MyFatoorah, All rights reserved
- * @license   GNU General Public License v3.0
- */
 class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------

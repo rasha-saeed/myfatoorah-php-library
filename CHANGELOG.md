@@ -4,8 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ------------------------------
-## [2.2.11] - 2026-11-03
+## [2.2.11] - 2026-11-04
 ### Changed
+- Relicense from GPL-3.0-only to the MIT License. The library exists so that any PHP developer can call the MyFatoorah API, take the code, change it and ship it inside their own product; MIT says exactly that, and its one condition - keeping the copyright notice - is what marks this as the official MyFatoorah library. The notice lives in `autoload.php`, which the self-update never rewrites and which keeps its comments, unlike the copy downloaded from the portal.
+- Stop the self-update in a working copy with a `.mf-env` file holding the word `development` instead of an unreachable `return;`. Anyone who wants the auto-update off can create that file; with no such file - the normal case - the update runs as before, at the cost of one `stat()`.
+- Shorten the file header of `autoload.php` and drop the class docblocks from `src/`: they restated the class name, and two of them named the wrong class.
 - Update the docblocks from `double` to `float` to match the casts.
 - Upgrade the development toolchain (PHPUnit 13, PHPStan 2, PHP_CodeSniffer 4, PHPCompatibility 10, phan 6) and move the test suites from `__construct()` to `setUp()`.
 - Run the quality checks through composer scripts (`composer check`), kept in sync with the `cmd` script.
@@ -16,17 +19,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Fixed
 - Make the library safe on PHP 8.5: every `curl_close()` call (deprecated since 8.5, without effect since 8.0) now releases the handle instead, and the non-canonical `(double)` cast is replaced by `(float)`.
+- Replace the `curl_close()` call left in the loader that ships with the manual install. It is deprecated since PHP 8.5, so a merchant who installed the library by hand saw a warning that a Composer install did not.
 - Build the digit list in `convertArabicDigitstoEnglish()` from an explicit string array instead of `range(0, 9)`, whose return type is not stable across PHP versions.
 
 ### Security
 - Pass explicit flags to `htmlspecialchars()` in `MyFatoorahHelper::filterInputField()`. The default flags changed in PHP 8.1, so on PHP 8.0 and older single quotes were left unescaped and a filtered value could break out of a single-quoted HTML attribute.
 
 ------------------------------
-## [2.1.5] - 2026-11-03
+## [2.1.5] - 2026-11-04
 ### Added
 - Add `executePayment()`, correctly spelled.
 
 ### Changed
+- Relicense from GPL-3.0-only to the MIT License. The library exists so that any PHP developer can call the MyFatoorah API, take the code, change it and ship it inside their own product; MIT says exactly that, and its one condition - keeping the copyright notice - is what marks this as the official MyFatoorah library. The notice lives in `autoload.php`, which the self-update never rewrites and which keeps its comments, unlike the copy downloaded from the portal.
+- Stop the self-update in a working copy with a `.mf-env` file holding the word `development` instead of an unreachable `return;`. Anyone who wants the auto-update off can create that file; with no such file - the normal case - the update runs as before, at the cost of one `stat()`.
+- Bring `autoload.php` in line with the 2.2 branch: a connect timeout of 3 seconds and a transfer timeout of 6, where this branch had none and a slow portal could hold up a page; an explicit return after a cURL error; a warning when the update server answers with anything other than a readable 200, which used to pass in silence; and every message tagged `MyFatoorah Library:`.
+- Shorten the file header of `autoload.php` and drop the class docblocks from `src/`: they restated the class name, and two of them named the wrong class.
 - Update the docblocks from `double` to `float`.
 - Upgrade the development toolchain (PHPUnit 13, PHPStan 2, PHP_CodeSniffer 4, PHPCompatibility 10) and move the test suites from `__construct()` to `setUp()`.
 - Run the quality checks through composer scripts (`composer check`).
@@ -41,6 +49,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Fixed
 - Make the library safe on PHP 8.5: every `curl_close()` call (deprecated since 8.5, without effect since 8.0) now releases the handle instead, and the non-canonical `(double)` cast is replaced by `(float)`.
+- Replace the `curl_close()` call left in the loader that ships with the manual install. It is deprecated since PHP 8.5, so a merchant who installed the library by hand saw a warning that a Composer install did not.
 - Build the digit list in `getPhone()` from an explicit string array instead of `range(0, 9)`, whose return type is not stable across PHP versions.
 - Correct the `Excute Payment` label written to the log file; it now reads `Execute Payment`, matching the 2.2 branch.
 

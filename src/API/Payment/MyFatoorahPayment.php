@@ -5,13 +5,6 @@ namespace MyFatoorah\Library\API\Payment;
 use MyFatoorah\Library\MyFatoorah;
 use Exception;
 
-/**
- *  MyFatoorahPayment handles the payment process of MyFatoorah API endpoints
- *
- * @author    MyFatoorah <tech@myfatoorah.com>
- * @copyright MyFatoorah, All rights reserved
- * @license   GNU General Public License v3.0
- */
 class MyFatoorahPayment extends MyFatoorah
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------
