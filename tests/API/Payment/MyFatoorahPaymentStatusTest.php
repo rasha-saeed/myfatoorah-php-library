@@ -8,7 +8,7 @@ use MyFatoorah\Library\API\Payment\MyFatoorahPaymentStatus;
 class MyFatoorahPaymentStatusTest extends MyFatoorahTestCase
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testGetPaymentStatus()
+    public function testGetPaymentStatus(): void
     {
         foreach ($this->keys as $config) {
             try {

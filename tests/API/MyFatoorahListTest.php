@@ -8,7 +8,7 @@ use MyFatoorah\Library\API\MyFatoorahList;
 class MyFatoorahListTest extends MyFatoorahTestCase
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------
-    public function testGetCurrencyRates()
+    public function testGetCurrencyRates(): void
     {
         foreach ($this->keys as $config) {
             try {

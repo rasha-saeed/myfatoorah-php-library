@@ -270,8 +270,9 @@ class MyFatoorahHelper
         ];
         curl_setopt_array($curl, $option);
 
-        $response  = curl_exec($curl);
-        $httpCode  = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
         $curl = null;
 
         if ($httpCode == 200 && is_string($response)) {
