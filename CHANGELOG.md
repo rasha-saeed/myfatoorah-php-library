@@ -22,6 +22,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ------------------------------
 ## [2.1.5] - 2026-11-03
+### Added
+- Add `executePayment()`, correctly spelled.
+
 ### Changed
 - Update the docblocks from `double` to `float`.
 - Upgrade the development toolchain (PHPUnit 13, PHPStan 2, PHP_CodeSniffer 4, PHPCompatibility 10) and move the test suites from `__construct()` to `setUp()`.
@@ -32,9 +35,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Correct the wording of the `Phone Number lenght` exception thrown by `getPhone()`; it now reads `length`, matching the 2.2 branch.
 - Supported PHP versions are unchanged: the library still installs on PHP 7.0 and up.
 
+### Deprecated
+- `excutePayment()` is kept as a wrapper that forwards to `executePayment()`, so existing callers are unaffected. A subclass that **overrides** `excutePayment()` is no longer reached and should override `executePayment()` instead.
+
 ### Fixed
 - Make the library safe on PHP 8.5: every `curl_close()` call (deprecated since 8.5, without effect since 8.0) now releases the handle instead, and the non-canonical `(double)` cast is replaced by `(float)`.
 - Build the digit list in `getPhone()` from an explicit string array instead of `range(0, 9)`, whose return type is not stable across PHP versions.
+- Correct the `Excute Payment` label written to the log file; it now reads `Execute Payment`, matching the 2.2 branch.
 
 ------------------------------
 ## [2.2.10] - 2026-07-12
