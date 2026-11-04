@@ -20,7 +20,19 @@
  */
 
 $mfVersion = '2.2';
-return;
+
+/*
+ * The self-update routine below rewrites src/ from the copy on the portal.
+ * A checkout where the library is being worked on must not let that happen,
+ * so it carries a .mf-env file holding the word "development". Production
+ * has no such file and the routine runs as usual.
+ */
+$mfEnvFile = __DIR__ . '/.mf-env';
+$mfEnv     = is_file($mfEnvFile) && is_readable($mfEnvFile) ? file_get_contents($mfEnvFile) : '';
+if (trim((string) $mfEnv) === 'development') {
+    return;
+}
+
 if (!in_array('curl', get_loaded_extensions())) {
     trigger_error('MyFatoorah Library: Kindly install and enable PHP cURL extension in your server.', E_USER_WARNING);
     return;
