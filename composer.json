@@ -28,14 +28,12 @@
             "phpstan analyse tests/ --level 5"
         ],
         "phpcs": [
-            "phpcs --standard=PSR12 autoload.php --exclude=Generic.Files.LineLength,PSR1.Files.SideEffects",
-            "phpcs --standard=PSR12 src/ --exclude=Generic.Files.LineLength",
-            "phpcs --standard=PSR12 src/ --warning-severity=0 --error-severity=10 --exclude=Generic.Files.LineLength",
-            "phpcs --standard=PSR12 tests/ --exclude=Generic.Files.LineLength",
+            "phpcs",
             "phpcs -p --standard=PHPCompatibility autoload.php --runtime-set testVersion 7.0-",
             "phpcs -p --standard=PHPCompatibility src/ --runtime-set testVersion 7.0-",
             "phpcs -p --standard=PHPCompatibility tests/ --runtime-set testVersion 8.4-"
         ],
+        "psr4": "@composer dump-autoload --optimize --strict-psr --dry-run",
         "phpcbf": [
             "phpcbf --standard=PSR12 autoload.php --exclude=Generic.Files.LineLength,PSR1.Files.SideEffects",
             "phpcbf --standard=PSR12 src/ --exclude=Generic.Files.LineLength",
@@ -45,7 +43,8 @@
             "@phpunit",
             "@phan",
             "@phpstan",
-            "@phpcs"
+            "@phpcs",
+            "@psr4"
         ]
     },
     "autoload": {
