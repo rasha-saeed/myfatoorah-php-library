@@ -19,7 +19,7 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
      * Get the Payment Transaction Status (POST API)
      *
      * @param int|string $keyId    MyFatoorah InvoiceId, PaymentId, or CustomerReference value.
-     * @param string     $KeyType  The supported key types are "InvoiceId", "PaymentId", or "CustomerReference".
+     * @param string     $keyType  The supported key types are "InvoiceId", "PaymentId", or "CustomerReference".
      * @param int|string $orderId  The order id in the store used to match the invoice data with store order.
      * @param string     $price    The order price in the store used to match the invoice data with store order.
      * @param string     $currency The order currency in the store used to match the invoice data with store order.
@@ -28,11 +28,11 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
      *
      * @throws Exception
      */
-    public function getPaymentStatus($keyId, $KeyType, $orderId = null, $price = null, $currency = null)
+    public function getPaymentStatus($keyId, $keyType, $orderId = null, $price = null, $currency = null)
     {
 
         //payment inquiry
-        $curlData = ['Key' => $keyId, 'KeyType' => $KeyType];
+        $curlData = ['Key' => $keyId, 'KeyType' => $keyType];
         $json     = $this->callAPI("$this->apiURL/v2/GetPaymentStatus", $curlData, $orderId, 'Get Payment Status');
 
         $data = $json->Data;
@@ -51,7 +51,7 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
             $data = self::getSuccessData($data);
             $this->log("$msgLog - Status is Paid");
         } elseif ($data->InvoiceStatus != 'Paid') {
-            $data = $this->getErrorData($data, $keyId, $KeyType);
+            $data = $this->getErrorData($data, $keyId, $keyType);
             $this->log("$msgLog - Status is " . $data->InvoiceStatus . '. Error is ' . $data->InvoiceError);
         }
 
@@ -120,16 +120,16 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
      *
      * @param object     $data    The payment data object
      * @param int|string $keyId   MyFatoorah InvoiceId, PaymentId, or CustomerReference value.
-     * @param string     $KeyType The supported key types are "InvoiceId", "PaymentId", or "CustomerReference".
+     * @param string     $keyType The supported key types are "InvoiceId", "PaymentId", or "CustomerReference".
      *
      * @return object
      */
-    private function getErrorData($data, $keyId, $KeyType)
+    private function getErrorData($data, $keyId, $keyType)
     {
 
         //------------------
         //case 1: payment is Failed
-        $focusTransaction = self::{"getLastTransactionOf$KeyType"}($data->InvoiceTransactions, $keyId);
+        $focusTransaction = self::{"getLastTransactionOf$keyType"}($data->InvoiceTransactions, $keyId);
         if ($focusTransaction && $focusTransaction->TransactionStatus == 'Failed') {
             $data->InvoiceStatus = 'Failed';
             $data->InvoiceError  = $focusTransaction->Error . '.';
@@ -144,11 +144,11 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
         //all myfatoorah gateway is set to Asia/Kuwait
         $timeZone = $this->getVendorTimeZone();
 
-        $ExpiryDateTime = $data->ExpiryDate . ' ' . $data->ExpiryTime;
-        $ExpiryDate     = new \DateTime($ExpiryDateTime, new \DateTimeZone($timeZone));
+        $expiryDateTime = $data->ExpiryDate . ' ' . $data->ExpiryTime;
+        $expiryDate     = new \DateTime($expiryDateTime, new \DateTimeZone($timeZone));
         $currentDate    = new \DateTime('now', new \DateTimeZone($timeZone));
 
-        if ($ExpiryDate < $currentDate) {
+        if ($expiryDate < $currentDate) {
             $data->InvoiceStatus = 'Expired';
             $data->InvoiceError  = 'Invoice is expired since ' . $data->ExpiryDate . '.';
 
