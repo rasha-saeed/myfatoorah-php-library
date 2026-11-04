@@ -3,9 +3,7 @@
     "description": "MyFatoorah PHP Library",
     "version": "2.2.11",
     "type": "library",
-    "license": [
-        "GPL-3.0-only"
-    ],
+    "license": "MIT",
     "require": {
         "php": ">=7",
         "ext-curl": "*",
@@ -75,7 +73,7 @@
     "authors": [
         {
             "name": "MyFatoorah Plugin Team",
-            "email": "plugins@myfatoorah.com"
+            "email": "tech@myfatoorah.com"
         },
         {
             "name": "Nermeen Shoman",

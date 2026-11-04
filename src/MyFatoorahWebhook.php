@@ -4,9 +4,6 @@ namespace MyFatoorah\Library;
 
 use Exception;
 
-/**
- *  MyFatoorahWebhook handles Webhook endpoints.
- */
 class MyFatoorahWebhook extends MyFatoorah
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------

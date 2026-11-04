@@ -4,13 +4,6 @@ namespace MyFatoorah\Library\API;
 
 use MyFatoorah\Library\MyFatoorah;
 
-/**
- *  MyFatoorahRefund handles the refund process of MyFatoorah API endpoints
- *
- * @author    MyFatoorah <tech@myfatoorah.com>
- * @copyright MyFatoorah, All rights reserved
- * @license   GNU General Public License v3.0
- */
 class MyFatoorahRefund extends MyFatoorah
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------

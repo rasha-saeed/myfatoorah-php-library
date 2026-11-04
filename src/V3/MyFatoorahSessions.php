@@ -4,13 +4,6 @@ namespace MyFatoorah\Library\V3;
 
 use MyFatoorah\Library\MyFatoorah;
 
-/**
- * Handles v3 session APIs.
- *
- * @author    MyFatoorah <tech@myfatoorah.com>
- * @copyright MyFatoorah, All rights reserved
- * @license   GNU General Public License v3.0
- */
 class MyFatoorahSessions extends MyFatoorah
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------

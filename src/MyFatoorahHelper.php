@@ -4,9 +4,6 @@ namespace MyFatoorah\Library;
 
 use Exception;
 
-/**
- * Trait MyFatoorah is responsible for helping calling MyFatoorah API endpoints.
- */
 class MyFatoorahHelper
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------

@@ -5,24 +5,27 @@ namespace MyFatoorah\Library;
 use Exception;
 
 /**
- * MyFatoorah is responsible for handling calling MyFatoorah API endpoints.
- * Also, It has necessary library functions that help in providing the correct parameters used endpoints.
+ * The class the rest of the library is built on: MyFatoorahList, MyFatoorahRefund,
+ * MyFatoorahShipping, MyFatoorahSupplier, MyFatoorahPayment, MyFatoorahWebhook,
+ * MyFatoorahPayments and MyFatoorahSessions all extend it.
  *
- * MyFatoorah offers a seamless business experience by offering a technology put together by our tech team.
- * It enables smooth business operations involving sales activity, product invoicing, shipping, and payment processing.
- * MyFatoorah invoicing and payment gateway solution trigger your business to greater success at all levels in the new age world of commerce. Leverage your sales and payments at all e-commerce platforms (ERPs, CRMs, CMSs) with transparent and slick applications that are well-integrated into social media and telecom services. For every closing sale click, you make a business function gets done for you, along with generating factual reports and statistics to fine-tune your business plan with no-barrier low-cost. Our technology experts have designed the best GCC E-commerce solutions for the native financial instruments (Debit Cards, Credit Cards, etc.) supporting online sales and payments, for events, shopping, mall, and associated services.
+ * It holds callAPI(), through which every request to a MyFatoorah endpoint goes:
+ * it sends the request, logs it, reads the response and turns an API error into
+ * an exception. Everything above it only builds the request and reads Data back.
  *
- * Created by MyFatoorah http://www.myfatoorah.com/
- * Developed By tech@myfatoorah.com
- * Date: 31/03/2024
- * Time: 12:00
+ * The notice below is the second of two. The daily update rewrites this file from a
+ * copy with its comments stripped, so it does not survive an update - but a copy
+ * modified far enough to be worth keeping has the update turned off, and then this is
+ * where the notice stays. The other is at the top of autoload.php, which the update
+ * never rewrites. Keeping either one satisfies the licence.
  *
- * API Documentation on https://myfatoorah.readme.io/docs
- * Library Documentation and Download link on https://myfatoorah.readme.io/docs/php-library
+ * API documentation     https://myfatoorah.readme.io/docs
+ * Library documentation https://myfatoorah.readme.io/docs/php-library
  *
- * @author    MyFatoorah <tech@myfatoorah.com>
- * @copyright MyFatoorah, All rights reserved
- * @license   GNU General Public License v3.0
+ * @author    MyFatoorah Plugin Team <tech@myfatoorah.com>
+ * @author    Rasha Saeed <rsaeed@myfatoorah.com>
+ * @copyright Copyright (c) 2026 MyFatoorah
+ * @license   MIT https://opensource.org/licenses/MIT
  */
 class MyFatoorah extends MyFatoorahHelper
 {

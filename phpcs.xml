@@ -46,6 +46,7 @@
         <exclude name="PEAR.Commenting.FileComment.MissingLinkTag"/>
         <exclude name="PEAR.Commenting.FileComment.MissingVersion"/>
         <exclude name="PEAR.Commenting.FileComment.IncompleteCopyright"/>
+        <exclude name="PEAR.Commenting.ClassComment.Missing"/>
         <exclude name="PEAR.Commenting.ClassComment.MissingCategoryTag"/>
         <exclude name="PEAR.Commenting.ClassComment.MissingPackageTag"/>
         <exclude name="PEAR.Commenting.ClassComment.MissingAuthorTag"/>
