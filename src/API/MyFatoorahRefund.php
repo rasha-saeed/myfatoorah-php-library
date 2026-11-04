@@ -19,8 +19,6 @@ class MyFatoorahRefund extends MyFatoorah
      * (deprecated function) use makeRefund instead
      * Refund a given PaymentId or InvoiceId
      *
-     * @deprecated
-     *
      * @param int|string       $keyId    payment id that will be refunded
      * @param float|int|string $amount   the refund amount
      * @param string           $currency the amount currency
@@ -29,6 +27,8 @@ class MyFatoorahRefund extends MyFatoorah
      * @param string           $keyType  supported keys are (InvoiceId, PaymentId)
      *
      * @return object
+     *
+     * @deprecated
      */
     public function refund($keyId, $amount, $currency = null, $comment = null, $orderId = null, $keyType = 'PaymentId')
     {

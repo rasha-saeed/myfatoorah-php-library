@@ -2,19 +2,11 @@
 
 namespace MyFatoorah\Test\API;
 
-use PHPUnit\Framework\TestCase;
+use MyFatoorah\Test\MyFatoorahTestCase;
 use MyFatoorah\Library\API\MyFatoorahRefund;
 
-class MyFatoorahRefundTest extends TestCase
+class MyFatoorahRefundTest extends MyFatoorahTestCase
 {
-    private $keys;
-
-    //-----------------------------------------------------------------------------------------------------------------------------------------
-    protected function setUp(): void
-    {
-        $this->keys = include __DIR__ . '/../apiKeys.php';
-    }
-
     //-----------------------------------------------------------------------------------------------------------------------------------------
     public function testRefund()
     {

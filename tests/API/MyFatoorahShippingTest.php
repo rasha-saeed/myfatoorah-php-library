@@ -2,18 +2,11 @@
 
 namespace MyFatoorah\Test\API;
 
+use MyFatoorah\Test\MyFatoorahTestCase;
 use MyFatoorah\Library\API\MyFatoorahShipping;
 
-class MyFatoorahShippingTest extends \PHPUnit\Framework\TestCase
+class MyFatoorahShippingTest extends MyFatoorahTestCase
 {
-    private $keys;
-
-    //-----------------------------------------------------------------------------------------------------------------------------------------
-    protected function setUp(): void
-    {
-        $this->keys = include __DIR__ . '/../apiKeys.php';
-    }
-
     //-----------------------------------------------------------------------------------------------------------------------------------------
     public function testGetShippingCountries()
     {
@@ -35,7 +28,7 @@ class MyFatoorahShippingTest extends \PHPUnit\Framework\TestCase
     {
         foreach ($this->keys as $config) {
             try {
-                $mfObj  = new MyfatoorahShipping($config);
+                $mfObj  = new MyFatoorahShipping($config);
                 $cities = $mfObj->getShippingCities(1, 'KW', 'ada');
 
                 $this->assertEquals('ADAN', $cities[0]);
@@ -49,7 +42,7 @@ class MyFatoorahShippingTest extends \PHPUnit\Framework\TestCase
     //-----------------------------------------------------------------------------------------------------------------------------------------
     public function testCalculateShippingCharge()
     {
-        $mfObj = new MyfatoorahShipping($this->keys['valid']);
+        $mfObj = new MyFatoorahShipping($this->keys['valid']);
 
         $shippingData = [
             'ShippingMethod' => 1,
@@ -77,7 +70,7 @@ class MyFatoorahShippingTest extends \PHPUnit\Framework\TestCase
     //-----------------------------------------------------------------------------------------------------------------------------------------
     public function testCalculateShippingChargeExceptionEmptyProductName()
     {
-        $mfObj = new MyfatoorahShipping($this->keys['valid']);
+        $mfObj = new MyFatoorahShipping($this->keys['valid']);
 
         //test empty ProductName
         $shippingData = [

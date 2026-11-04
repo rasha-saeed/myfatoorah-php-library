@@ -2,19 +2,11 @@
 
 namespace MyFatoorah\Test\V3;
 
+use MyFatoorah\Test\MyFatoorahTestCase;
 use MyFatoorah\Library\V3\MyFatoorahPayments;
-use PHPUnit\Framework\TestCase;
 
-class MyFatoorahPaymentsTest extends TestCase
+class MyFatoorahPaymentsTest extends MyFatoorahTestCase
 {
-    private $keys;
-
-    //-----------------------------------------------------------------------------------------------------------------------------------------
-    protected function setUp(): void
-    {
-        $this->keys = include __DIR__ . '/../apiKeys.php';
-    }
-
     //-----------------------------------------------------------------------------------------------------------------------------------------
     public function testCreatePayment()
     {

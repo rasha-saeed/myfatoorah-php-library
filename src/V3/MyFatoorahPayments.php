@@ -19,7 +19,7 @@ class MyFatoorahPayments extends MyFatoorah
      * Process a payment using a collected session (Mode 2).
      * POST /v3/payments
      *
-     * @param array $data
+     * @param array $data the payment request body
      *
      * @return object
      */
@@ -36,7 +36,7 @@ class MyFatoorahPayments extends MyFatoorah
      * Get payment status by paymentId.
      * GET /v3/payments/{paymentId}
      *
-     * @param string $paymentId
+     * @param string $paymentId the MyFatoorah payment id
      *
      * @return object
      */

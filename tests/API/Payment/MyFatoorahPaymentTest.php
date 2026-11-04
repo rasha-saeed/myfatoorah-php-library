@@ -2,18 +2,11 @@
 
 namespace MyFatoorah\Test\API\Payment;
 
+use MyFatoorah\Test\MyFatoorahTestCase;
 use MyFatoorah\Library\API\Payment\MyFatoorahPayment;
 
-class MyFatoorahPaymentTest extends \PHPUnit\Framework\TestCase
+class MyFatoorahPaymentTest extends MyFatoorahTestCase
 {
-    private $keys;
-
-    //-----------------------------------------------------------------------------------------------------------------------------------------
-    protected function setUp(): void
-    {
-        $this->keys = include __DIR__ . '/../../apiKeys.php';
-    }
-
     //-----------------------------------------------------------------------------------------------------------------------------------------
     public function testInitiatePayment()
     {
@@ -69,20 +62,5 @@ class MyFatoorahPaymentTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    //-----------------------------------------------------------------------------------------------------------------------------------------
-
-    /**
-     * change the accessibility of a function
-     * usage $method->invokeArgs($mfObj, [$ua]);
-     *
-     * @param  type $name
-     * @return type
-     */
-    //    protected static function getMethod($name) {
-    //        $class  = new \ReflectionClass('\MyFatoorah\Library\MyfatoorahPayment');
-    //        $method = $class->getMethod($name);
-    //        $method->setAccessible(true);
-    //        return $method;
-    //    }
     //-----------------------------------------------------------------------------------------------------------------------------------------
 }

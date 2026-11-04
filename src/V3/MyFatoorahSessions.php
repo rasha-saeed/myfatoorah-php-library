@@ -19,7 +19,7 @@ class MyFatoorahSessions extends MyFatoorah
      * Create a payment session.
      * POST /v3/sessions
      *
-     * @param array $data
+     * @param array $data the session request body
      *
      * @return object
      */
@@ -35,7 +35,7 @@ class MyFatoorahSessions extends MyFatoorah
      * Get session details by sessionId.
      * GET /v3/sessions/{sessionId}
      *
-     * @param string $sessionId
+     * @param string $sessionId the MyFatoorah session id
      *
      * @return object
      */

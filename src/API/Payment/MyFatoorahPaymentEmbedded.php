@@ -106,8 +106,8 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
     /**
      * Returns the next highest float value by rounding up to a certain decimal
      *
-     * @param mixed $number
-     * @param mixed $decimalPlaces
+     * @param mixed $number        the value that will be rounded up
+     * @param mixed $decimalPlaces the number of decimals to keep
      *
      * @return float
      */
@@ -140,7 +140,7 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
             return $gateways[$displayCurrencyIndex];
         }
 
-        //get defult mf account currency
+        //get default mf account currency
         $defCurKey       = array_search('1', array_column($allRates, 'Value'));
         $defaultCurrency = $allRates[$defCurKey]->Text;
 
