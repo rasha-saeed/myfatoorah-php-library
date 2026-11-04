@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Run the quality checks through composer scripts (`composer check`), kept in sync with the `cmd` script.
 - Complete the docblocks across `autoload.php` and `src/`: every function now carries a description, its parameter descriptions and a `@return` tag.
 - Correct the wording of the `Worng event.` exception thrown by `MyFatoorahWebhook`; it now reads `Wrong event.`.
+- Rename the `$KeyType` parameter of `getPaymentStatus()` to `$keyType`, matching `refund()` and the rest of the library. It only affects callers that pass it as a named argument.
 - Supported PHP versions are unchanged: the library still installs on PHP 7.0 and up.
 
 ### Fixed
@@ -31,7 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Run the quality checks through composer scripts (`composer check`).
 - Reformat the source to PSR-12.
 - Complete the docblocks across `autoload.php` and `src/`: every function now carries a description, its parameter descriptions and a `@return` tag.
-- Rename the misspelled `$currncy` parameter of `getPaymentStatus()` to `$currency`. It only affects callers that pass it as a named argument.
+- Rename the misspelled `$currncy` parameter of `getPaymentStatus()` to `$currency`, and its `$KeyType` parameter to `$keyType`, matching the rest of the library. Both only affect callers that pass them as named arguments.
 - Correct the wording of the `Phone Number lenght` exception thrown by `getPhone()`; it now reads `length`, matching the 2.2 branch.
 - Supported PHP versions are unchanged: the library still installs on PHP 7.0 and up.
 

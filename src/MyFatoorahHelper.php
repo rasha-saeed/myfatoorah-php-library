@@ -271,14 +271,14 @@ class MyFatoorahHelper
         curl_setopt_array($curl, $option);
 
         $response  = curl_exec($curl);
-        $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        $httpCode  = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         $curl = null;
 
-        if ($http_code == 200 && is_string($response)) {
+        if ($httpCode == 200 && is_string($response)) {
             $responseText = trim($response, '﻿'); //remove the hidden character between the single quotes
             file_put_contents($cachedFile, $responseText);
             return json_decode($responseText, true);
-        } elseif ($http_code == 403) {
+        } elseif ($httpCode == 403) {
             touch($cachedFile);
             $fileContent = file_get_contents($cachedFile);
             if (!empty($fileContent)) {
