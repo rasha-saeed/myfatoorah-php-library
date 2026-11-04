@@ -2,19 +2,11 @@
 
 namespace MyFatoorah\Test\API;
 
+use MyFatoorah\Test\MyFatoorahTestCase;
 use MyFatoorah\Library\API\MyFatoorahSupplier;
-use PHPUnit\Framework\TestCase;
 
-class MyFatoorahSupplierTest extends TestCase
+class MyFatoorahSupplierTest extends MyFatoorahTestCase
 {
-    private $keys;
-
-    //-----------------------------------------------------------------------------------------------------------------------------------------
-    protected function setUp(): void
-    {
-        $this->keys = include __DIR__ . '/../apiKeys.php';
-    }
-
     //-----------------------------------------------------------------------------------------------------------------------------------------
     public function testGetSupplierDashboard()
     {

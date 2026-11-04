@@ -200,9 +200,9 @@ class MyFatoorahHelper
     /**
      * Checks whether the provided signature is correct or not for MyFatoorah Webhook
      *
-     * @param array  $dataModel
-     * @param string $secretKey
-     * @param string $signature
+     * @param array  $dataModel Webhook request array
+     * @param string $secretKey Webhook secret key
+     * @param string $signature MyFatoorah signature
      *
      * @return boolean
      */

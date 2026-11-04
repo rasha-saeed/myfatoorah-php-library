@@ -223,7 +223,7 @@ class MyFatoorah extends MyFatoorahHelper
         $json = json_decode((string) $res);
 
         //***************************************
-        //Check for reponse errors
+        //Check for response errors
         //***************************************
         $error = self::getAPIError($json, (string) $res);
         if ($error) {
@@ -353,6 +353,8 @@ class MyFatoorah extends MyFatoorahHelper
      * Log the events
      *
      * @param string $msg It is the string message that will be written in the log file.
+     *
+     * @return void
      */
     public static function log($msg)
     {

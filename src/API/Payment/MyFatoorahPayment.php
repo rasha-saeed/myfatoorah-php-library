@@ -246,6 +246,8 @@ class MyFatoorahPayment extends MyFatoorah
      * Prepare payment array for SendPayment and ExecutePayment
      *
      * @param array $curlData Invoice information
+     *
+     * @return void
      */
     private function preparePayment(&$curlData)
     {
@@ -262,6 +264,8 @@ class MyFatoorahPayment extends MyFatoorah
      * Prepare Customer Info for SendPayment and ExecutePayment
      *
      * @param array $curlData Invoice information
+     *
+     * @return void
      */
     private function prepareCustomerInfo(&$curlData)
     {
@@ -280,6 +284,8 @@ class MyFatoorahPayment extends MyFatoorah
      * Prepare Invoice Info for SendPayment and ExecutePayment
      *
      * @param array $curlData Invoice information
+     *
+     * @return void
      */
     private function prepareInvoiceInfo(&$curlData)
     {

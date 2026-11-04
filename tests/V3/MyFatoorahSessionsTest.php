@@ -2,19 +2,11 @@
 
 namespace MyFatoorah\Test\V3;
 
+use MyFatoorah\Test\MyFatoorahTestCase;
 use MyFatoorah\Library\V3\MyFatoorahSessions;
-use PHPUnit\Framework\TestCase;
 
-class MyFatoorahSessionsTest extends TestCase
+class MyFatoorahSessionsTest extends MyFatoorahTestCase
 {
-    private $keys;
-
-    //-----------------------------------------------------------------------------------------------------------------------------------------
-    protected function setUp(): void
-    {
-        $this->keys = include __DIR__ . '/../apiKeys.php';
-    }
-
     //-----------------------------------------------------------------------------------------------------------------------------------------
     public function testCreateAndGetSessionDetails()
     {
