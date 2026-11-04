@@ -22,10 +22,11 @@
 $mfVersion = '2.2';
 
 /*
- * The self-update routine below rewrites src/ from the copy on the portal.
- * A checkout where the library is being worked on must not let that happen,
- * so it carries a .mf-env file holding the word "development". Production
- * has no such file and the routine runs as usual.
+ * The self-update routine below overwrites the library with the copy on the
+ * portal. To turn it off, create a .mf-env file next to this one holding the
+ * word "development"; the routine then stops here. With no such file - the
+ * normal case - it runs as usual. A checkout where the library is being
+ * worked on carries one, so work in progress is never overwritten.
  */
 $mfEnvFile = __DIR__ . '/.mf-env';
 $mfEnv     = is_file($mfEnvFile) && is_readable($mfEnvFile) ? file_get_contents($mfEnvFile) : '';
