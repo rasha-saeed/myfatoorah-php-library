@@ -34,9 +34,9 @@ class MyFatoorahShipping extends MyFatoorah
     public function getShippingCities($method, $countryCode, $searchValue = '')
     {
         $url = $this->apiURL . '/v2/GetCities'
-                . '?shippingMethod=' . $method
-                . '&countryCode=' . $countryCode
-                . '&searchValue=' . urlencode(substr($searchValue, 0, 30));
+            . '?shippingMethod=' . $method
+            . '&countryCode=' . $countryCode
+            . '&searchValue=' . urlencode(substr($searchValue, 0, 30));
 
         $json = $this->callAPI($url, null, null, "Get Cities: $countryCode");
         return array_map('ucwords', $json->Data->CityNames);

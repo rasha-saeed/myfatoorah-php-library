@@ -8,7 +8,6 @@ use Exception;
 class MyFatoorahPayment extends MyFatoorah
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * The file name used in caching the gateways data
      *
