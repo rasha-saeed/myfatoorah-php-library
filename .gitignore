@@ -1,0 +1,7 @@
+# What anyone working on this library wants ignored. Personal entries - the IDE
+# folder, local notes, scratch files - belong in .git/info/exclude, which is not
+# part of the repository and cannot be committed by accident.
+
+vendor/
+composer.lock
+.phpunit.cache/
