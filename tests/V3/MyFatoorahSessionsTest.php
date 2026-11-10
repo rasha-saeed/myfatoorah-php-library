@@ -29,7 +29,7 @@ class MyFatoorahSessionsTest extends MyFatoorahTestCase
 
                 $this->assertObjectHasProperty('SessionExpiry', $details);
 
-                //A session that has already expired is not a session the vendor can use.
+                // A session that has already expired is not a session the vendor can use.
                 $this->assertGreaterThan(time(), strtotime($details->SessionExpiry));
             } catch (\Exception $ex) {
                 $this->assertEquals($config['exception'], $ex->getMessage(), $config['message']);

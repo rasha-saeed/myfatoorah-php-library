@@ -78,7 +78,7 @@ class MyFatoorahPayment extends MyFatoorah
             $cachedGateways = $this->addGatewayToCheckout($gateway, $cachedGateways, $isApRegistered);
         }
 
-        //add only one ap/gp gateway
+        // Add only one ap/gp gateway
         $cachedGateways['gp'] = $cachedGateways['gp'][0] ?? [];
         if ($isApRegistered) {
             $cachedGateways['ap'] = $cachedGateways['ap'][0] ?? [];
@@ -110,7 +110,7 @@ class MyFatoorahPayment extends MyFatoorah
 
             $index = $map[$code] ?? 'form';
         } elseif ($gateway->IsDirectPayment) {
-            //don't add the $gateway if $gateway->IsEmbeddedSupported = false and $gateway->IsDirectPayment = true
+            // Don't add the $gateway if $gateway->IsEmbeddedSupported = false and $gateway->IsDirectPayment = true
             return $checkoutGateways;
         } else {
             $index = 'cards';
@@ -238,7 +238,7 @@ class MyFatoorahPayment extends MyFatoorah
      */
     private function preparePayment(&$curlData)
     {
-        $curlData['CustomerReference'] = $curlData['CustomerReference'] ?? null; //important to be set even with null and here
+        $curlData['CustomerReference'] = $curlData['CustomerReference'] ?? null; // Important: to be set even with null and here
         $curlData['SourceInfo']        = $curlData['SourceInfo'] ?? 'MyFatoorah PHP Library ' . $this->version;
 
         $this->prepareInvoiceInfo($curlData);
@@ -281,7 +281,7 @@ class MyFatoorahPayment extends MyFatoorah
                 $item['ItemName'] = strip_tags($item['ItemName']);
             }
         }
-        unset($item); //important to clear the ref
+        unset($item); // Important: to clear the ref
 
         if (empty($curlData['ExpiryDate']) && !empty($curlData['ExpiryMinutes'])) {
             $curlData['ExpiryDate'] = $this->getExpiryDate($curlData['ExpiryMinutes']);

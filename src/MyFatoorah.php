@@ -69,7 +69,7 @@ class MyFatoorah extends MyFatoorahHelper
         $this->config['loggerObj']  = empty($config['loggerObj']) ? null : $config['loggerObj'];
         $this->config['loggerFunc'] = empty($config['loggerFunc']) ? null : $config['loggerFunc'];
 
-        //to use logger as static
+        // To use logger as static
         self::$loggerObj  = $this->config['loggerObj'];
         self::$loggerFunc = $this->config['loggerFunc'];
 
@@ -195,7 +195,7 @@ class MyFatoorah extends MyFatoorahHelper
         $this->log("$msgLog - Request: $fields");
 
         //***************************************
-        //Call API url
+        // Call API url
         //***************************************
         $curl = curl_init($url);
 
@@ -211,10 +211,10 @@ class MyFatoorah extends MyFatoorahHelper
         $res = curl_exec($curl);
         $err = curl_error($curl);
 
-        //release the handle; curl_close() is a no-op since PHP 8.0 and deprecated since 8.5
+        // Release the handle; curl_close() is a no-op since PHP 8.0 and deprecated since 8.5
         $curl = null;
 
-        //Check for cURL errors
+        // Check for cURL errors
         if ($err) {
             $this->log("$msgLog - cURL Error: $err");
             throw new Exception('cURL Error: ' . $err);
@@ -225,7 +225,7 @@ class MyFatoorah extends MyFatoorahHelper
         $json = json_decode((string) $res);
 
         //***************************************
-        //Check for response errors
+        // Check for response errors
         //***************************************
         $error = self::getAPIError($json, (string) $res);
         if ($error) {
@@ -234,7 +234,7 @@ class MyFatoorah extends MyFatoorahHelper
         }
 
         //***************************************
-        //Success
+        // Success
         //***************************************
         return $json;
     }
@@ -256,13 +256,13 @@ class MyFatoorah extends MyFatoorahHelper
             return '';
         }
 
-        //Check for the HTML errors
+        // Check for the HTML errors
         $hErr = self::getHtmlErrors($res);
         if ($hErr) {
             return $hErr;
         }
 
-        //Check for the JSON errors
+        // Check for the JSON errors
         if (is_string($json)) {
             return $json;
         }
@@ -285,14 +285,14 @@ class MyFatoorah extends MyFatoorahHelper
      */
     protected static function getHtmlErrors($res)
     {
-        //to avoid blocked IP like:
-        //<html>
-        //<head><title>403 Forbidden</title></head>
-        //<body>
-        //<center><h1>403 Forbidden</h1></center><hr><center>Microsoft-Azure-Application-Gateway/v2</center>
-        //</body>
-        //</html>
-        //and, skip apple register <YourDomainName> tag error
+        // To avoid blocked IP like:
+        // <html>
+        // <head><title>403 Forbidden</title></head>
+        // <body>
+        // <center><h1>403 Forbidden</h1></center><hr><center>Microsoft-Azure-Application-Gateway/v2</center>
+        // </body>
+        // </html>
+        // and, skip apple register <YourDomainName> tag error
         $stripHtml = strip_tags($res);
         if ($res != $stripHtml && stripos($stripHtml, 'apple-developer-merchantid-domain-association') !== false) {
             return trim(preg_replace('/\s+/', ' ', $stripHtml));
@@ -328,22 +328,21 @@ class MyFatoorah extends MyFatoorahHelper
             return $json->Data->ErrorMessage;
         }
 
-        //if not, get the message.
-        //sometimes Error value of ValidationErrors is null, so either get the "Name" key or get the "Message"
-        //example {
-        //"IsSuccess":false,
-        //"Message":"Invalid data",
-        //"ValidationErrors":[{"Name":"invoiceCreate.InvoiceItems","Error":""}],
-        //"Data":null
-        //}
-        //example {
-        //"Message":
-        //"No HTTP resource was found that matches the request URI 'https://apitest.myfatoorah.com/v2/SendPayment222'.",
-        //"MessageDetail":
-        //"No route providing a controller name was found to match request URI
-        //'https://apitest.myfatoorah.com/v2/SendPayment222'"
-        //}
-
+        // If not, get the message.
+        // sometimes Error value of ValidationErrors is null, so either get the "Name" key or get the "Message"
+        // example {
+        // "IsSuccess":false,
+        // "Message":"Invalid data",
+        // "ValidationErrors":[{"Name":"invoiceCreate.InvoiceItems","Error":""}],
+        // "Data":null
+        // }
+        // example {
+        // "Message":
+        // "No HTTP resource was found that matches the request URI 'https://apitest.myfatoorah.com/v2/SendPayment222'.",
+        // "MessageDetail":
+        // "No route providing a controller name was found to match request URI
+        // 'https://apitest.myfatoorah.com/v2/SendPayment222'"
+        // }
         return empty($json->Message) ? '' : $json->Message;
     }
 

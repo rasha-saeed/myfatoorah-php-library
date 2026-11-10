@@ -50,7 +50,7 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
             self::$checkoutGateways = $this->addGatewayToCheckout($gateway, self::$checkoutGateways, $isApRegistered);
         }
 
-        //add only one ap/gp gateway
+        // Add only one ap/gp gateway
         self::$checkoutGateways['gp'] = $this->getOneEmbeddedGateway(self::$checkoutGateways['gp'], $currencyIso, $allRates);
         if ($isApRegistered) {
             self::$checkoutGateways['ap'] = $this->getOneEmbeddedGateway(self::$checkoutGateways['ap'], $currencyIso, $allRates);
@@ -77,11 +77,11 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
             return $this->roundUp($dbTrucVal, 2);
         }
 
-        //convert to portal base currency
+        // Convert to portal base currency
         $dueVal          = ($currencyRate == 1) ? $dbTrucVal : round($paymentMethod->TotalAmount / $currencyRate, 3);
         $baseTotalAmount = $this->roundUp($dueVal, 2);
 
-        //gateway currency is not the portal currency
+        // Gateway currency is not the portal currency
         $paymentCurrencyRate = MyFatoorahList::getOneCurrencyRate($paymentMethod->PaymentCurrencyIso, $allRates);
         if ($paymentCurrencyRate != 1) {
             $paymentTotalAmount = $baseTotalAmount * $paymentCurrencyRate;
@@ -130,7 +130,7 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
             return $gateways[$displayCurrencyIndex];
         }
 
-        //get default mf account currency
+        // Get default mf account currency
         $defCurKey       = array_search('1', array_column($allRates, 'Value'));
         $defaultCurrency = $allRates[$defCurKey]->Text;
 

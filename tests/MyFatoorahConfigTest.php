@@ -26,8 +26,8 @@ class MyFatoorahConfigTest extends \PHPUnit\Framework\TestCase
     {
         $this->shipped = dirname(__DIR__) . '/src/mf-config.json';
 
-        //Hold the file at today's date, so reading it never calls the portal,
-        //and put the date back in tearDown so the library refreshes as usual.
+        // Hold the file at today's date, so reading it never calls the portal,
+        // and put the date back in tearDown so the library refreshes as usual.
         $this->shippedTime = (int) filemtime($this->shipped);
         touch($this->shipped);
         clearstatcache(true, $this->shipped);
@@ -81,7 +81,7 @@ class MyFatoorahConfigTest extends \PHPUnit\Framework\TestCase
         MyFatoorah::getMFCountries();
         clearstatcache(true, $this->shipped);
 
-        //An update always touches the file, so an unchanged date means none happened.
+        // An update always touches the file, so an unchanged date means none happened.
         $this->assertSame($before, filemtime($this->shipped));
     }
 
@@ -134,8 +134,8 @@ class MyFatoorahConfigTest extends \PHPUnit\Framework\TestCase
     {
         $file = $this->tmp . '/mf-config.json';
 
-        //With no file to fall back on a failed call stops the library, so the
-        //unreachable portal is caught here and reported as a skip, not a break.
+        // With no file to fall back on a failed call stops the library, so the
+        // unreachable portal is caught here and reported as a skip, not a break.
         try {
             $updated = ConfigProbe::update($file);
         } catch (\Exception $e) {

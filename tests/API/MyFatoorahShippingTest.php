@@ -72,7 +72,7 @@ class MyFatoorahShippingTest extends MyFatoorahTestCase
     {
         $mfObj = new MyFatoorahShipping($this->keys['valid']);
 
-        //test empty ProductName
+        // Test empty ProductName
         $shippingData = [
             'ShippingMethod' => 1,
             'Items'          => [[
