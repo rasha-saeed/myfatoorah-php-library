@@ -320,9 +320,9 @@ class MyFatoorahHelper
 
         //Nothing is cached, so no payment can be made. Say why here instead of failing with an empty list later.
         throw new Exception('MyFatoorah could not read its countries configuration: ' . $reason
-                . '. There is no copy in ' . $mfConfigFile . ' either, so no payment can be processed.'
-                . ' Restore the mf-config.json file that ships with the library, or disable MyFatoorah'
-                . ' until the portal can be reached.');
+            . '. There is no copy in ' . $mfConfigFile . ' either, so no payment can be processed.'
+            . ' Restore the mf-config.json file that ships with the library, or disable MyFatoorah'
+            . ' until the portal can be reached.');
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
