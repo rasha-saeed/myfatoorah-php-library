@@ -7,7 +7,6 @@ use MyFatoorah\Library\API\MyFatoorahList;
 class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * The checkoutGateways array is used to display the payment in the checkout page.
      *

@@ -30,7 +30,6 @@ use Exception;
 class MyFatoorah extends MyFatoorahHelper
 {
     //-----------------------------------------------------------------------------------------------------------------------------------------
-
     /**
      * The configuration used to connect to MyFatoorah test/live API server
      *
@@ -212,7 +211,8 @@ class MyFatoorah extends MyFatoorahHelper
         $res = curl_exec($curl);
         $err = curl_error($curl);
 
-        $curl = null; //release the handle; curl_close() is a no-op since PHP 8.0 and deprecated since 8.5
+        //release the handle; curl_close() is a no-op since PHP 8.0 and deprecated since 8.5
+        $curl = null;
 
         //Check for cURL errors
         if ($err) {
