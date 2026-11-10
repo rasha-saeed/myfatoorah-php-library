@@ -86,7 +86,7 @@ class MyFatoorahWebhook extends MyFatoorah
      * @param string       $secretKey Webhook secret key
      * @param string       $signature MyFatoorah signature
      *
-     * @return boolean
+     * @return bool
      *
      * @throws Exception if something wrong in the request
      */
@@ -108,7 +108,7 @@ class MyFatoorahWebhook extends MyFatoorah
      * @param string              $secretKey Webhook secret key
      * @param string              $signature MyFatoorah signature
      *
-     * @return boolean
+     * @return bool
      *
      * @throws Exception if something wrong in the request
      */
@@ -197,7 +197,7 @@ class MyFatoorahWebhook extends MyFatoorah
      * @param array<mixed> $webhook the webhook data model
      * @param array<mixed> $order   the order record stored on the store side
      *
-     * @return string|boolean the reason to skip the message, or false when it should be processed
+     * @return string|bool the reason to skip the message, or false when it should be processed
      */
     public static function checkforWebHook2ProcessMessage($webhook, $order)
     {

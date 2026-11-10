@@ -24,6 +24,14 @@
     </rule>
 
     <!--
+        PSR-12 says nothing about a blank line after a function's opening brace,
+        so the codebase had both habits. This settles it on "none", which is what
+        the majority already did, and keeps it settled for every function written
+        from here on. phpcbf fixes any that slip in.
+    -->
+    <rule ref="Squiz.WhiteSpace.FunctionOpeningBraceSpace"/>
+
+    <!--
         autoload.php both declares mfPutFileContent() and runs the self-update
         routine. That is deliberate: the function exists only for that routine,
         and the file must not depend on the library it regenerates.

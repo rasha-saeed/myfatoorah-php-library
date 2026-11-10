@@ -32,11 +32,7 @@
             "phpcs -p --standard=PHPCompatibility tests/ --runtime-set testVersion 8.4-"
         ],
         "psr4": "@composer dump-autoload --optimize --strict-psr --dry-run",
-        "phpcbf": [
-            "phpcbf --standard=PSR12 autoload.php --exclude=Generic.Files.LineLength,PSR1.Files.SideEffects",
-            "phpcbf --standard=PSR12 src/ --exclude=Generic.Files.LineLength",
-            "phpcbf --standard=PSR12 tests/ --exclude=Generic.Files.LineLength"
-        ],
+        "phpcbf": "phpcbf",
         "check": [
             "@phpunit",
             "@phan",

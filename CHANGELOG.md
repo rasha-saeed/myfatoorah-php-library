@@ -4,8 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ------------------------------
-## [2.2.11] - 2026-11-09
+## [2.2.11] - 2026-11-10
 ### Changed
+- Let `composer phpcbf` fix everything `composer check` reports. It ran `--standard=PSR12`, which knows nothing about docblocks, so it left the alignment the check complains about and the check still failed. Bare `phpcbf` reads the same `phpcs.xml` the check does, and the paths and exclusions it used to repeat are already in that file.
+- Settle two things the style rules never decided: no blank line after a function's opening brace, now enforced by `phpcs.xml` rather than left to habit, and `bool` in place of the older `boolean` in every docblock. Both are presentation only; no behaviour changes.
 - Relicense from GPL-3.0-only to the MIT License. The library exists so that any PHP developer can call the MyFatoorah API, take the code, change it and ship it inside their own product; MIT says exactly that, and its one condition - keeping the copyright notice - is what marks this as the official MyFatoorah library. The notice lives in `autoload.php`, which the self-update never rewrites and which keeps its comments, unlike the copy downloaded from the portal.
 - Stop the self-update in a working copy with a `.mf-env` file holding the word `development` instead of an unreachable `return;`. Anyone who wants the auto-update off can create that file; with no such file - the normal case - the update runs as before, at the cost of one `stat()`.
 - Shorten the file header of `autoload.php` and drop the class docblocks from `src/`: they restated the class name, and two of them named the wrong class.
@@ -36,11 +38,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Pass explicit flags to `htmlspecialchars()` in `MyFatoorahHelper::filterInputField()`. The default flags changed in PHP 8.1, so on PHP 8.0 and older single quotes were left unescaped and a filtered value could break out of a single-quoted HTML attribute.
 
 ------------------------------
-## [2.1.5] - 2026-11-09
+## [2.1.5] - 2026-11-10
 ### Added
 - Add `executePayment()`, correctly spelled.
 
 ### Changed
+- Let `composer phpcbf` fix everything `composer check` reports. It ran `--standard=PSR12`, which knows nothing about docblocks, so it left the alignment the check complains about and the check still failed. Bare `phpcbf` reads the same `phpcs.xml` the check does, and the paths and exclusions it used to repeat are already in that file.
+- Settle `int` in place of the older `integer` in every docblock, as `bool` replaced `boolean`. Presentation only; no behaviour changes.
+- Settle two things the style rules never decided: no blank line after a function's opening brace, now enforced by `phpcs.xml` rather than left to habit, and `bool` in place of the older `boolean` in every docblock. Both are presentation only; no behaviour changes.
 - Relicense from GPL-3.0-only to the MIT License. The library exists so that any PHP developer can call the MyFatoorah API, take the code, change it and ship it inside their own product; MIT says exactly that, and its one condition - keeping the copyright notice - is what marks this as the official MyFatoorah library. The notice lives in `autoload.php`, which the self-update never rewrites and which keeps its comments, unlike the copy downloaded from the portal.
 - Stop the self-update in a working copy with a `.mf-env` file holding the word `development` instead of an unreachable `return;`. Anyone who wants the auto-update off can create that file; with no such file - the normal case - the update runs as before, at the cost of one `stat()`.
 - Bring `autoload.php` in line with the 2.2 branch: a connect timeout of 3 seconds and a transfer timeout of 6, where this branch had none and a slow portal could hold up a page; an explicit return after a cURL error; a warning when the update server answers with anything other than a readable 200, which used to pass in silence; and every message tagged `MyFatoorah Library:`.

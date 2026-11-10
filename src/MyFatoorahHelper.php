@@ -40,7 +40,6 @@ class MyFatoorahHelper
      */
     public static function getPhone($inputString)
     {
-
         //remove any arabic digit
         $string3 = self::convertArabicDigitstoEnglish($inputString);
 
@@ -87,7 +86,6 @@ class MyFatoorahHelper
      */
     protected static function convertArabicDigitstoEnglish($inputString)
     {
-
         $newNumbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
         $persianDecimal = ['&#1776;', '&#1777;', '&#1778;', '&#1779;', '&#1780;', '&#1781;', '&#1782;', '&#1783;', '&#1784;', '&#1785;']; // 1. Persian HTML decimal
@@ -116,7 +114,6 @@ class MyFatoorahHelper
      */
     public static function getWeightRate($unit)
     {
-
         $lUnit = strtolower($unit);
 
         //kg is the default
@@ -149,7 +146,6 @@ class MyFatoorahHelper
      */
     public static function getDimensionRate($unit)
     {
-
         $lUnit = strtolower($unit);
 
         //cm is the default
@@ -180,11 +176,10 @@ class MyFatoorahHelper
      * @param string $signature MyFatoorah signature
      * @param int    $eventType MyFatoorah Event type Number (1, 2, 3 , 4)
      *
-     * @return boolean
+     * @return bool
      */
     public static function isSignatureValid($dataModel, $secretKey, $signature, $eventType = 1)
     {
-
         if ($eventType == 2) {
             unset($dataModel['GatewayReference']);
         }
@@ -201,7 +196,7 @@ class MyFatoorahHelper
      * @param string $secretKey Webhook secret key
      * @param string $signature MyFatoorah signature
      *
-     * @return boolean
+     * @return bool
      */
     protected static function checkSignatureValidation($dataModel, $secretKey, $signature)
     {

@@ -61,7 +61,6 @@ class MyFatoorah extends MyFatoorahHelper
      */
     public function __construct($config)
     {
-
         $mfCountries = self::getMFCountries();
 
         $this->setApiKey($config);
@@ -252,7 +251,6 @@ class MyFatoorah extends MyFatoorahHelper
      */
     protected static function getAPIError($json, $res)
     {
-
         $isSuccess = $json->IsSuccess ?? false;
         if ($isSuccess) {
             return '';
@@ -313,7 +311,6 @@ class MyFatoorah extends MyFatoorahHelper
      */
     protected static function getJsonErrors($json)
     {
-
         $errorsVar = isset($json->ValidationErrors) ? 'ValidationErrors' : 'FieldsErrors';
         if (isset($json->$errorsVar)) {
             $blogDatas = array_column($json->$errorsVar, 'Error', 'Name');
@@ -361,7 +358,6 @@ class MyFatoorah extends MyFatoorahHelper
      */
     public static function log($msg)
     {
-
         $loggerObj  = self::$loggerObj;
         $loggerFunc = self::$loggerFunc;
 

@@ -23,13 +23,12 @@ class MyFatoorahPayment extends MyFatoorah
      *
      * @param float|int $invoiceAmount The display invoice total amount.
      * @param string    $currencyIso   The display invoice currency ISO.
-     * @param boolean   $isCached      It used to cache the gateways.
+     * @param bool      $isCached      It used to cache the gateways.
      *
      * @return array
      */
     public function initiatePayment($invoiceAmount = 0, $currencyIso = '', $isCached = false)
     {
-
         $postFields = [
             'InvoiceAmount' => $invoiceAmount,
             'CurrencyIso'   => $currencyIso,
@@ -54,7 +53,6 @@ class MyFatoorahPayment extends MyFatoorah
      */
     public function getCachedVendorGateways()
     {
-
         if (file_exists(self::$pmCachedFile)) {
             $cache = file_get_contents(self::$pmCachedFile);
             return ($cache) ? json_decode($cache) : [];
@@ -74,7 +72,6 @@ class MyFatoorahPayment extends MyFatoorah
      */
     public function getCachedCheckoutGateways($isApRegistered = false)
     {
-
         $gateways = $this->getCachedVendorGateways();
 
         $cachedGateways = ['all' => [], 'cards' => [], 'form' => [], 'ap' => [], 'gp' => []];
@@ -96,9 +93,9 @@ class MyFatoorahPayment extends MyFatoorah
     /**
      * Add the MyFatoorah gateway object to the a given Payment Methods Array
      *
-     * @param object  $gateway          MyFatoorah gateway object.
-     * @param array   $checkoutGateways Payment Methods Array.
-     * @param boolean $isApRegistered   Is site domain is registered with applePay and MyFatoorah or not.
+     * @param object $gateway          MyFatoorah gateway object.
+     * @param array  $checkoutGateways Payment Methods Array.
+     * @param bool   $isApRegistered   Is site domain is registered with applePay and MyFatoorah or not.
      *
      * @return array
      */
@@ -141,7 +138,6 @@ class MyFatoorahPayment extends MyFatoorah
      */
     public function getOnePaymentMethod($gateway, $searchKey = 'PaymentMethodId', $invoiceAmount = 0, $currencyIso = '')
     {
-
         $paymentMethods = $this->initiatePayment($invoiceAmount, $currencyIso);
 
         $paymentMethod = null;
@@ -174,7 +170,6 @@ class MyFatoorahPayment extends MyFatoorah
      */
     public function getInvoiceURL($curlData, $gatewayId = 0, $orderId = null, $sessionId = null, $ntfOption = 'Lnk')
     {
-
         $this->log('------------------------------------------------------------');
 
         $curlData['CustomerReference'] = $curlData['CustomerReference'] ?? $orderId;
@@ -306,7 +301,6 @@ class MyFatoorahPayment extends MyFatoorah
      */
     public function getEmbeddedSession($userDefinedField = '', $logId = null)
     {
-
         $curlData = ['CustomerIdentifier' => $userDefinedField];
 
         return $this->initiateSession($curlData, $logId);
@@ -324,7 +318,6 @@ class MyFatoorahPayment extends MyFatoorah
      */
     public function initiateSession($curlData, $logId = null)
     {
-
         $json = $this->callAPI("$this->apiURL/v2/InitiateSession", $curlData, $logId, 'Initiate Session');
         return $json->Data;
     }
@@ -340,7 +333,6 @@ class MyFatoorahPayment extends MyFatoorah
      */
     public function registerApplePayDomain($url)
     {
-
         $domainName = ['DomainName' => parse_url($url, PHP_URL_HOST)];
         return $this->callAPI("$this->apiURL/v2/RegisterApplePayDomain", $domainName, '', 'Register Apple Pay Domain');
     }
