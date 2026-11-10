@@ -43,14 +43,14 @@ class MyFatoorahPaymentTest extends MyFatoorahTestCase
                     'ShippingConsignee'  => '',
                     'ShippingMethod'     => null,
                     'InvoiceItems'       => [[
-                    "ItemName"  => "<span>string</span>",
-                    "Quantity"  => 1,
-                    "UnitPrice" => 729,
-                    "Weight"    => 0,
-                    "Width"     => 0,
-                    "Height"    => 0,
-                    "Depth"     => 0
-                        ]],
+                        "ItemName"  => "<span>string</span>",
+                        "Quantity"  => 1,
+                        "UnitPrice" => 729,
+                        "Weight"    => 0,
+                        "Width"     => 0,
+                        "Height"    => 0,
+                        "Depth"     => 0
+                    ]],
                     'NotificationOption' => 'LNK'
                 ];
 

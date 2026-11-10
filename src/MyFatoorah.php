@@ -179,7 +179,7 @@ class MyFatoorah extends MyFatoorahHelper
      * @param int|string|null $orderId    The order id or the payment id of the process, used for the events logging.
      * @param string|null     $function   The requester function name, used for the events logging. ex:__FUNCTION__.
      *
-     * @return mixed       The response object as the result of a successful calling to the API.
+     * @return mixed The response object as the result of a successful calling to the API.
      *
      * @throws Exception    Throw exception if there is any curl/validation error in the MyFatoorah API endpoint URL.
      */
