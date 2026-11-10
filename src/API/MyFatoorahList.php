@@ -21,7 +21,6 @@ class MyFatoorahList extends MyFatoorah
      */
     public static function getOneCurrencyRate($currency, $allRates)
     {
-
         foreach ($allRates as $value) {
             if ($value->Text == $currency) {
                 return (float) $value->Value;
@@ -41,7 +40,6 @@ class MyFatoorahList extends MyFatoorah
      */
     public function getCurrencyRate($currency)
     {
-
         $allRates = $this->getCurrencyRates();
         return self::getOneCurrencyRate($currency, $allRates);
     }
@@ -55,7 +53,6 @@ class MyFatoorahList extends MyFatoorah
      */
     public function getCurrencyRates()
     {
-
         $url = "$this->apiURL/v2/GetCurrenciesExchangeList";
         return (array) $this->callAPI($url, null, null, 'Get Currencies Exchange List');
     }

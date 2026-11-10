@@ -28,7 +28,6 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
      */
     public function getCheckoutGateways($invoiceAmount, $currencyIso, $isApRegistered)
     {
-
         if (!empty(self::$checkoutGateways)) {
             return self::$checkoutGateways;
         }
@@ -74,7 +73,6 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
      */
     private function getPaymentTotalAmount($paymentMethod, $allRates, $currencyRate)
     {
-
         $dbTrucVal = ((int) ($paymentMethod->TotalAmount * 1000)) / 1000;
         if ($paymentMethod->PaymentCurrencyIso == $paymentMethod->CurrencyIso) {
             return $this->roundUp($dbTrucVal, 2);
@@ -160,7 +158,6 @@ class MyFatoorahPaymentEmbedded extends MyFatoorahPayment
      */
     public static function getTranslatedCurrency($currency)
     {
-
         $currencies = [
             'KWD' => ['en' => 'KD', 'ar' => 'د.ك'],
             'SAR' => ['en' => 'SR', 'ar' => 'ريال'],

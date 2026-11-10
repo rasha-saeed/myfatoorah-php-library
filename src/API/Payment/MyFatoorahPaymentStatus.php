@@ -23,7 +23,6 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
      */
     public function getPaymentStatus($keyId, $keyType, $orderId = null, $price = null, $currency = null)
     {
-
         //payment inquiry
         $curlData = ['Key' => $keyId, 'KeyType' => $keyType];
         $json     = $this->callAPI("$this->apiURL/v2/GetPaymentStatus", $curlData, $orderId, 'Get Payment Status');
@@ -61,11 +60,10 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
      * @param string     $price    The order price in the store used to match the invoice data with store order.
      * @param string     $currency The order currency in the store used to match the invoice data with store order.
      *
-     * @return boolean
+     * @return bool
      */
     private static function checkOrderInformation($data, $orderId = null, $price = null, $currency = null)
     {
-
         //check for the order ID
         if ($orderId && $orderId != $data->CustomerReference) {
             return false;
@@ -93,7 +91,6 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
      */
     private static function getSuccessData($data)
     {
-
         foreach ($data->InvoiceTransactions as $transaction) {
             if ($transaction->TransactionStatus == 'Succss') {
                 $data->InvoiceStatus = 'Paid';
@@ -119,7 +116,6 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
      */
     private function getErrorData($data, $keyId, $keyType)
     {
-
         //------------------
         //case 1: payment is Failed
         $focusTransaction = self::{"getLastTransactionOf$keyType"}($data->InvoiceTransactions, $keyId);
@@ -169,7 +165,6 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
      */
     private static function getLastTransactionOfPaymentId($transactions, $paymentId)
     {
-
         foreach ($transactions as $transaction) {
             if ($transaction->PaymentId == $paymentId && $transaction->Error) {
                 return $transaction;
@@ -189,7 +184,6 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
      */
     private static function getLastTransactionOfInvoiceId($transactions)
     {
-
         $usortFun = function ($a, $b) {
             return strtotime($a->TransactionDate) - strtotime($b->TransactionDate);
         };
