@@ -39,13 +39,13 @@ class MyFatoorahHelper
      */
     public static function getPhone($inputString)
     {
-        //remove any arabic digit
+        // Remove any arabic digit
         $string3 = self::convertArabicDigitstoEnglish($inputString);
 
-        //Keep Only digits
+        // Keep Only digits
         $string4 = preg_replace('/[^0-9]/', '', $string3);
 
-        //remove 00 at start
+        // Remove 00 at start
         if (strpos($string4, '00') === 0) {
             $string4 = substr($string4, 2);
         }
@@ -54,13 +54,13 @@ class MyFatoorahHelper
             return ['', ''];
         }
 
-        //check for the allowed length
+        // Check for the allowed length
         $len = strlen($string4);
         if ($len < 3 || $len > 14) {
             throw new Exception('Phone Number length must be between 3 to 14 digits');
         }
 
-        //get the phone arr
+        // Get the phone arr
         if (strlen(substr($string4, 3)) > 3) {
             return [
                 substr($string4, 0, 3),
@@ -115,7 +115,7 @@ class MyFatoorahHelper
     {
         $lUnit = strtolower($unit);
 
-        //kg is the default
+        // 'kg' is the default
         $rateUnits = [
             '1'         => ['kg', 'kgs', 'كج', 'كلغ', 'كيلو جرام', 'كيلو غرام'],
             '0.001'     => ['g', 'جرام', 'غرام', 'جم'],
@@ -147,7 +147,7 @@ class MyFatoorahHelper
     {
         $lUnit = strtolower($unit);
 
-        //cm is the default
+        // 'cm' is the default
         $rateUnits = [
             '1'     => ['cm', 'سم'],
             '100'   => ['m', 'متر', 'م'],
@@ -206,11 +206,10 @@ class MyFatoorahHelper
         $outputArr = array_map($mapFun, $dataModel, array_keys($dataModel));
         $output    = implode(',', $outputArr);
 
-        // generate hash of $field string
+        // Generate hash of $field string
         $hash = base64_encode(hash_hmac('sha256', $output, $secretKey, true));
 
         return hash_equals($hash, $signature);
-        //return $signature === $hash;
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -226,7 +225,7 @@ class MyFatoorahHelper
     {
         $mfConfigFile = __DIR__ . '/mf-config.json';
 
-        //A missing file reports no time, which reads as very old - and that is what it is.
+        // A missing file reports no time, which reads as very old - and that is what it is.
         if (time() - (int) @filemtime($mfConfigFile) > 3600) {
             self::updateMFConfigFile($mfConfigFile);
         }
@@ -248,7 +247,7 @@ class MyFatoorahHelper
      */
     protected static function updateMFConfigFile($mfConfigFile)
     {
-        //An existing file is overwritten in place, a missing one is created in its folder.
+        // An existing file is overwritten in place, a missing one is created in its folder.
         $fileExists = file_exists($mfConfigFile);
         $target     = $fileExists ? $mfConfigFile : dirname($mfConfigFile);
 
@@ -256,7 +255,7 @@ class MyFatoorahHelper
             return self::reportConfigFailure('no permission to write ' . $target, $mfConfigFile, $fileExists);
         }
 
-        //The cache can be written, so ask the portal for the latest configuration.
+        // The cache can be written, so ask the portal for the latest configuration.
         $curl = curl_init('https://portal.myfatoorah.com/Files/API/mf-config.json');
 
         $option = [
@@ -273,22 +272,22 @@ class MyFatoorahHelper
 
         $curl = null;
 
-        //Record the attempt, so a portal that is down is not asked again before an hour.
+        // Record the attempt, so a portal that is down is not asked again before an hour.
         if ($fileExists) {
             touch($mfConfigFile);
         }
 
         if ($httpCode == 200 && is_string($response)) {
-            //remove the hidden character between the single quotes
+            // Remove the hidden character between the single quotes
             $responseText = trim($response, '﻿');
             $countries    = json_decode($responseText, true);
 
-            //Only overwrite the cache with something that is actually the configuration.
+            // Only overwrite the cache with something that is actually the configuration.
             if (is_array($countries) && !empty($countries)) {
                 return file_put_contents($mfConfigFile, $responseText) !== false;
             }
 
-            //The portal answered, but not with the configuration.
+            // The portal answered, but not with the configuration.
             return self::reportConfigFailure('the portal did not answer with the configuration', $mfConfigFile, $fileExists);
         }
 
@@ -310,15 +309,15 @@ class MyFatoorahHelper
      */
     protected static function reportConfigFailure($reason, $mfConfigFile, $fileExists)
     {
-        //The log keeps the reason even where the caller swallows the exception below.
+        // The log keeps the reason even where the caller swallows the exception below.
         error_log('MyFatoorah: ' . $reason . '.');
 
-        //The file on disk keeps the vendor working, so the log is enough.
+        // The file on disk keeps the vendor working, so the log is enough.
         if ($fileExists) {
             return false;
         }
 
-        //Nothing is cached, so no payment can be made. Say why here instead of failing with an empty list later.
+        // Nothing is cached, so no payment can be made. Say why here instead of failing with an empty list later.
         throw new Exception('MyFatoorah could not read its countries configuration: ' . $reason
             . '. There is no copy in ' . $mfConfigFile . ' either, so no payment can be processed.'
             . ' Restore the mf-config.json file that ships with the library, or disable MyFatoorah'
@@ -355,7 +354,7 @@ class MyFatoorahHelper
      */
     public static function getPaymentStatusLink($url, $paymentId)
     {
-        //to overcome session urls
+        // To overcome session urls
         $pattern = '/MpgsAuthentication.*|ApplePayComplete.*|GooglePayComplete.*/i';
         return preg_replace($pattern, "Result?paymentId=$paymentId", $url);
     }

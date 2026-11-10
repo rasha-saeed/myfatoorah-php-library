@@ -23,7 +23,7 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
      */
     public function getPaymentStatus($keyId, $keyType, $orderId = null, $price = null, $currency = null)
     {
-        //payment inquiry
+        // Payment inquiry
         $curlData = ['Key' => $keyId, 'KeyType' => $keyType];
         $json     = $this->callAPI("$this->apiURL/v2/GetPaymentStatus", $curlData, $orderId, 'Get Payment Status');
 
@@ -31,14 +31,14 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
 
         $msgLog = 'Order #' . $data->CustomerReference . ' ----- Get Payment Status';
 
-        //check for the order information
+        // Check for the order information
         if (!self::checkOrderInformation($data, $orderId, $price, $currency)) {
             $err = 'Trying to call data of another order';
             $this->log("$msgLog - Exception is $err");
             throw new Exception($err);
         }
 
-        //check invoice status (Paid and Not Paid Cases)
+        // Check invoice status (Paid and Not Paid Cases)
         if ($data->InvoiceStatus == 'Paid' || $data->InvoiceStatus == 'DuplicatePayment') {
             $data = self::getSuccessData($data);
             $this->log("$msgLog - Status is Paid");
@@ -64,12 +64,12 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
      */
     private static function checkOrderInformation($data, $orderId = null, $price = null, $currency = null)
     {
-        //check for the order ID
+        // Check for the order ID
         if ($orderId && $orderId != $data->CustomerReference) {
             return false;
         }
 
-        //check for the order price and currency
+        // Check for the order price and currency
         list($valStr, $mfCurrency) = explode(' ', $data->InvoiceDisplayValue);
         $mfPrice = (float) (preg_replace('/[^\d.]/', '', $valStr));
 
@@ -117,7 +117,7 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
     private function getErrorData($data, $keyId, $keyType)
     {
         //------------------
-        //case 1: payment is Failed
+        // Case 1: payment is Failed
         $focusTransaction = self::{"getLastTransactionOf$keyType"}($data->InvoiceTransactions, $keyId);
         if ($focusTransaction && $focusTransaction->TransactionStatus == 'Failed') {
             $data->InvoiceStatus = 'Failed';
@@ -129,8 +129,7 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
         }
 
         //------------------
-        //case 2: payment is Expired
-        //all myfatoorah gateway is set to Asia/Kuwait
+        // Case 2: payment is Expired
         $timeZone = $this->getVendorTimeZone();
 
         $expiryDateTime = $data->ExpiryDate . ' ' . $data->ExpiryTime;
@@ -145,8 +144,8 @@ class MyFatoorahPaymentStatus extends MyFatoorahPayment
         }
 
         //------------------
-        //case 3: payment is Pending
-        //payment is pending .. user has not paid yet and the invoice is not expired
+        // Case 3: payment is Pending
+        // Payment is pending. User has not paid yet and the invoice is not expired
         $data->InvoiceStatus = 'Pending';
         $data->InvoiceError  = 'Pending Payment.';
 
