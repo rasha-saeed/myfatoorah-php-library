@@ -84,7 +84,8 @@ class MyFatoorahShippingTest extends MyFatoorahTestCase
                 'Depth'       => 10,
                 'Quantity'    => 1,
                 'UnitPrice'   => '17.234',
-            ]],
+            ]
+            ],
             'CountryCode'    => 'KW',
             'CityName'       => 'adan',
             'PostalCode'     => '12345',

@@ -18,7 +18,7 @@ class MyFatoorahSupplier extends MyFatoorah
     public function getSupplierDashboard($supplierCode)
     {
         $url = $this->apiURL . '/v2/GetSupplierDashboard?SupplierCode=' . $supplierCode;
-        return $this->callAPI($url, null, null, "Get Supplier Documents");
+        return $this->callAPI($url, null, null, 'Get Supplier Documents');
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
