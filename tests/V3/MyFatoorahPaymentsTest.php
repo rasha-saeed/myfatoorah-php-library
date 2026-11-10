@@ -24,8 +24,8 @@ class MyFatoorahPaymentsTest extends MyFatoorahTestCase
                 $mfObj = new MyFatoorahPayments($config);
                 $data  = $mfObj->createPayment($curlData);
 
-                $this->assertIsObject($data);
                 $this->assertObjectHasProperty('PaymentURL', $data);
+                $this->assertStringStartsWith('https://', $data->PaymentURL);
             } catch (\Exception $ex) {
                 $this->assertEquals($config['exception'], $ex->getMessage(), $config['message']);
             }
@@ -41,7 +41,6 @@ class MyFatoorahPaymentsTest extends MyFatoorahTestCase
             try {
                 $mfObj = new MyFatoorahPayments($config);
                 $data  = $mfObj->getPaymentDetails($paymentId);
-                $this->assertIsObject($data);
                 $this->assertObjectHasProperty('Invoice', $data);
 
                 $this->assertEquals('PAID', $data->Invoice->Status);

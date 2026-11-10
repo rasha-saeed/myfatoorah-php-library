@@ -22,13 +22,15 @@ class MyFatoorahSessionsTest extends MyFatoorahTestCase
                 $mfObj = new MyFatoorahSessions($config);
                 $data  = $mfObj->createSession($curlData);
 
-                $this->assertIsObject($data);
                 $this->assertObjectHasProperty('SessionId', $data);
+                $this->assertNotEmpty($data->SessionId);
 
                 $details = $mfObj->getSessionDetails($data->SessionId);
 
-                $this->assertIsObject($details);
                 $this->assertObjectHasProperty('SessionExpiry', $details);
+
+                //A session that has already expired is not a session the vendor can use.
+                $this->assertGreaterThan(time(), strtotime($details->SessionExpiry));
             } catch (\Exception $ex) {
                 $this->assertEquals($config['exception'], $ex->getMessage(), $config['message']);
             }

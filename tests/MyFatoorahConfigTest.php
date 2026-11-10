@@ -58,7 +58,6 @@ class MyFatoorahConfigTest extends \PHPUnit\Framework\TestCase
     {
         $countries = MyFatoorah::getMFCountries();
 
-        $this->assertIsArray($countries);
         $this->assertNotEmpty($countries);
         $this->assertArrayHasKey('KWT', $countries);
     }
