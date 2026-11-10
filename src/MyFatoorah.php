@@ -66,7 +66,7 @@ class MyFatoorah extends MyFatoorahHelper
 
         $this->setApiKey($config);
         $this->setIsTest($config);
-        $this->setVcCode($config);
+        $this->setVcCode($config, $mfCountries);
 
         $this->config['loggerObj']  = empty($config['loggerObj']) ? null : $config['loggerObj'];
         $this->config['loggerFunc'] = empty($config['loggerFunc']) ? null : $config['loggerFunc'];
@@ -146,20 +146,20 @@ class MyFatoorah extends MyFatoorahHelper
     /**
      * Set the vendor country code of the MyFatoorah account
      *
-     * @param array $config It has the required keys (apiKey, isTest, and vcCode) to process a MyFatoorah API request.
+     * @param array $config      It has the required keys (apiKey, isTest, and vcCode) to process a MyFatoorah API request.
+     * @param array $mfCountries The MyFatoorah countries, their API URLs, and names.
      *
      * @return void
      *
      * @throws Exception
      */
-    protected function setVcCode($config)
+    protected function setVcCode($config, $mfCountries)
     {
         $config['vcCode'] = $config['vcCode'] ?? $config['countryCode'] ?? '';
         if (empty($config['vcCode'])) {
             throw new Exception('Config array must have the "vcCode" key.');
         }
 
-        $mfCountries    = self::getMFCountries();
         $countriesCodes = array_keys($mfCountries);
 
         $config['vcCode'] = strtoupper($config['vcCode']);

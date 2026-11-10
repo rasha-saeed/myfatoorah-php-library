@@ -4,20 +4,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ------------------------------
-## [2.2.11] - 2026-11-04
+## [2.2.11] - 2026-11-09
 ### Changed
 - Relicense from GPL-3.0-only to the MIT License. The library exists so that any PHP developer can call the MyFatoorah API, take the code, change it and ship it inside their own product; MIT says exactly that, and its one condition - keeping the copyright notice - is what marks this as the official MyFatoorah library. The notice lives in `autoload.php`, which the self-update never rewrites and which keeps its comments, unlike the copy downloaded from the portal.
 - Stop the self-update in a working copy with a `.mf-env` file holding the word `development` instead of an unreachable `return;`. Anyone who wants the auto-update off can create that file; with no such file - the normal case - the update runs as before, at the cost of one `stat()`.
 - Shorten the file header of `autoload.php` and drop the class docblocks from `src/`: they restated the class name, and two of them named the wrong class.
 - Update the docblocks from `double` to `float` to match the casts.
 - Upgrade the development toolchain (PHPUnit 13, PHPStan 2, PHP_CodeSniffer 4, PHPCompatibility 10, phan 6) and move the test suites from `__construct()` to `setUp()`.
-- Run the quality checks through composer scripts (`composer check`), kept in sync with the `cmd` script.
+- Run the quality checks through composer scripts (`composer check`), the single entry point.
 - Complete the docblocks across `autoload.php` and `src/`: every function now carries a description, its parameter descriptions and a `@return` tag.
 - Correct the wording of the `Worng event.` exception thrown by `MyFatoorahWebhook`; it now reads `Wrong event.`.
 - Rename the `$KeyType` parameter of `getPaymentStatus()` to `$keyType`, matching `refund()` and the rest of the library. It only affects callers that pass it as a named argument.
 - Supported PHP versions are unchanged: the library still installs on PHP 7.0 and up.
 
+- Report a failed configuration update to the server error log. Every message starts with `MyFatoorah:` and names the cause: no write permission on a named path, the HTTP code the portal answered with, or the cURL error behind a failed connection. The report goes through `error_log()` and not `trigger_error()`, which a framework can turn into an exception on a merchant whose error handling is strict.
+- Stop with an exception that names the cause when there is no cached configuration at all. The library already stopped in that case, with `The "vcCode" key must be one of ().`, which told the merchant nothing; it now says what went wrong, which file is missing, and that the shipped `mf-config.json` can be restored or MyFatoorah disabled until the portal answers.
+- Cover the countries configuration cache with a test suite of its own: the shipped file is readable, a fresh file is read without calling the portal, and each way the update can fail is reported or stopped as intended. It does not reach the Composer package.
+
 ### Fixed
+- Ask the portal only when the answer can be saved. Where the cache file or its folder was read-only, the download ran on every page view and was thrown away: the site worked from the cache so nothing looked wrong, while a thousand page views an hour meant a thousand downloads. The write permission is now checked first, and no request is made that cannot be acted on.
+- Keep the cached configuration when the portal answers with something that is not the configuration. An HTTP 200 carrying an HTML error page used to be written straight into `mf-config.json`, so the merchant lost the configuration until a later download succeeded. The answer is now parsed before it replaces anything.
+- Always return an array from `getMFCountries()`. Invalid JSON in the cache made it return `null`, and the `array_keys()` call in the caller raised a `TypeError` that no `catch (Exception)` could hold, so a damaged cache file took the page down instead of falling back to an empty list.
+- Read the countries configuration once while building a MyFatoorah object instead of twice. The constructor looked it up and `setVcCode()` looked it up again, so an unreachable portal cost two timeouts on the same page and wrote the same line in the log twice.
+- Give the mf-config.json request a connect timeout of 3 seconds and a transfer timeout of 6. It had none, and it runs on the critical path of a merchant's page: once an hour the first request that builds a MyFatoorah object pays the download, so a slow portal was a slow checkout page.
+- Reset the cache file's timestamp before fetching it. It used to be reset only on an HTTP 403, so any other failure - a timeout, a DNS error, a 500 - left the timestamp old and every following request tried the download again; with no timeout on that request, a portal that was merely slow became a site that was slow on every page load. The 403 branch is gone with it: it read the cached file and returned it, which is what `getMFCountries()` already does when the fetch comes back empty, and on a missing file it left an empty one behind that blocked the next attempt for an hour.
 - Make the library safe on PHP 8.5: every `curl_close()` call (deprecated since 8.5, without effect since 8.0) now releases the handle instead, and the non-canonical `(double)` cast is replaced by `(float)`.
 - Replace the `curl_close()` call left in the loader that ships with the manual install. It is deprecated since PHP 8.5, so a merchant who installed the library by hand saw a warning that a Composer install did not.
 - Build the digit list in `convertArabicDigitstoEnglish()` from an explicit string array instead of `range(0, 9)`, whose return type is not stable across PHP versions.
@@ -26,7 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Pass explicit flags to `htmlspecialchars()` in `MyFatoorahHelper::filterInputField()`. The default flags changed in PHP 8.1, so on PHP 8.0 and older single quotes were left unescaped and a filtered value could break out of a single-quoted HTML attribute.
 
 ------------------------------
-## [2.1.5] - 2026-11-04
+## [2.1.5] - 2026-11-09
 ### Added
 - Add `executePayment()`, correctly spelled.
 
@@ -44,10 +54,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Correct the wording of the `Phone Number lenght` exception thrown by `getPhone()`; it now reads `length`, matching the 2.2 branch.
 - Supported PHP versions are unchanged: the library still installs on PHP 7.0 and up.
 
+- Bring the countries configuration cache in line with the 2.2 branch: the write permission is checked before the portal is asked, so a read-only file or folder no longer causes a download on every page view; the answer is parsed before it replaces the cache, so an HTML error page cannot overwrite it; the byte order mark is stripped as 2.2 does; and a failed update is reported through `error_log()` instead of `trigger_error()`, in the same words as 2.2. Unlike 2.2 this branch does not stop when nothing is cached - it keeps falling back to the default API URL, as it always has.
+
 ### Deprecated
 - `excutePayment()` is kept as a wrapper that forwards to `executePayment()`, so existing callers are unaffected. A subclass that **overrides** `excutePayment()` is no longer reached and should override `executePayment()` instead.
 
 ### Fixed
+- Create `mf-config.json` when it is missing and the folder allows it. The branch used to return an empty list for good, which sends a merchant outside Kuwait to the Kuwait API URL without a word in any log; an installation that lost the file stayed on the wrong URL until someone put it back by hand.
+- Give the mf-config.json request a connect timeout of 3 seconds and a transfer timeout of 6. It had none, and it runs on the critical path of a merchant's page: once an hour the first request that builds a MyFatoorah object pays the download, so a slow portal was a slow checkout page.
 - Make the library safe on PHP 8.5: every `curl_close()` call (deprecated since 8.5, without effect since 8.0) now releases the handle instead, and the non-canonical `(double)` cast is replaced by `(float)`.
 - Replace the `curl_close()` call left in the loader that ships with the manual install. It is deprecated since PHP 8.5, so a merchant who installed the library by hand saw a warning that a Composer install did not.
 - Build the digit list in `getPhone()` from an explicit string array instead of `range(0, 9)`, whose return type is not stable across PHP versions.

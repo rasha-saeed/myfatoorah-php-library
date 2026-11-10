@@ -225,65 +225,110 @@ class MyFatoorahHelper
      * Get a list of MyFatoorah countries, their API URLs, and names.
      *
      * @return array of MyFatoorah data
+     *
+     * @throws Exception
      */
     public static function getMFCountries()
     {
+        $mfConfigFile = __DIR__ . '/mf-config.json';
 
-        $cachedFile = dirname(__FILE__) . '/mf-config.json';
-
-        if (file_exists($cachedFile)) {
-            if ((time() - filemtime($cachedFile) > 3600)) {
-                $countries = self::getMFConfigFileContent($cachedFile);
-            }
-
-            if (!empty($countries)) {
-                return $countries;
-            }
-
-            $cache = file_get_contents($cachedFile);
-            return ($cache) ? json_decode($cache, true) : [];
-        } else {
-            return self::getMFConfigFileContent($cachedFile);
+        //A missing file reports no time, which reads as very old - and that is what it is.
+        if (time() - (int) @filemtime($mfConfigFile) > 3600) {
+            self::updateMFConfigFile($mfConfigFile);
         }
+
+        $content = file_get_contents($mfConfigFile);
+        return ($content) ? (array) json_decode($content, true) : [];
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
 
     /**
-     * Cache a list of MyFatoorah countries, their API URLs, and names.
+     * Update the mf-config.json file
      *
-     * @param string $cachedFile The file name used in caching data.
+     * @param string $mfConfigFile The file name used in caching data.
      *
-     * @return array of MyFatoorah data
+     * @return bool True when the file now holds a fresh configuration.
+     *
+     * @throws Exception
      */
-    protected static function getMFConfigFileContent($cachedFile)
+    protected static function updateMFConfigFile($mfConfigFile)
     {
+        //An existing file is overwritten in place, a missing one is created in its folder.
+        $fileExists = file_exists($mfConfigFile);
+        $target     = $fileExists ? $mfConfigFile : dirname($mfConfigFile);
 
+        if (!is_writable($target)) {
+            return self::reportConfigFailure('no permission to write ' . $target, $mfConfigFile, $fileExists);
+        }
+
+        //The cache can be written, so ask the portal for the latest configuration.
         $curl = curl_init('https://portal.myfatoorah.com/Files/API/mf-config.json');
 
         $option = [
             CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
-            CURLOPT_RETURNTRANSFER => true
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CONNECTTIMEOUT => 3, // Maximum time to establish the connection (in seconds)
+            CURLOPT_TIMEOUT        => 6  // Maximum time allowed for the entire request (in seconds)
         ];
         curl_setopt_array($curl, $option);
 
-        $response = curl_exec($curl);
-        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        $response  = curl_exec($curl);
+        $httpCode  = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        $curlError = curl_error($curl);
 
         $curl = null;
 
-        if ($httpCode == 200 && is_string($response)) {
-            $responseText = trim($response, '﻿'); //remove the hidden character between the single quotes
-            file_put_contents($cachedFile, $responseText);
-            return json_decode($responseText, true);
-        } elseif ($httpCode == 403) {
-            touch($cachedFile);
-            $fileContent = file_get_contents($cachedFile);
-            if (!empty($fileContent)) {
-                return json_decode($fileContent, true);
-            }
+        //Record the attempt, so a portal that is down is not asked again before an hour.
+        if ($fileExists) {
+            touch($mfConfigFile);
         }
-        return [];
+
+        if ($httpCode == 200 && is_string($response)) {
+            //remove the hidden character between the single quotes
+            $responseText = trim($response, '﻿');
+            $countries    = json_decode($responseText, true);
+
+            //Only overwrite the cache with something that is actually the configuration.
+            if (is_array($countries) && !empty($countries)) {
+                return file_put_contents($mfConfigFile, $responseText) !== false;
+            }
+
+            //The portal answered, but not with the configuration.
+            return self::reportConfigFailure('the portal did not answer with the configuration', $mfConfigFile, $fileExists);
+        }
+
+        return self::reportConfigFailure('the portal could not be read, ' . ($curlError ?: 'HTTP ' . $httpCode), $mfConfigFile, $fileExists);
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Report a failed configuration update, and stop when there is no file to fall back on.
+     *
+     * @param string $reason       Why the configuration could not be refreshed.
+     * @param string $mfConfigFile The file name used in caching data.
+     * @param bool   $fileExists   Whether a usable copy is already on disk.
+     *
+     * @return bool Always false, when the file on disk keeps the vendor working.
+     *
+     * @throws Exception
+     */
+    protected static function reportConfigFailure($reason, $mfConfigFile, $fileExists)
+    {
+        //The log keeps the reason even where the caller swallows the exception below.
+        error_log('MyFatoorah: ' . $reason . '.');
+
+        //The file on disk keeps the vendor working, so the log is enough.
+        if ($fileExists) {
+            return false;
+        }
+
+        //Nothing is cached, so no payment can be made. Say why here instead of failing with an empty list later.
+        throw new Exception('MyFatoorah could not read its countries configuration: ' . $reason
+            . '. There is no copy in ' . $mfConfigFile . ' either, so no payment can be processed.'
+            . ' Restore the mf-config.json file that ships with the library, or disable MyFatoorah'
+            . ' until the portal can be reached.');
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
