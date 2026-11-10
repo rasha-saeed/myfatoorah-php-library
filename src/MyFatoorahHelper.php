@@ -34,7 +34,7 @@ class MyFatoorahHelper
      *
      * @param string $inputString It is the input phone number provide by the end user.
      *
-     * @return array        That contains the phone code in the 1st element the the phone number the the 2nd element.
+     * @return array That contains the phone code in the 1st element the the phone number the the 2nd element.
      *
      * @throws Exception    Throw exception if the input length is less than 3 chars or long than 14 chars.
      */
@@ -140,7 +140,7 @@ class MyFatoorahHelper
      *
      * @param string $unit It is the dimension unit used in width, hight, or depth.
      *
-     * @return float|int   The conversion rate that will convert the given unit into the cm.
+     * @return float|int The conversion rate that will convert the given unit into the cm.
      *
      * @throws Exception        Throw exception if the input unit is not support.
      */
@@ -201,7 +201,7 @@ class MyFatoorahHelper
     protected static function checkSignatureValidation($dataModel, $secretKey, $signature)
     {
         $mapFun = function ($v, $k) {
-            return sprintf("%s=%s", $k, $v);
+            return sprintf('%s=%s', $k, $v);
         };
 
         $outputArr = array_map($mapFun, $dataModel, array_keys($dataModel));

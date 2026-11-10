@@ -21,9 +21,9 @@ class MyFatoorahRefundTest extends MyFatoorahTestCase
             $this->assertContains(
                 $ex->getMessage(),
                 [
-                        $this->keys['valid']['refundException'],
-                        $this->keys['valid']['refundException2'],
-                    ],
+                    $this->keys['valid']['refundException'],
+                    $this->keys['valid']['refundException2'],
+                ],
                 $this->keys['valid']['message']
             );
         }
