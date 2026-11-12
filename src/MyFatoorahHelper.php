@@ -278,20 +278,38 @@ class MyFatoorahHelper
         }
 
         if ($httpCode == 200 && is_string($response)) {
-            // Remove the hidden character between the single quotes
-            $responseText = trim($response, '﻿');
-            $countries    = json_decode($responseText, true);
-
-            // Only overwrite the cache with something that is actually the configuration.
-            if (is_array($countries) && !empty($countries)) {
-                return file_put_contents($mfConfigFile, $responseText) !== false;
-            }
-
-            // The portal answered, but not with the configuration.
-            return self::reportConfigFailure('the portal did not answer with the configuration', $mfConfigFile, $fileExists);
+            return self::saveMFConfig($response, $mfConfigFile, $fileExists);
         }
 
         return self::reportConfigFailure('the portal could not be read, ' . ($curlError ?: 'HTTP ' . $httpCode), $mfConfigFile, $fileExists);
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Save a portal answer to the cache file, when it really is the configuration
+     *
+     * @param string $response     The body the portal answered with.
+     * @param string $mfConfigFile The file name used in caching data.
+     * @param bool   $fileExists   Whether a usable copy is already on disk.
+     *
+     * @return bool True when the file now holds a fresh configuration.
+     *
+     * @throws Exception
+     */
+    protected static function saveMFConfig($response, $mfConfigFile, $fileExists)
+    {
+        // Remove the hidden character between the single quotes
+        $responseText = trim($response, '﻿');
+        $countries    = json_decode($responseText, true);
+
+        // Only overwrite the cache with something that is actually the configuration.
+        if (is_array($countries) && !empty($countries)) {
+            return file_put_contents($mfConfigFile, $responseText) !== false;
+        }
+
+        // The portal answered, but not with the configuration.
+        return self::reportConfigFailure('the portal did not answer with the configuration', $mfConfigFile, $fileExists);
     }
 
     //-----------------------------------------------------------------------------------------------------------------------------------------
