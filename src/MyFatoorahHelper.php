@@ -270,7 +270,7 @@ class MyFatoorahHelper
         $httpCode  = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         $curlError = curl_error($curl);
 
-        $curl = null;
+        unset($curl);
 
         // Record the attempt, so a portal that is down is not asked again before an hour.
         if ($fileExists) {
