@@ -59,7 +59,7 @@ try {
     $mfHttpCode = curl_getinfo($mfCurl, CURLINFO_HTTP_CODE);
     $mfCurlErr  = curl_error($mfCurl);
 
-    $mfCurl = null;
+    unset($mfCurl);
 
     if ($mfCurlErr) {
         throw new \Exception('cURL Error: ' . $mfCurlErr);
