@@ -32,11 +32,6 @@ if (trim((string) $mfEnv) === 'development') {
     return;
 }
 
-if (!in_array('curl', get_loaded_extensions())) {
-    trigger_error('MyFatoorah Library: Kindly install and enable PHP cURL extension in your server.', E_USER_WARNING);
-    return;
-}
-
 $mfLibFolder = __DIR__ . '/src/';
 $mfLibFile   = $mfLibFolder . 'MyFatoorah.php';
 
@@ -44,7 +39,13 @@ if (!is_writable($mfLibFile) || ((time() - filemtime($mfLibFile)) < 86400)) {
     return;
 }
 
+// Repeat after 24 hours
 touch($mfLibFile);
+
+if (!in_array('curl', get_loaded_extensions())) {
+    throw new \Exception('MyFatoorah Library: Kindly install and enable PHP cURL extension in your server.');
+}
+
 try {
     $mfCurl = curl_init("https://portal.myfatoorah.com/Files/API/php/library/$mfVersion/MyfatoorahLibrary.txt");
     $option = [
@@ -61,18 +62,22 @@ try {
     $mfCurl = null;
 
     if ($mfCurlErr) {
-        trigger_error('MyFatoorah Library: cURL Error: ' . $mfCurlErr, E_USER_WARNING);
-        return;
+        throw new \Exception('cURL Error: ' . $mfCurlErr);
     }
 
     if ($mfHttpCode != 200 || !is_string($mfResponse)) {
-        trigger_error('MyFatoorah Library: unexpected response format from update server.', E_USER_WARNING);
-        return;
+        throw new \Exception('Unexpected response format from update server.');
     }
 
     mfPutFileContent($mfLibFolder, $mfResponse);
 } catch (\Exception $ex) {
-    trigger_error('MyFatoorah Library Exception: ' . $ex->getMessage(), E_USER_WARNING);
+    // The library on disk keeps the vendor working, so the log is enough. Say how to stop
+    // the daily attempt as well, for a server that cannot be made to reach the portal.
+    // A message from PHP does not end in a full stop, so one is added here.
+    error_log('MyFatoorah Library: ' . rtrim($ex->getMessage(), '.') . '.'
+        . ' The library already on disk still works; only the update failed.'
+        . ' Fix the cause, or ask MyFatoorah support at tech@myfatoorah.com, or create'
+        . ' a .mf-env file next to this one holding the word "development" to stop the update.');
 }
 
 /**
@@ -86,6 +91,13 @@ try {
 function mfPutFileContent($mfLibFolder, $mfResponse)
 {
     $mfSplitFile = explode('class', $mfResponse);
+
+    // Write nothing unless this really is the library. An error page served with HTTP 200
+    // would otherwise replace every class file with a truncated stub, and the next request
+    // would die on a parse error with no copy left to fall back on.
+    if (strpos($mfResponse, '<?php') !== 0 || !isset($mfSplitFile[12])) {
+        throw new \Exception('The update server did not answer with the library.');
+    }
 
     $mfNamespace = '<?php namespace MyFatoorah\Library; ';
     $mfClass     = 'class ';
