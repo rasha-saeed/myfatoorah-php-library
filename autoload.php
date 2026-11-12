@@ -90,14 +90,16 @@ try {
  */
 function mfPutFileContent($mfLibFolder, $mfResponse)
 {
-    $mfSplitFile = explode('class', $mfResponse);
-
-    // Write nothing unless this really is the library. An error page served with HTTP 200
-    // would otherwise replace every class file with a truncated stub, and the next request
-    // would die on a parse error with no copy left to fall back on.
-    if (strpos($mfResponse, '<?php') !== 0 || !isset($mfSplitFile[12])) {
+    // Write nothing unless the whole library arrived. An error page served with HTTP 200,
+    // or a download that stopped halfway, would otherwise overwrite what is installed, and
+    // the next request would die on a parse error with no copy left to fall back on.
+    // combine.php strips every comment but this marker and puts it last, so finding it
+    // means the file is complete.
+    if (strpos($mfResponse, '<?php') !== 0 || strpos($mfResponse, '// End Of Library') === false) {
         throw new \Exception('The update server did not answer with the library.');
     }
+
+    $mfSplitFile = explode('class', $mfResponse);
 
     $mfNamespace = '<?php namespace MyFatoorah\Library; ';
     $mfClass     = 'class ';
