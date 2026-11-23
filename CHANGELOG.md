@@ -4,13 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ------------------------------
-## [2.2.11] - 2026-11-16
+## [2.2.11] - 2026-11-23
 ### Added
 - Stop the self-update with a `.mf-env` file. Create it next to `autoload.php` holding the word `development`, and the library stops downloading new versions. With no such file - the normal case - the update runs as before.
 
 ### Changed
 - Make the library safe on PHP 8.5, which is what this release is for: every `curl_close()` call (deprecated since 8.5, without effect since 8.0) now releases the handle instead, in the library and in the loader that ships with the manual install, and the non-canonical `(double)` cast is replaced by `(float)`.
-- Supported PHP versions are unchanged: the library still installs on PHP 7.0 and up.
+- Supported PHP versions are unchanged: the library still installs on PHP 7.0 and up, and it runs clean on PHP 8.6.
 - Relicense from GPL-3.0-only to the MIT License, so any PHP developer can take the code, change it and ship it inside their own product. Its one condition is keeping the copyright notice.
 - Report a failed self-update or configuration update to the server error log instead of raising a PHP warning, and name the cause where the library cannot go on.
 - Correct the wording of the `Worng event.` exception thrown by `MyFatoorahWebhook`; it now reads `Wrong event.`. A caller matching on the old text must be updated.
@@ -23,14 +23,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Pass explicit flags to `htmlspecialchars()` in `MyFatoorahHelper::filterInputField()`. The default flags changed in PHP 8.1, so on PHP 8.0 and older single quotes were left unescaped and a filtered value could break out of a single-quoted HTML attribute.
 
 ------------------------------
-## [2.1.5] - 2026-11-16
+## [2.1.5] - 2026-11-23
 ### Added
 - Add `executePayment()`, correctly spelled.
 - Stop the self-update with a `.mf-env` file. Create it next to `autoload.php` holding the word `development`, and the library stops downloading new versions. With no such file - the normal case - the update runs as before.
 
 ### Changed
 - Make the library safe on PHP 8.5, which is what this release is for: every `curl_close()` call (deprecated since 8.5, without effect since 8.0) now releases the handle instead, in the library and in the loader that ships with the manual install, and the non-canonical `(double)` cast is replaced by `(float)`.
-- Supported PHP versions are unchanged: the library still installs on PHP 7.0 and up.
+- Supported PHP versions are unchanged: the library still installs on PHP 7.0 and up, and it runs clean on PHP 8.6.
 - Relicense from GPL-3.0-only to the MIT License, so any PHP developer can take the code, change it and ship it inside their own product. Its one condition is keeping the copyright notice.
 - Report a failed self-update or configuration update to the server error log instead of raising a PHP warning, and name the cause where the library cannot go on.
 - Reformat the source to PSR-12. A merchant who patched the library by hand will see a large diff.
